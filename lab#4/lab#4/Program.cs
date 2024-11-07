@@ -1,28 +1,15 @@
 ﻿using System;
-using Array;
+using MyTypes;
 
 namespace lab_4
 {  
-
     internal class Program
     {
-        public static int ReadValueInt()
-        {
-            do
-            {
-                string s = Console.ReadLine();
-                if (int.TryParse(s, out int a))
-                    return a;
-                else
-                    Console.WriteLine($"Вы ввели не целое число {s}, введите число правильно");
-            }
-            while (true);
-        }
-
+        
         static void Main(string[] args)
         {
             Console.WriteLine("Начать работу - любое число кроме -1 выйти из программы - -1");            
-            int a = ReadValueInt();
+            int a = GeneralFunc.ReadValueInt();
             while (a != -1)
             {
                 Console.Clear();
@@ -32,13 +19,13 @@ namespace lab_4
                 {
                     if (n < 0)
                         Console.WriteLine("Количество не может быть отрицательным введите заново");
-                    n = ReadValueInt();
+                    n = GeneralFunc.ReadValueInt();
                 }
                 while (n < 0);
-                var CurrentArray = new Array(n);
+                var CurrentArray = new MyArray(n);
                 Console.Clear();
                 Console.WriteLine("Выберите способ заполнения 1 - ввод с консоли 2 - автоматически");
-                a = ReadValueInt();
+                a = GeneralFunc.ReadValueInt();
                 switch (a)
                 {
                     case 1:
@@ -59,7 +46,7 @@ namespace lab_4
                     Console.WriteLine("3 Циклически сдвинуть на M элементов вправо");
                     Console.WriteLine("4 Найти первый четный");
                     Console.WriteLine("5 Сортировать массив");
-                    a = ReadValueInt();
+                    a = GeneralFunc.ReadValueInt();
                     if(a == -1)
                         break;
                     switch(a)
@@ -72,14 +59,14 @@ namespace lab_4
                             {
                                 if(n < 0)
                                     Console.WriteLine("Количество не может быть отрицательным введите заново");
-                                n = ReadValueInt();
+                                n = GeneralFunc.ReadValueInt();
                             }
                             while (n < 0);
                             Console.WriteLine("Введите " + n.ToString() + " элементов");
                             int[] b = new int[n];   
                             for(int i = 0;i < n;i++)
-                                b[i] = ReadValueInt();
-                            CurrentArray.Insert(0, new Array(b));
+                                b[i] = GeneralFunc.ReadValueInt();
+                            CurrentArray.Insert(0, new MyArray(b));
                             CurrentArray.WriteArray();
                             Console.WriteLine("Для продолжения нажмите enter");
                             Console.Read();
@@ -96,7 +83,7 @@ namespace lab_4
                             Console.Clear();
                             CurrentArray.WriteArray();
                             Console.WriteLine("Введите на какое количество нужно сдвинуть");
-                            int m = ReadValueInt();
+                            int m = GeneralFunc.ReadValueInt();
                             CurrentArray.Move(m);
                             CurrentArray.WriteArray();
                             Console.WriteLine("Для продолжения нажмите enter");
@@ -118,11 +105,11 @@ namespace lab_4
                             CurrentArray.WriteArray();
                             
                             Console.WriteLine("любая цифра кроме 1 - продолжить работу 1 - Выполнить бинарный поиск элемента");
-                            a = ReadValueInt();
+                            a = GeneralFunc.ReadValueInt();
                             if(a == 1)
                             {
                                 Console.WriteLine("Введите число которое нужно найти");
-                                n = ReadValueInt();
+                                n = GeneralFunc.ReadValueInt();
                                 var num = CurrentArray.GetIndexBinary(n);
                                 if(num != -1)
                                     Console.WriteLine("Ваше число находиться под индексом - " + num.ToString());
