@@ -3,6 +3,7 @@ using System.Collections;
 
 namespace MyTypes
 {
+    delegate T Criterion<T,J>(J a);
     class MyArray : IEnumerable, IEnumerator
     {
         private int[] ints;
@@ -165,7 +166,7 @@ namespace MyTypes
             length--;
             Ints = currarray;
         }
-        public void DeleteElem(Func<int, bool> criterion)
+        public void DeleteElem(Criterion<bool,int> criterion)
         {
             var currarray = new int[length];
             int[] result;
@@ -190,7 +191,7 @@ namespace MyTypes
 
         public void Insert(int ind, MyArray array)
         {
-            if (!inBorder(ind))
+            if (!(ind <= length && ind >= 0))
             {
                 Console.WriteLine("Ошибка в количестве добавляемых элементов");
                 return;
@@ -216,9 +217,10 @@ namespace MyTypes
             length += array.Count;
             Ints = result;
         }
+
         public void AddElem(int ind, int value)
         {
-            if (!inBorder(ind) || (ind > ints.Length))
+            if (!(ind <= length && ind >= 0))
             {
                 Console.WriteLine("Ошибка в количестве добавляемых элементов");
                 return;
@@ -241,10 +243,10 @@ namespace MyTypes
 
             length++;
             Ints = result;
-        }
+        }    
         public void AddElem(int ind, int count = 1, bool fill = false, bool random = true)
         {
-            if (!inBorder(ind) || (ind > ints.Length))
+            if (! (ind <= length && ind >= 0))
             {
                 Console.WriteLine("Ошибка в количестве добавляемых элементов");
                 return;
@@ -306,7 +308,7 @@ namespace MyTypes
             ints = result;
         }
 
-        public int FindFirst(Func<int, bool> criterion)
+        public int FindFirst(Criterion<bool,int> criterion)
         {
             for (int i = 0; i < length; i++)
             {
@@ -330,7 +332,7 @@ namespace MyTypes
             Console.WriteLine("Ни один элемент не подешел по критерию");
             return -1;
         }
-        public MyArray FindAll(Func<int, bool> criterion)
+        public MyArray FindAll(Criterion<bool, int> criterion)
         {
             var currarray = new int[length];
             int[] result;
@@ -406,6 +408,7 @@ namespace MyTypes
             for (int i = 0; i < length; i++)
                 ints[i] = 0;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -421,6 +424,7 @@ namespace MyTypes
             Console.WriteLine("Такого элемента нет, индекс вернуть невозможно");
             return -1;
         }
+
         /// <summary>
         /// For binary search, your array should be sorted
         /// </summary>
@@ -447,6 +451,7 @@ namespace MyTypes
             Console.WriteLine("Такого элемента нет, индекс вернуть невозможно");
             return -1;
         }
+
         public bool Contains(int value)
         {
             for (int i = 0; i < length; i++)
@@ -479,8 +484,7 @@ namespace MyTypes
                     offsetLeft += offsetRight;
                     offsetRight /= 2;
                 }
-            }
-            Console.WriteLine("Такого элемента нет, индекс вернуть невозможно");
+            }            
             return false;
         }
         public void WriteArray()
@@ -492,7 +496,7 @@ namespace MyTypes
             Console.WriteLine();
         }
 
-        private bool inBorder(int ind)
+        public bool inBorder(int ind)
         {
             return ind < length && ind >= 0;
         }
@@ -553,6 +557,7 @@ namespace MyTypes
                 result[count++] = arr2[i];
             return result;
         }
+
 
 
         public IEnumerator GetEnumerator()

@@ -66,7 +66,7 @@ namespace lab_4
                             int[] b = new int[n];   
                             for(int i = 0;i < n;i++)
                                 b[i] = GeneralFunc.ReadValueInt();
-                            CurrentArray.Insert(0, new MyArray(b));
+                            CurrentArray.Insert(0, new MyArray(b));                            
                             CurrentArray.WriteArray();
                             Console.WriteLine("Для продолжения нажмите enter");
                             Console.Read();
