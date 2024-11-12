@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Dynamic;
 
 namespace MyTypes
 {
@@ -8,7 +9,6 @@ namespace MyTypes
     {
         private int[] ints;
         private int length;
-
 
         private Random rand = new Random();
         private int start = 0;
@@ -152,24 +152,25 @@ namespace MyTypes
                 Console.WriteLine("Удаление элемента невозможно элемент находиться вне границ массива");
                 return;
             }
-            var currarray = new int[ints.Length];
             int j = 0;
+            Console.WriteLine("Удален элемент - " + ints[ind].ToString());
             for (int i = 0; i < ind; i++)
             {
-                currarray[j++] = ints[i];
+                ints[j++] = ints[i];
             }
             for (int i = ind + 1; i < length; i++)
             {
-                currarray[j++] = ints[i];
+                ints[j++] = ints[i];
             }
-            Console.WriteLine("Удален элемент - " + ints[ind].ToString());
             length--;
-            Ints = currarray;
+            int newLen = 1;
+            while (newLen <= length)
+                newLen *= 2;
+            SetSize(newLen);            
         }
         public void DeleteElem(Criterion<bool,int> criterion)
         {
-            var currarray = new int[length];
-            int[] result;
+            var currarray = new int[length];            
             int count = 0;
             Console.Write("Удалены элементы - ");
             for (int i = 0; i < length; i++)
@@ -180,13 +181,15 @@ namespace MyTypes
                     Console.Write(ints[i].ToString() + " ");
             }
             Console.WriteLine();
-            result = new int[ints.Length];
             for (int i = 0; i < count; i++)
             {
-                result[i] = currarray[i];
+                ints[i] = currarray[i];
             }
+            int newLen = 1;
+            while (newLen <= count)
+                newLen *= 2;
+            SetSize(newLen);
             length = count;
-            Ints = result;
         }
 
         public void Insert(int ind, MyArray array)
@@ -196,26 +199,16 @@ namespace MyTypes
                 Console.WriteLine("Ошибка в количестве добавляемых элементов");
                 return;
             }
-
-            int[] result;
             int newLen = ints.Length;
             while (length + array.Count > newLen)
                 newLen *= 2;
-            result = new int[newLen];
-
-            for (int i = 0; i < ind; i++)
-            {
-                result[i] = ints[i];
-            }
-
+            SetSize(newLen);
+            
+            for (int i = length + array.Count; i >= ind + array.Count; i--)
+                ints[i ] = ints[i - array.Count];
             for (int i = ind; i < array.Count; i++)
-                result[i] = array[i - ind];
-
-            for (int i = ind + array.Count; i < Count + array.Count; i++)
-                result[i] = ints[i - array.Count];
-
+                ints[i] = array[i - ind];            
             length += array.Count;
-            Ints = result;
         }
 
         public void AddElem(int ind, int value)
@@ -225,24 +218,17 @@ namespace MyTypes
                 Console.WriteLine("Ошибка в количестве добавляемых элементов");
                 return;
             }
-            int[] result;
             int newLen = ints.Length;
-            while (Count + 1 > newLen)
+            while (length + 1 > newLen)
                 newLen *= 2;
-            result = new int[newLen];
-
-            for (int i = 0; i < ind; i++)
+            SetSize(newLen); 
+            
+            for (int i = ind; i < length; i++)
             {
-                result[i] = ints[i];
+                ints[i + 1] = ints[i];
             }
-            for (int i = ind; i < Count; i++)
-            {
-                result[i + 1] = ints[i];
-            }
-            result[ind] = value;
-
+            ints[ind] = value;
             length++;
-            Ints = result;
         }    
         public void AddElem(int ind, int count = 1, bool fill = false, bool random = true)
         {
@@ -251,30 +237,23 @@ namespace MyTypes
                 Console.WriteLine("Ошибка в количестве добавляемых элементов");
                 return;
             }
-            int[] result;
             int newLen = ints.Length;
-            while (Count + count > newLen)
+            while (length + count > newLen)
                 newLen *= 2;
-            result = new int[newLen];
-
-            for (int i = 0; i < ind; i++)
-            {
-                result[i] = ints[i];
-            }
+            SetSize(newLen);            
             for (int i = ind; i < length; i++)
             {
-                result[i + count] = ints[i];
+                ints[i + count] = ints[i];
             }
             if (fill)
                 for (int i = ind; i <= ind + count - 1; i++)
                 {
                     if (random)
-                        result[i] = rand.Next(start, end);
+                        ints[i] = rand.Next(start, end);
                     else
-                        result[i] = GeneralFunc.ReadValueInt();
+                        ints[i] = GeneralFunc.ReadValueInt();
                 }
             length += count;
-            Ints = result;
         }
 
         public void Reverse()
@@ -288,14 +267,16 @@ namespace MyTypes
 
         public void Move(int count, bool right = true)
         {
-            count = count % Count;
+            if (length == 0)
+                return;
+            count = count % length;
             int[] result = new int[ints.Length];
             int k = 0;
             if (right)
             {
                 for (int i = length - count; i < length; i++)
                     result[k++] = ints[i];
-                for (int i = 0; i < Count - count; i++)
+                for (int i = 0; i < length - count; i++)
                     result[k++] = ints[i];
             }
             else
@@ -491,9 +472,12 @@ namespace MyTypes
         {
             for (int i = 0; i < length; i++)
             {
+                if(i % 10 != 0)
+                    Console.ForegroundColor = (ConsoleColor)(i % 10);
                 Console.Write(ints[i].ToString() + " ");
             }
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         public bool inBorder(int ind)
@@ -501,6 +485,13 @@ namespace MyTypes
             return ind < length && ind >= 0;
         }
 
+        private void SetSize(int size)
+        {
+            var result = new int[size];
+            for (int i = 0;i < (length > size ? size : length);i++)
+                result[i] = ints[i];
+            ints = result;
+        }
         public int this[int key]
         {
             get

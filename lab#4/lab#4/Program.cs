@@ -49,7 +49,7 @@ namespace lab_4
                     a = GeneralFunc.ReadValueInt();
                     if(a == -1)
                         break;
-                    switch(a)
+                    switch (a)
                     {
                         case 1:
                             Console.Clear();
@@ -57,19 +57,40 @@ namespace lab_4
                             Console.WriteLine("Введите количество элементов");
                             do
                             {
-                                if(n < 0)
+                                if (n < 0)
                                     Console.WriteLine("Количество не может быть отрицательным введите заново");
                                 n = GeneralFunc.ReadValueInt();
                             }
                             while (n < 0);
-                            Console.WriteLine("Введите " + n.ToString() + " элементов");
-                            int[] b = new int[n];   
-                            for(int i = 0;i < n;i++)
-                                b[i] = GeneralFunc.ReadValueInt();
-                            CurrentArray.Insert(0, new MyArray(b));                            
-                            CurrentArray.WriteArray();
-                            Console.WriteLine("Для продолжения нажмите enter");
-                            Console.Read();
+                            Console.WriteLine("Вставить с консоли - 2, вставить автоматически (рандомно) - 3");
+                            while (a != 2 && a != 3)
+                            {                                
+                                a = GeneralFunc.ReadValueInt();
+                                if (a != 2 && a != 3)
+                                    Console.WriteLine("Введите либо 2 либо 3");
+                            }
+                            switch (a) 
+                            {
+                                case 2:
+                                    Console.WriteLine("Введите " + n.ToString() + " элементов");
+                                    int[] b = new int[n];
+                                    for (int i = 0; i < n; i++)
+                                        b[i] = GeneralFunc.ReadValueInt();
+                                    CurrentArray.Insert(0, new MyArray(b));
+                                    CurrentArray.WriteArray();
+                                    Console.WriteLine("Для продолжения нажмите enter");
+                                    Console.Read();
+                                    break;
+                                case 3:                                    
+                                    var arr = new MyArray(n);
+                                    arr.Fill();
+                                    arr.WriteArray();
+                                    CurrentArray.Insert(0, arr);
+                                    CurrentArray.WriteArray();
+                                    Console.WriteLine("Для продолжения нажмите enter");
+                                    Console.Read();
+                                    break;
+                            } 
                             break;
                         case 2: 
                             Console.Clear();
