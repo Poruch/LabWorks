@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.ComponentModel;
 using System.Dynamic;
 
 namespace MyTypes
@@ -336,16 +337,13 @@ namespace MyTypes
             for (int i = 0; i < length; i++)
             {
                 int buff = ints[i];
-                for (int j = i - 1; j >= 0; j--)
+                int j = i - 1;
+                while (j >= 0 && buff < ints[j])
                 {
-                    if (buff < ints[j] == rise)
-                    {
-                        ints[j + 1] = ints[j];
-                        ints[j] = buff;
-                    }
-                    else
-                        break;
+                    ints[j + 1] = ints[j];
+                    j--;
                 }
+                ints[j + 1] = buff;                
             }
         }
 
