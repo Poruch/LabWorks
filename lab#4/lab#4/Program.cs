@@ -121,10 +121,9 @@ namespace lab_4
                         case 5:
                             Console.Clear();
                             CurrentArray.WriteArray();
-                            CurrentArray.SortInsets();
+                            CurrentArray.SelectionSort();
                             Console.WriteLine("Отсортированный массив");
-                            CurrentArray.WriteArray();
-                            
+                            CurrentArray.WriteArray();                            
                             Console.WriteLine("любая цифра кроме 1 - продолжить работу 1 - Выполнить бинарный поиск элемента");
                             a = GeneralFunc.ReadValueInt();
                             if(a == 1)

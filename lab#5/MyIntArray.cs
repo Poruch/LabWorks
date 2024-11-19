@@ -1,12 +1,11 @@
 using System;
 using System.Collections;
-using System.ComponentModel;
 using System.Dynamic;
 
 namespace MyTypes
 {
     delegate T Criterion<T,J>(J a);
-    class MyArray : IEnumerable, IEnumerator
+    class MyIntArray : IEnumerable, IEnumerator
     {
         private int[] ints;
         private int length;
@@ -112,14 +111,14 @@ namespace MyTypes
                 //WriteArray();
             }
         }
-        public MyArray(int size)
+        public MyIntArray(int size)
         {
             int p = 2;
             while (p < size) p *= 2;
             ints = new int[p];
             length = size;
         }
-        public MyArray(int[] numbers)
+        public MyIntArray(int[] numbers)
         {
             int p = 2;
             while (p < numbers.Length) p *= 2;
@@ -193,7 +192,7 @@ namespace MyTypes
             length = count;
         }
 
-        public void Insert(int ind, MyArray array)
+        public void Insert(int ind, MyIntArray array)
         {
             if (!(ind <= length && ind >= 0))
             {
@@ -314,7 +313,7 @@ namespace MyTypes
             Console.WriteLine("Ни один элемент не подешел по критерию");
             return -1;
         }
-        public MyArray FindAll(Criterion<bool, int> criterion)
+        public MyIntArray FindAll(Criterion<bool, int> criterion)
         {
             var currarray = new int[length];
             int[] result;
@@ -329,7 +328,7 @@ namespace MyTypes
                 result[i] = currarray[i];
             }
 
-            return new MyArray(result);
+            return new MyIntArray(result);
         }
 
         public void SortInsets(bool rise = true)
@@ -337,13 +336,16 @@ namespace MyTypes
             for (int i = 0; i < length; i++)
             {
                 int buff = ints[i];
-                int j = i - 1;
-                while (j >= 0 && buff < ints[j])
+                for (int j = i - 1; j >= 0; j--)
                 {
-                    ints[j + 1] = ints[j];
-                    j--;
+                    if (buff < ints[j] == rise)
+                    {
+                        ints[j + 1] = ints[j];
+                        ints[j] = buff;
+                    }
+                    else
+                        break;
                 }
-                ints[j + 1] = buff;                
             }
         }
 
@@ -515,34 +517,34 @@ namespace MyTypes
                 ints[key] = value;
             }
         }
-        public MyArray Copy(int indS)
+        public MyIntArray Copy(int indS)
         {
             if (!inBorder(indS))
             {
                 Console.WriteLine("Выход за границы массива");
-                return new MyArray(0);
+                return new MyIntArray(0);
             }
-            MyArray result = new MyArray(Count - indS);
+            MyIntArray result = new MyIntArray(Count - indS);
             for (int i = indS; i < Count; i++)
                 result[i - indS] = ints[i];
             return result;
         }
-        public MyArray Copy(int indS, int indE)
+        public MyIntArray Copy(int indS, int indE)
         {
             if (!inBorder(indS) || !inBorder(indE))
             {
                 Console.WriteLine("Выход за границы массива");
-                return new MyArray(0);
+                return new MyIntArray(0);
             }
-            MyArray result = new MyArray(indE - indS);
+            MyIntArray result = new MyIntArray(indE - indS);
             for (int i = indS; i < indE; i++)
                 result[i - indS] = ints[i];
             return result;
         }
 
-        public static MyArray operator +(MyArray arr1, MyArray arr2)
+        public static MyIntArray operator +(MyIntArray arr1, MyIntArray arr2)
         {
-            MyArray result = new MyArray(arr1.Count + arr2.Count);
+            MyIntArray result = new MyIntArray(arr1.Count + arr2.Count);
             int count = 0;
             for (int i = 0; i < arr1.Count; i++)
                 result[count++] = arr1[i];

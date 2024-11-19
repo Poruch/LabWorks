@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="InputManager.cs" />
     <Compile Include="Lab5.cs" />
+    <Compile Include="MyIntArray.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
