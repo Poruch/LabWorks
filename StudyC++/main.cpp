@@ -2,14 +2,40 @@
 //
 
 #include <iostream>
+void foo() {
+	static unsigned char  A;
+	A = 255;
+	do {
+		A++;
+	} while (A != 0);
+}
 
+void foo2() {
+	static signed __int8 A;
+	A = -127;
+	while (A < 0)
+	{
+		A = A - 1;
+	}
+}
+void foo3() {
+	static float S;
+	static unsigned char N = 11;
+	long int s;
+	int b;
+	s = b;
+	std::cout << "N = " << (int)N << std::endl;
+	S = 1. / N;
+	while (S != 1)
+	{
+		std::cout << S << std::endl;
+		S += 1. / N;
+	}
+	std::cout << S << std::endl;
+}
 int main()
-{
-    int a; 
-    char* b = new char[6];
-    std::cin >> b;
-    std::cout << b;
-    
+{	
+	foo3();	
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"

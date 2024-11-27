@@ -1,11 +1,10 @@
+using lab_4;
 using System;
 using System.Collections;
-using System.ComponentModel;
-using System.Dynamic;
 
 namespace MyTypes
 {
-    delegate T Criterion<T,J>(J a);
+    delegate T Criterion<T, J>(J a);
     class MyArray : IEnumerable, IEnumerator
     {
         private int[] ints;
@@ -14,30 +13,7 @@ namespace MyTypes
         private Random rand = new Random();
         private int start = 0;
         private int end = 10;
-        private bool isRiseSorted
-        {
-            get
-            {
-                for (int i = 0; i < length - 1; i++)
-                {
-                    if (ints[i] > ints[i + 1])
-                        return false;
-                }
-                return true;
-            }
-        }
-        private bool isFallSorted
-        {
-            get
-            {
-                for (int i = 0; i < length - 1; i++)
-                {
-                    if (ints[i] < ints[i + 1])
-                        return false;
-                }
-                return true;
-            }
-        }
+        
         public void SetBorderRand(int start, int end)
         {
             this.start = start;
@@ -143,7 +119,7 @@ namespace MyTypes
             else
             {
                 for (int i = 0; i < length; i++)
-                    ints[i] = GeneralFunc.ReadValueInt();
+                    ints[i] = Program.ReadValueInt();
             }
         }
         public void DeleteElem(int ind)
@@ -167,11 +143,11 @@ namespace MyTypes
             int newLen = 1;
             while (newLen <= length)
                 newLen *= 2;
-            SetSize(newLen);            
+            SetSize(newLen);
         }
-        public void DeleteElem(Criterion<bool,int> criterion)
+        public void DeleteElem(Criterion<bool, int> criterion)
         {
-            var currarray = new int[length];            
+            var currarray = new int[length];
             int count = 0;
             Console.Write("Удалены элементы - ");
             for (int i = 0; i < length; i++)
@@ -204,11 +180,11 @@ namespace MyTypes
             while (length + array.Count > newLen)
                 newLen *= 2;
             SetSize(newLen);
-            
+
             for (int i = length + array.Count; i >= ind + array.Count; i--)
-                ints[i ] = ints[i - array.Count];
+                ints[i] = ints[i - array.Count];
             for (int i = ind; i < array.Count; i++)
-                ints[i] = array[i - ind];            
+                ints[i] = array[i - ind];
             length += array.Count;
         }
 
@@ -222,18 +198,18 @@ namespace MyTypes
             int newLen = ints.Length;
             while (length + 1 > newLen)
                 newLen *= 2;
-            SetSize(newLen); 
-            
+            SetSize(newLen);
+
             for (int i = ind; i < length; i++)
             {
                 ints[i + 1] = ints[i];
             }
             ints[ind] = value;
             length++;
-        }    
+        }
         public void AddElem(int ind, int count = 1, bool fill = false, bool random = true)
         {
-            if (! (ind <= length && ind >= 0))
+            if (!(ind <= length && ind >= 0))
             {
                 Console.WriteLine("Ошибка в количестве добавляемых элементов");
                 return;
@@ -241,7 +217,7 @@ namespace MyTypes
             int newLen = ints.Length;
             while (length + count > newLen)
                 newLen *= 2;
-            SetSize(newLen);            
+            SetSize(newLen);
             for (int i = ind; i < length; i++)
             {
                 ints[i + count] = ints[i];
@@ -252,7 +228,7 @@ namespace MyTypes
                     if (random)
                         ints[i] = rand.Next(start, end);
                     else
-                        ints[i] = GeneralFunc.ReadValueInt();
+                        ints[i] = Program.ReadValueInt();
                 }
             length += count;
         }
@@ -290,7 +266,7 @@ namespace MyTypes
             ints = result;
         }
 
-        public int FindFirst(Criterion<bool,int> criterion)
+        public int FindFirst(Criterion<bool, int> criterion)
         {
             for (int i = 0; i < length; i++)
             {
@@ -338,12 +314,12 @@ namespace MyTypes
             {
                 int buff = ints[i];
                 int j = i - 1;
-                while (j >= 0 && buff < ints[j])
+                while (j >= 0 && (buff < ints[j] == rise))
                 {
                     ints[j + 1] = ints[j];
                     j--;
                 }
-                ints[j + 1] = buff;                
+                ints[j + 1] = buff;
             }
         }
 
@@ -362,13 +338,13 @@ namespace MyTypes
                         k = j;
                     }
                 }
-                if (buff1 > buff2)
+                if (buff1 > buff2 == rise)
                 {
                     ints[i] = buff2;
                     ints[k] = buff1;
                 }
             }
-            
+
         }
 
         public void BubbleSort(bool rise = true)
@@ -467,14 +443,14 @@ namespace MyTypes
                     offsetLeft += offsetRight;
                     offsetRight /= 2;
                 }
-            }            
+            }
             return false;
         }
         public void WriteArray()
         {
             for (int i = 0; i < length; i++)
             {
-                if(i % 10 != 0)
+                if (i % 10 != 0)
                     Console.ForegroundColor = (ConsoleColor)(i % 10);
                 Console.Write(ints[i].ToString() + " ");
             }
@@ -490,7 +466,7 @@ namespace MyTypes
         private void SetSize(int size)
         {
             var result = new int[size];
-            for (int i = 0;i < (length > size ? size : length);i++)
+            for (int i = 0; i < (length > size ? size : length); i++)
                 result[i] = ints[i];
             ints = result;
         }

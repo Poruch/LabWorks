@@ -43,9 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collection.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="Lab5.cs" />
+    <Compile Include="Matrix.cs" />
+    <Compile Include="MyDoubleArray.cs" />
     <Compile Include="MyIntArray.cs" />
+    <Compile Include="MyString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

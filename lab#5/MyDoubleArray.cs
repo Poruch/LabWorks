@@ -1,12 +1,12 @@
+п»ї
 using DataManage;
 using System;
 
 namespace MyTypes
 {
-    
-    class MyIntArray : Collection<int>
+    class MyDoubleArray : Collection<double>
     {
-        private Random rand = new Random();
+        private static Random rand = new Random();
         private int start = 0;
         private int end = 10;
         public void SetBorderRand(int start, int end)
@@ -15,11 +15,11 @@ namespace MyTypes
             this.end = end;
         }
 
-        public int Sum
+        public double Sum
         {
             get
             {
-                int sum = 0;
+                double sum = 0;
                 for (int i = 0; i < Count; i++)
                 {
                     sum += items[i];
@@ -41,51 +41,44 @@ namespace MyTypes
                 return Count == 0 || items == null;
             }
         }
-        public int Max
+        public double Max
         {
             get
             {
                 if (isEmpty)
                 {
-                    Console.WriteLine("В массиве нет максимума массив пуст");
+                    Console.WriteLine("Р’ РјР°СЃСЃРёРІРµ РЅРµС‚ РјР°РєСЃРёРјСѓРјР° РјР°СЃСЃРёРІ РїСѓСЃС‚");
                     return -1;
                 }
-                int max = int.MinValue;
+                double max = double.MinValue;
                 for (int i = 0; i < Count; i++)
                     max = max > items[i] ? max : items[i];
                 return max;
             }
         }
-        public int Min
+        public double Min
         {
             get
             {
                 if (isEmpty)
                 {
-                    Console.WriteLine("В массиве нет минимума массив пуст");
+                    Console.WriteLine("Р’ РјР°СЃСЃРёРІРµ РЅРµС‚ РјРёРЅРёРјСѓРјР° РјР°СЃСЃРёРІ РїСѓСЃС‚");
                     return -1;
                 }
-                int max = int.MaxValue;
+                double max = double.MaxValue;
                 for (int i = 0; i < Count; i++)
                     max = max < items[i] ? max : items[i];
                 return max;
             }
         }
-        public MyIntArray(int size) : base(size)
+
+        public MyDoubleArray(int size, bool fill = false) : base(size)
         {
-            int p = 2;
-            while (p < size) p *= 2;
-            items = new int[p];
-            Count = size;
+            if (fill) Fill();
         }
-        public MyIntArray(int[] numbers) : base(numbers.Length)
+        public MyDoubleArray(double[] numbers) : base(numbers)
         {
-            int p = 2;
-            while (p < numbers.Length) p *= 2;
-            items = new int[p];
-            for (int i = 0; i < numbers.Length; i++)
-                items[i] = numbers[i];
-            Count = numbers.Length;
+
         }
         /// <summary>
         /// if random is true then array will fill random numbers
@@ -97,21 +90,23 @@ namespace MyTypes
             if (random)
             {
                 for (int i = 0; i < Count; i++)
-                    items[i] = rand.Next(start, end);
+                    items[i] = rand.NextDouble() * (end - start) + start;
             }
             else
             {
                 for (int i = 0; i < Count; i++)
-                    items[i] = InputManager.ReadValueInt();
+                    items[i] = InputManager.ReadValueDouble();
             }
-        }       
+        }
+
+
 
 
         public void AddElem(int ind, int count = 1, bool fill = false, bool random = true)
         {
             if (!(ind <= Count && ind >= 0))
             {
-                Console.WriteLine("Ошибка в количестве добавляемых элементов");
+                Console.WriteLine("РћС€РёР±РєР° РІ РєРѕР»РёС‡РµСЃС‚РІРµ РґРѕР±Р°РІР»СЏРµРјС‹С… СЌР»РµРјРµРЅС‚РѕРІ");
                 return;
             }
             int newLen = items.Length;
@@ -126,20 +121,19 @@ namespace MyTypes
                 for (int i = ind; i <= ind + count - 1; i++)
                 {
                     if (random)
-                        items[i] = rand.Next(start, end);
+                        items[i] = rand.NextDouble() * (end - start) + start;
                     else
-                        items[i] = InputManager.ReadValueInt();
+                        items[i] = InputManager.ReadValueDouble();
                 }
             Count += count;
         }
-
 
 
         public void SortInsets(bool rise = true)
         {
             for (int i = 0; i < Count; i++)
             {
-                int buff = items[i];
+                double buff = items[i];
                 int j = i - 1;
                 while (j >= 0 && buff < items[j])
                 {
@@ -152,10 +146,10 @@ namespace MyTypes
 
         public void SelectionSort(bool rise = true)
         {
-            for (int i = 0; i < Count    - 1; i++)
+            for (int i = 0; i < Count - 1; i++)
             {
-                int buff1 = items[i];
-                int buff2 = !rise ? int.MinValue : int.MaxValue;
+                double buff1 = items[i];
+                double buff2 = !rise ? double.MinValue : double.MaxValue;
                 int k = i + 1;
                 for (int j = i + 1; j < Count; j++)
                 {
@@ -173,14 +167,13 @@ namespace MyTypes
             }
 
         }
-
         public void BubbleSort(bool rise = true)
         {
             for (int i = 0; i < Count - 1; i++)
             {
                 for (int j = i + 1; j < Count; j++)
                 {
-                    int buff = items[j];
+                    double buff = items[j];
                     if (items[i] > items[j] == rise)
                     {
                         items[j] = items[i];
@@ -189,20 +182,19 @@ namespace MyTypes
                 }
             }
         }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public int GetIndex(int value)
+        public int GetIndex(double value)
         {
             for (int i = 0; i < Count; i++)
             {
                 if (items[i] == value)
                     return i;
             }
-            Console.WriteLine("Такого элемента нет, индекс вернуть невозможно");
+            Console.WriteLine("РўР°РєРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РЅРµС‚, РёРЅРґРµРєСЃ РІРµСЂРЅСѓС‚СЊ РЅРµРІРѕР·РјРѕР¶РЅРѕ");
             return -1;
         }
 
@@ -211,7 +203,7 @@ namespace MyTypes
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public int GetIndexBinary(int value)
+        public int GetIndexBinary(double value)
         {
             int offsetLeft = 0;
             int offsetRight = Count / 2;
@@ -229,11 +221,11 @@ namespace MyTypes
                     offsetRight /= 2;
                 }
             }
-            Console.WriteLine("Такого элемента нет, индекс вернуть невозможно");
+            Console.WriteLine("РўР°РєРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РЅРµС‚, РёРЅРґРµРєСЃ РІРµСЂРЅСѓС‚СЊ РЅРµРІРѕР·РјРѕР¶РЅРѕ");
             return -1;
         }
 
-        public bool Contains(int value)
+        public bool Contains(double value)
         {
             for (int i = 0; i < Count; i++)
             {
@@ -248,7 +240,7 @@ namespace MyTypes
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public bool ContainsBinary(int value)
+        public bool ContainsBinary(double value)
         {
             int offsetLeft = 0;
             int offsetRight = Count / 2;
@@ -268,19 +260,17 @@ namespace MyTypes
             }
             return false;
         }
-
-        public void Write()
+        public void Write(int count)
         {
             for (int i = 0; i < Count; i++)
             {
                 if (i % 10 != 0)
                     Console.ForegroundColor = (ConsoleColor)(i % 10);
-                Console.Write(items[i].ToString() + " ");
+                Console.Write(items[i].ToString().Substring(0,count) + " ");
             }
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.White;
         }
-
 
     }
 }
