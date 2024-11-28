@@ -102,6 +102,7 @@ namespace MyTypes
                     last = i;
                 }
             }
+            
             return res;
         }      
         

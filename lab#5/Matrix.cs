@@ -26,7 +26,7 @@ namespace MyTypes
             }
             else
             {
-                Console.WriteLine("Количесивр колонок не равно количесиву столбцов");
+                Console.WriteLine("Количество колонок не равно количесиву столбцов");
             }
 
         }

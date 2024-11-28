@@ -14,7 +14,7 @@ namespace lab_5
             {
                 Console.WriteLine("Введите что хотите сделать" +
                     "\n1 - добавить K строк в начало," +
-                    "\n2 - удалить что то там из рваного массива," +
+                    "\n2 - удалить строку из рваного массива," +
                     "\n3 - выполнить действие со строкой," +
                     "\n-1 - выход из программы");
                 a = InputManager.ReadValueInt();
@@ -42,7 +42,7 @@ namespace lab_5
                         mat = new Matrix(n, m);
                         mat.Fill();
                         Console.Clear();
-                        mat.Write(2);
+                        mat.Write(3);
                         Console.WriteLine("Введите количество строк");
                         int k = 0;
                         do
@@ -58,7 +58,7 @@ namespace lab_5
                             arr.Fill();
                             mat.Add(0, arr);
                         }
-                        mat.Write(2);
+                        mat.Write(3);
                         Console.WriteLine("Нажмите Enter для продолжения");
                         Console.ReadLine();
                         break;
