@@ -168,7 +168,6 @@ namespace MyTypes
             SetSize(newLen);
             length = count;
         }
-
         public void Insert(int ind, MyArray array)
         {
             if (!(ind <= length && ind >= 0))
@@ -187,7 +186,23 @@ namespace MyTypes
                 ints[i] = array[i - ind];
             length += array.Count;
         }
-
+        public void Insert(int ind, int[] array)
+        {
+            if (!(ind <= length && ind >= 0))
+            {
+                Console.WriteLine("Ошибка в количестве добавляемых элементов");
+                return;
+            }
+            int newLen = ints.Length;
+            while (length + array.Length > newLen)
+                newLen *= 2;
+            SetSize(newLen);
+            for (int i = length + array.Length; i >= ind + array.Length; i--)
+                ints[i] = ints[i - array.Length];
+            for (int i = ind; i < array.Length; i++)
+                ints[i] = array[i - ind];
+            length += array.Length;
+        }
         public void AddElem(int ind, int value)
         {
             if (!(ind <= length && ind >= 0))
@@ -265,7 +280,7 @@ namespace MyTypes
             }
             ints = result;
         }
-
+        
         public int FindFirst(Criterion<bool, int> criterion)
         {
             for (int i = 0; i < length; i++)
@@ -465,6 +480,7 @@ namespace MyTypes
 
         private void SetSize(int size)
         {
+            if (size == ints.Length) return;
             var result = new int[size];
             for (int i = 0; i < (length > size ? size : length); i++)
                 result[i] = ints[i];

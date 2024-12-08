@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace MyTypes
+namespace DataManage
 {
-
-    static class GeneralFunc
+    static class InputManager
     {
         public static int ReadValueInt()
         {

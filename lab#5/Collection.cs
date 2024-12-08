@@ -250,8 +250,7 @@ namespace MyTypes
             {
                 if (!inBorder(key))
                 {
-                    Console.WriteLine("Выход за границы массива");
-                    return default;
+                    throw new ArgumentOutOfRangeException("Выход за границы коллекции типа - " + typeof(T).Name);
                 }
                 return items[key];
             }

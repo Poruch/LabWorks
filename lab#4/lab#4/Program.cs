@@ -132,7 +132,7 @@ namespace lab_4
                         case 5:
                             Console.Clear();
                             CurrentArray.WriteArray();
-                            CurrentArray.SortInsets(false);
+                            CurrentArray.SortInsets();
                             Console.WriteLine("Отсортированный массив");
                             CurrentArray.WriteArray();
                             Console.WriteLine("любая цифра кроме 1 - продолжить работу 1 - Выполнить бинарный поиск элемента");

@@ -3,7 +3,6 @@ using System;
 
 namespace MyTypes
 {
-    
     class MyIntArray : Collection<int>
     {
         private Random rand = new Random();
