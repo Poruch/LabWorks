@@ -29,11 +29,55 @@ void foo3() {
 		S += 1. / N;
 	}
 	std::cout << S << std::endl;
+};
+
+
+
+//LAB2
+//////////////////
+int iterAdd(int x, int y) {
+	for (int i = 0; i < y; i++) {
+		x++;
+	}
+	return x;
 }
+
+int recAdd(int x, int y) {
+	if (y == 0) return x;
+	return recAdd(x,y-1) + 1;
+}
+
+int iterMulty(int x, int y) {
+	int res = 0;
+	for (int i = 0; i < y; i++) {
+		iterAdd(res, x);
+	}
+	return res;
+}
+
+int recMulty(int x, int y) {
+	if (y == 0) return 0;
+	return recAdd(x, recMulty(x, y - 1));
+}
+
+int iterPower(int x, int y) {
+	int res = 1;
+	for (int i = 0; i < y; i++) {
+		res = iterMulty(res, x);
+	}
+	return res;
+}
+
+int recPower(int x, int y) {
+	if (y == 0) return 1;
+	return recMulty(x, recPower(x, y - 1));
+}
+
 int foo4(int n) {
 	if (n <= 2) return 1;
 	return foo4(n - 2) + foo4(n - 1);
 }
+
 int foo5(int n) {
 	int a = 1;
 	int last = 0;
@@ -45,15 +89,18 @@ int foo5(int n) {
 	}
 	return a;
 }
+
 int fooM(int n) {
 	if (n > 100) return n - 10;
 	return fooM(fooM(n + 11));
 }
+
 int fooA(int m, int n) {
 	if (m == 0) return n + 1;
 	else if (n == 0) return fooA(m - 1, 1);
 	else return fooA(m - 1, fooA(m, n - 1));
 }
+
 char picture[17][17] = {
 	{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',' '},
 	{ ' ', ' ', ' ', ' ', ' ', '@', '@', '@', ' ', '@', '@', '@', ' ', ' ', ' ', ' ',' '},
@@ -93,6 +140,7 @@ char picture2[17][17] = {
 	{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',' '},
 	{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',' '},
 };
+
 void FILL(int x, int y, char border, char filColor) {
 	char c;
 	c = picture2[x][y];
@@ -104,8 +152,14 @@ void FILL(int x, int y, char border, char filColor) {
 		FILL(x, y + 1, border, filColor);
 	}
 }
+
 int main()
 {	
+	std::cout << recAdd(4, 2) << std::endl;
+	std::cout << recMulty(4, 2) << std::endl;
+	std::cout << recPower(4, 2) << std::endl;
+
+
 	int n = 17;
 	for (unsigned i = 0; i < n; ++i)
 	{
