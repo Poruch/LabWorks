@@ -3,7 +3,7 @@ using System.Collections;
 namespace MyTypes
 {
     delegate T Criterion<T, J>(J a);
-    class Collection<T> : IEnumerable, IEnumerator
+    class Collection<T> : IEnumerable, IEnumerator 
     {
         private int length;
         protected T[] items;

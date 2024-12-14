@@ -1,7 +1,7 @@
 ﻿// StudyC++.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
-
 #include <iostream>
+
 void foo() {
 	static unsigned char  A;
 	A = 255;
@@ -75,31 +75,22 @@ int recPower(int x, int y) {
 
 int foo4(int n) {
 	if (n <= 2) return 1;
-	return foo4(n - 2) + foo4(n - 1);
+	return foo4(n - 1) + foo4(n - 2);
 }
 
 int foo5(int n) {
-	int a = 1;
 	int last = 0;
-	int b = 0;
+	int current = 1;
 	for (int i = 0; i < n - 1; i++) {
-		last = a;
-		a = a + b;
-		b = last;
+		int buffer = current + last;
+		last = current;
+		current = buffer;
 	}
-	return a;
+	return current;
 }
 
-int fooM(int n) {
-	if (n > 100) return n - 10;
-	return fooM(fooM(n + 11));
-}
 
-int fooA(int m, int n) {
-	if (m == 0) return n + 1;
-	else if (n == 0) return fooA(m - 1, 1);
-	else return fooA(m - 1, fooA(m, n - 1));
-}
+
 
 char picture[17][17] = {
 	{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',' '},
@@ -140,43 +131,94 @@ char picture2[17][17] = {
 	{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',' '},
 	{ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',' '},
 };
-
+int count = 0;
 void FILL(int x, int y, char border, char filColor) {
-	char c;
-	c = picture2[x][y];
+	char c;	
+	if (count >= 17) return;
+	c = picture[y][x];
+	count++;
 	if (c != border and c != filColor) {
-		picture2[x][y] = filColor;
+		picture[y][x] = filColor;		
 		FILL(x - 1, y, border, filColor);
-		FILL(x + 1, y, border, filColor);
+		FILL(x + 1, y, border, filColor);	
 		FILL(x, y - 1, border, filColor);
 		FILL(x, y + 1, border, filColor);
 	}
 }
 
+int fooM(int n) {
+	if (n > 100) return n - 10;
+	return fooM(fooM(n + 11));
+}
+
+
+
+int fooA(int m, int n) {
+	if (m == 0) return n + 1;
+	else if (n == 0) return fooA(m - 1, 1);
+	else return fooA(m - 1, fooA(m, n - 1));
+}
 int main()
 {	
+
+
+	std::cout << foo4(6) << "\n";
+	std::cout << foo5(6) << "\n";
+
+
+	int n, m;
+	std::cin >> n;
+	std::cin >> m;
+	std::cout << fooA(m, n);
+
+
+
+	std::cout << std::endl; std::cout << std::endl;
+
+
+	setlocale(LC_ALL, "Russian");
+	for (int i = 0; i < 200; i++) {
+		std::cout << "Для значения n = " << i << " Функция Маккарти = " << fooM(i) << "\t";
+		if(i % 3 == 2)
+			std::cout << std::endl;		
+	}
+
+	
+
+
+	std::cout << std::endl;
 	std::cout << recAdd(4, 2) << std::endl;
 	std::cout << recMulty(4, 2) << std::endl;
 	std::cout << recPower(4, 2) << std::endl;
 
+	std::cout << std::endl;
+	std::cout << iterAdd(4, 2) << std::endl;
+	std::cout << iterMulty(4, 2) << std::endl;
+	std::cout << iterPower(4, 2) << std::endl;
+	std::cout << std::endl;
 
-	int n = 17;
+	for (int i = 0; i < 7; i++) {
+		std::cout << '\n';
+		std::cout << foo4(i) << std::endl;
+		std::cout << foo5(i) << std::endl;
+	}
+	 n = 17;
 	for (unsigned i = 0; i < n; ++i)
 	{
 		for (unsigned j = 0; j < n; ++j)
-			std::cout << picture2[i][j] << " ";
+			std::cout << picture[i][j] << " ";
 		std::cout << "\n";
 	}
-	// 9 3
+	// 10 3
 	// 2 5
-	FILL(2,5,'@','0');
+	FILL(10,3,'@','0');
 	for (unsigned i = 0; i < n; ++i)
 	{
 		for (unsigned j = 0; j < n; ++j)
-			std::cout << picture2[i][j] << " ";
+			std::cout << picture[i][j] << " ";
 		std::cout << "\n";
 	}
-	std::cout;
+	std::cout << count;
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"

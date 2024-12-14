@@ -47,19 +47,18 @@ namespace MyTypes
         }
         public MyString(Collection<char> chars) : base(chars.GetData())
         {
-            //Console.WriteLine("Создалась строка!!!");
+
         }
         public MyString(char[] chars) : base(chars)
         {
-            //Console.WriteLine("Создалась строка!!!");
+
         }
         public MyString() : base()
         {
-            //Console.WriteLine("Создалась строка!!!");
+
         }
         public MyString(string chars) : base()
         {
-            //Console.WriteLine("Создалась строка!!!");
             int p = 2;
             while (p < chars.Length) p *= 2;
             items = new char[p];
@@ -91,7 +90,9 @@ namespace MyTypes
                     res.Add(new Sentence(words, _points));
                     words = new Collection<MyString>();
                     _points = new Collection<MyString>();
-                    last = i + 1;
+                    i++;
+                    last = i;
+                    
                 }
                 else if (points.Contains(items[i]))
                 {
@@ -101,8 +102,7 @@ namespace MyTypes
                         _points[_points.Count -1 ].Add(items[i++]);
                     last = i;
                 }
-            }
-            
+            }            
             return res;
         }      
         
