@@ -4,14 +4,14 @@ using System.Linq;
 using System.Net;
 namespace MyTypes
 {
-    internal class Matrix : Collection<MyDoubleArray>
+    internal class Matrix : Collection<MyIntArray>
     {
 
         public Matrix(int rows,int coluoms, bool autoFill = false) : base(rows)
         {
             for (int i = 0; i < rows; i++)
             {
-                items[i] = new MyDoubleArray(coluoms);
+                items[i] = new MyIntArray(coluoms);
                 if (autoFill) items[i].Fill();
             }
 
@@ -21,7 +21,7 @@ namespace MyTypes
             if(rows == coluoms.Length)
             for (int i = 0; i < rows; i++)
             {
-                items[i] = new MyDoubleArray(coluoms[i]);
+                items[i] = new MyIntArray(coluoms[i]);
                 if (autoFill) items[i].Fill();
             }
             else
@@ -37,7 +37,7 @@ namespace MyTypes
                 items[i].Fill(random);
             }
         }
-        public void AddColuom(MyDoubleArray coluom,int ind = 0)
+        public void AddColuom(MyIntArray coluom,int ind = 0)
         {
             for (int i = 0; i < Count; i++) 
             {
@@ -49,7 +49,7 @@ namespace MyTypes
             for(int i = 0; i < Count; i++)
             {
 
-                items[i].Write(count);
+                items[i].Write();
             }
         }        
         public double this[int key1, int key2]
