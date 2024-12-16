@@ -45,23 +45,22 @@ namespace lab_5
         public void AddRows(MyMatrix matrix)
         {
             int[,] result = new int[Row + matrix.Row, Column];
-            for (int i = 0; i < Row; i++)
+            for (int i = 0; i < matrix.Row; i++)
             {
                 for (int j = 0; j < Column; j++)
                 {
-                    result[i,j] = numbers[i,j]; 
+                    result[i,j] = matrix[i,j]; 
                 }
             }
-            for (int i = Row; i < Row + matrix.Row; i++)
+            for (int i = matrix.Row; i < Row + matrix.Row; i++)
             {
                 for (int j = 0; j < Column; j++)
                 {
-                    result[i, j] = matrix[i - Row, j];
+                    result[i, j] = numbers[i - Row, j];
                 }
             }
             Row += matrix.Row;
             numbers = result;
-
         }
         public int this[int key1, int key2]
         {

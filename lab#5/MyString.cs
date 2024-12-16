@@ -28,7 +28,7 @@ namespace MyTypes
                         words[i].Reverse();
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
-                    Console.Write(words[i].ToString() );
+                    Console.Write(words[i].ToString());
                     Console.ForegroundColor= ConsoleColor.White;
                     Console.Write(points[i].ToString());
                 }
@@ -45,18 +45,9 @@ namespace MyTypes
                 }
             }
         }
-        public MyString(MyCollection<char> chars) : base(chars.GetData())
-        {
-
-        }
-        public MyString(char[] chars) : base(chars)
-        {
-
-        }
-        public MyString() : base()
-        {
-
-        }
+        public MyString(MyCollection<char> chars) : base(chars.GetData()) { }
+        public MyString(char[] chars) : base(chars) { }
+        public MyString() : base() { }
         public MyString(string chars) : base()
         {
             int p = 2;
@@ -108,7 +99,7 @@ namespace MyTypes
         
         public override string ToString()
         {
-            return new string(items);
+            return new string(Copy(0,Count).GetData());
         }
     }
 }

@@ -47,7 +47,7 @@
     <Compile Include="InputManager.cs" />
     <Compile Include="Lab5.cs" />
     <Compile Include="MyMatrix.cs" />
-    <Compile Include="TornMyMatrix.cs" />
+    <Compile Include="MyTornMatrix.cs" />
     <Compile Include="MyDoubleArray.cs" />
     <Compile Include="MyIntArray.cs" />
     <Compile Include="MyString.cs" />

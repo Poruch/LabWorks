@@ -33,9 +33,13 @@ namespace MyTypes
                 items[i] = numbers[i];
             length = numbers.Length;
         }
-        protected bool inBorder(int ind)
+        protected int inBorder
         {
-            return ind < length && ind >= 0;
+            set
+            {
+                if (!(value < length && value >= 0))
+                    throw new ArgumentOutOfRangeException("Выход за границы коллекции типа - " + typeof(T).Name);
+            }
         }
         protected void SetSize(int size)
         {
@@ -48,9 +52,10 @@ namespace MyTypes
 
         public void DeleteElem(int ind)
         {
-            if (!inBorder(ind))
+            try { inBorder = ind; }
+            catch
             {
-                Console.WriteLine("Удаление элемента невозможно элемент находиться вне границ массива");
+                Console.WriteLine("Удаление элемента невозможно, выход за границы массива");
                 return;
             }
             int j = 0;
@@ -181,9 +186,10 @@ namespace MyTypes
 
         public MyCollection<T> Copy(int indS)
         {
-            if (!inBorder(indS))
+            try { inBorder = indS; }
+            catch
             {
-                Console.WriteLine("Выход за границы массива");
+                Console.WriteLine("Копирование невозможно, выход за границы массива");
                 return new MyCollection<T>(0);
             }
             MyCollection<T> result = new MyCollection<T>(Count - indS);
@@ -193,11 +199,13 @@ namespace MyTypes
         }
         public MyCollection<T> Copy(int indS, int indE)
         {
-            if (!inBorder(indS) || !inBorder(indE))
+            try { inBorder = indS;}
+            catch
             {
-                Console.WriteLine("Выход за границы массива");
+                Console.WriteLine("Копирование невозможно, выход за границы массива");
                 return new MyCollection<T>(0);
             }
+            indE = indE > Count ? Count : indE;
             MyCollection<T> result = new MyCollection<T>(indE - indS);
             for (int i = indS; i < indE; i++)
                 result[i - indS] = items[i];
@@ -248,19 +256,12 @@ namespace MyTypes
         {
             get
             {
-                if (!inBorder(key))
-                {
-                    throw new ArgumentOutOfRangeException("Выход за границы коллекции типа - " + typeof(T).Name);
-                }
+                inBorder = key;
                 return items[key];
             }
             set
             {
-                if (!inBorder(key))
-                {
-                    Console.WriteLine("Выход за границы массива");
-                    return;
-                }
+                inBorder = key;
                 items[key] = value;
             }
         }
@@ -274,10 +275,7 @@ namespace MyTypes
         {
             get
             {
-                if (!inBorder(index))
-                {
-                    Console.WriteLine("Сначала сдвиньте указатель");
-                }
+                inBorder = index;
                 return items[index];
             }
         }

@@ -5,9 +5,10 @@ using System.Linq;
 using System.Net;
 namespace MyTypes
 {
-    internal class TornMyMatrix : MyCollection<MyIntArray>
+    internal class MyTornMatrix : MyCollection<MyIntArray>
     {
-        public TornMyMatrix(int rows,int columns, bool autoFill = false) : base(rows)
+        
+        public MyTornMatrix(int rows,int columns, bool autoFill = false) : base(rows)
         {
             for (int i = 0; i < rows; i++)
             {
@@ -16,7 +17,7 @@ namespace MyTypes
             }
 
         }
-        public TornMyMatrix(int rows, int[] columns, bool autoFill = false) : base(rows)
+        public MyTornMatrix(int rows, int[] columns, bool autoFill = false) : base(rows)
         {
             if(rows == columns.Length)
             for (int i = 0; i < rows; i++)
@@ -26,7 +27,7 @@ namespace MyTypes
             }
             else
             {
-                Console.WriteLine("Количество колонок не равно количесиву столбцов");
+                throw new ArgumentException("Количество строк не равно количеству столбцов");
             }
 
         }

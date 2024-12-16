@@ -20,7 +20,7 @@ namespace lab_5
                     "\n-1 - выход из программы");
                 a = InputManager.ReadValueInt();
                 MyMatrix mat;
-                TornMyMatrix mat2;
+                MyTornMatrix mat2;
                 switch (a)
                 {
                     case 1:
@@ -88,7 +88,7 @@ namespace lab_5
                             mm.Fill(false);
                         else
                             mm.Fill(true);
-                        mat2 = new TornMyMatrix(mm.Count, mm.GetData());
+                        mat2 = new MyTornMatrix(mm.Count, mm.GetData());
                         mat2.Fill();
                         Console.Clear();
                         mat2.Write(2);
