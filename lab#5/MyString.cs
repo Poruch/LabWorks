@@ -5,16 +5,16 @@ using System.Xml.Serialization;
 
 namespace MyTypes
 {
-    internal class MyString : Collection<char>
+    internal class MyString : MyCollection<char>
     {
         static readonly MyString points = new MyString() {' ',';', ',', ':' };
         static readonly MyString ends = new MyString() { '.', '?', '!' };
         public class Sentence
         {
             public int Count { get => words.Count; }
-            Collection<MyString> words = new Collection<MyString>();
-            Collection<MyString> points = new Collection<MyString>();
-            public Sentence(Collection<MyString> words, Collection<MyString> points)
+            MyCollection<MyString> words = new MyCollection<MyString>();
+            MyCollection<MyString> points = new MyCollection<MyString>();
+            public Sentence(MyCollection<MyString> words, MyCollection<MyString> points)
             {
                 this.words = words;
                 this.points = points;
@@ -45,7 +45,7 @@ namespace MyTypes
                 }
             }
         }
-        public MyString(Collection<char> chars) : base(chars.GetData())
+        public MyString(MyCollection<char> chars) : base(chars.GetData())
         {
 
         }
@@ -75,12 +75,12 @@ namespace MyTypes
             }
             return false;
         }
-        public Collection<Sentence> GetSentence()
+        public MyCollection<Sentence> GetSentence()
         {
-            Collection<Sentence> res = new Collection<Sentence>();
+            MyCollection<Sentence> res = new MyCollection<Sentence>();
             int last = 0;
-            Collection<MyString> _points = new Collection<MyString>();
-            Collection<MyString> words = new Collection<MyString>();
+            MyCollection<MyString> _points = new MyCollection<MyString>();
+            MyCollection<MyString> words = new MyCollection<MyString>();
             for (int i = 0; i < Count; i++)
             {
                 if (ends.Contains(items[i]))
@@ -88,8 +88,8 @@ namespace MyTypes
                     words.Add(new MyString(Copy(last, i)));
                     _points.Add(new MyString() { items[i] });
                     res.Add(new Sentence(words, _points));
-                    words = new Collection<MyString>();
-                    _points = new Collection<MyString>();
+                    words = new MyCollection<MyString>();
+                    _points = new MyCollection<MyString>();
                     i++;
                     last = i;
                     

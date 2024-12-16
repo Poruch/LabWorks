@@ -1,27 +1,27 @@
 ﻿using System;
+using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 namespace MyTypes
 {
-    internal class Matrix : Collection<MyIntArray>
+    internal class TornMyMatrix : MyCollection<MyIntArray>
     {
-
-        public Matrix(int rows,int coluoms, bool autoFill = false) : base(rows)
+        public TornMyMatrix(int rows,int columns, bool autoFill = false) : base(rows)
         {
             for (int i = 0; i < rows; i++)
             {
-                items[i] = new MyIntArray(coluoms);
+                items[i] = new MyIntArray(columns);
                 if (autoFill) items[i].Fill();
             }
 
         }
-        public Matrix(int rows, int[] coluoms, bool autoFill = false) : base(rows)
+        public TornMyMatrix(int rows, int[] columns, bool autoFill = false) : base(rows)
         {
-            if(rows == coluoms.Length)
+            if(rows == columns.Length)
             for (int i = 0; i < rows; i++)
             {
-                items[i] = new MyIntArray(coluoms[i]);
+                items[i] = new MyIntArray(columns[i]);
                 if (autoFill) items[i].Fill();
             }
             else
@@ -37,11 +37,11 @@ namespace MyTypes
                 items[i].Fill(random);
             }
         }
-        public void AddColuom(MyIntArray coluom,int ind = 0)
+        public void AddColuom(MyIntArray column, int ind = 0)
         {
             for (int i = 0; i < Count; i++) 
             {
-                items[i].Add(ind,coluom[i]);
+                items[i].Add(ind, column[i]);
             }
         }
         public void Write(int count)
@@ -52,7 +52,7 @@ namespace MyTypes
                 items[i].Write();
             }
         }        
-        public double this[int key1, int key2]
+        public int this[int key1, int key2]
         {
             get
             {

@@ -4,7 +4,7 @@ using System;
 
 namespace MyTypes
 {
-    class MyDoubleArray : Collection<double>
+    class MyDoubleArray : MyCollection<double>
     {
         private static Random rand = new Random();
         private int start = 0;

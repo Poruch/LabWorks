@@ -19,7 +19,8 @@ namespace lab_5
                     "\n3 - выполнить действие со строкой," +
                     "\n-1 - выход из программы");
                 a = InputManager.ReadValueInt();
-                Matrix mat;
+                MyMatrix mat;
+                TornMyMatrix mat2;
                 switch (a)
                 {
                     case 1:
@@ -40,10 +41,14 @@ namespace lab_5
                             m = InputManager.ReadValueInt();
                         }
                         while (m < 0);
-                        mat = new Matrix(n, m);
-                        mat.Fill();
+                        mat = new MyMatrix(n, m);
+                        Console.WriteLine("Введите 1 если хотите заполнять вручную, введите любое другое число если нет");
+                        n = InputManager.ReadValueInt();
+                        if(n == 1)
+                        mat.Fill(false);
+                        else mat.Fill(true);
                         Console.Clear();
-                        mat.Write(3);
+                        mat.Write();
                         Console.WriteLine("Введите количество строк");
                         int k = 0;
                         do
@@ -53,13 +58,15 @@ namespace lab_5
                             k = InputManager.ReadValueInt();
                         }
                         while (k < 0);
-                        for (int i = 0; i < k; i++)
-                        {
-                            MyDoubleArray arr = new MyDoubleArray(m);
-                            arr.Fill();
-                            mat.Add(0, arr);
-                        }
-                        mat.Write(3);
+                        var result = new MyMatrix(k, m);
+                        Console.WriteLine("Введите 1 если хотите заполнять вручную, введите любое другое число если нет");
+                        n = InputManager.ReadValueInt();
+                        if (n == 1)
+                            result.Fill(false);
+                        else
+                            result.Fill(true);
+                        mat.AddRows(result);
+                        mat.Write();
                         Console.WriteLine("Нажмите Enter для продолжения");
                         Console.ReadLine();
                         break;
@@ -75,15 +82,16 @@ namespace lab_5
                         while (n < 0);
                         MyIntArray mm = new MyIntArray(n);
                         Console.WriteLine("Введите 1 если хотите заполнять сами");
+                        mm.SetBorderRand(1, 10);
                         int pow = InputManager.ReadValueInt();
                         if (pow == 1)
                             mm.Fill(false);
                         else
-                            mm.Fill();
-                        mat = new Matrix(mm.Count, mm.GetData());
-                        mat.Fill();
+                            mm.Fill(true);
+                        mat2 = new TornMyMatrix(mm.Count, mm.GetData());
+                        mat2.Fill();
                         Console.Clear();
-                        mat.Write(2);
+                        mat2.Write(2);
                         Console.WriteLine("Введите индекс строки");
                         int ind = 0;
                         do
@@ -93,8 +101,8 @@ namespace lab_5
                             ind = InputManager.ReadValueInt();
                         }
                         while (ind < 0);
-                        mat.DeleteElem(ind);
-                        mat.Write(2);
+                        mat2.DeleteElem(ind);
+                        mat2.Write(2);
                         Console.WriteLine("Нажмите Enter для продолжения");
                         Console.ReadLine();
                         break;

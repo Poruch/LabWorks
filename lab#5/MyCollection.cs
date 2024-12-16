@@ -3,7 +3,7 @@ using System.Collections;
 namespace MyTypes
 {
     delegate T Criterion<T, J>(J a);
-    class Collection<T> : IEnumerable, IEnumerator 
+    class MyCollection<T> : IEnumerable, IEnumerator 
     {
         private int length;
         protected T[] items;
@@ -12,19 +12,19 @@ namespace MyTypes
             get { return length; }
             protected set { length = value; }
         }
-        public  Collection(int size)
+        public  MyCollection(int size)
         {
             int p = 2;
             while (p < size) p *= 2;
             items = new T[p];
             length = size;
         }
-        public Collection()
+        public MyCollection()
         {
             items = new T[0];
             length = 0;
         }
-        public Collection(T[] numbers)
+        public MyCollection(T[] numbers)
         {
             int p = 2;
             while (p < numbers.Length) p *= 2;
@@ -69,7 +69,7 @@ namespace MyTypes
                 newLen *= 2;
             SetSize(newLen);
         }
-        public void Insert(int ind, Collection<T> array)
+        public void Insert(int ind, MyCollection<T> array)
         {
             if (!(ind <= length && ind >= 0))
             {
@@ -179,26 +179,26 @@ namespace MyTypes
         }     
 
 
-        public Collection<T> Copy(int indS)
+        public MyCollection<T> Copy(int indS)
         {
             if (!inBorder(indS))
             {
                 Console.WriteLine("Выход за границы массива");
-                return new Collection<T>(0);
+                return new MyCollection<T>(0);
             }
-            Collection<T> result = new Collection<T>(Count - indS);
+            MyCollection<T> result = new MyCollection<T>(Count - indS);
             for (int i = indS; i < Count; i++)
                 result[i - indS] = items[i];
             return result;
         }
-        public Collection<T> Copy(int indS, int indE)
+        public MyCollection<T> Copy(int indS, int indE)
         {
             if (!inBorder(indS) || !inBorder(indE))
             {
                 Console.WriteLine("Выход за границы массива");
-                return new Collection<T>(0);
+                return new MyCollection<T>(0);
             }
-            Collection<T> result = new Collection<T>(indE - indS);
+            MyCollection<T> result = new MyCollection<T>(indE - indS);
             for (int i = indS; i < indE; i++)
                 result[i - indS] = items[i];
             return result;
@@ -227,7 +227,7 @@ namespace MyTypes
             Console.WriteLine("Ни один элемент не подешел по критерию");
             return default;
         }
-        public Collection<T> FindAll(Criterion<bool, T> criterion)
+        public MyCollection<T> FindAll(Criterion<bool, T> criterion)
         {
             var currarray = new T[length];
             T[] result;
@@ -241,7 +241,7 @@ namespace MyTypes
                 result[i] = currarray[i];
             }
 
-            return new Collection<T>(result);
+            return new MyCollection<T>(result);
         }
 
         public T this[int key]

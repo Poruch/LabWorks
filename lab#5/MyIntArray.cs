@@ -3,9 +3,9 @@ using System;
 
 namespace MyTypes
 {
-    class MyIntArray : Collection<int>
+    class MyIntArray : MyCollection<int>
     {
-        private Random rand = new Random();
+        private static Random rand = new Random();
         private int start = 0;
         private int end = 10;
         public void SetBorderRand(int start, int end)
