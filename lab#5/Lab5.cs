@@ -25,22 +25,8 @@ namespace lab_5
                 {
                     case 1:
                         Console.WriteLine("Введите размеры массива");
-                        int n = 0;
-                        do
-                        {
-                            if (n < 0)
-                                Console.WriteLine("Количество не может быть отрицательным введите заново");
-                            n = InputManager.ReadValueInt();
-                        }
-                        while (n < 0);
-                        int m = 0;
-                        do
-                        {
-                            if (m < 0)
-                                Console.WriteLine("Количество не может быть отрицательным введите заново");
-                            m = InputManager.ReadValueInt();
-                        }
-                        while (m < 0);
+                        int n = InputManager.ReadValueUInt();
+                        int m = InputManager.ReadValueUInt();
                         mat = new MyMatrix(n, m);
                         Console.WriteLine("Введите 1 если хотите заполнять вручную, введите любое другое число если нет");
                         n = InputManager.ReadValueInt();
@@ -50,14 +36,7 @@ namespace lab_5
                         Console.Clear();
                         mat.Write();
                         Console.WriteLine("Введите количество строк");
-                        int k = 0;
-                        do
-                        {
-                            if (k < 0)
-                                Console.WriteLine("Количество не может быть отрицательным введите заново");
-                            k = InputManager.ReadValueInt();
-                        }
-                        while (k < 0);
+                        int k = InputManager.ReadValueUInt();
                         var result = new MyMatrix(k, m);
                         Console.WriteLine("Введите 1 если хотите заполнять вручную, введите любое другое число если нет");
                         n = InputManager.ReadValueInt();
@@ -66,20 +45,14 @@ namespace lab_5
                         else
                             result.Fill(true);
                         mat.AddRows(result);
+                        Console.WriteLine("Результат:");
                         mat.Write();
                         Console.WriteLine("Нажмите Enter для продолжения");
                         Console.ReadLine();
                         break;
                     case 2:
                         Console.WriteLine("Введите размеры массива");
-                        n = 0;
-                        do
-                        {
-                            if (n < 0)
-                                Console.WriteLine("Количество не может быть отрицательным введите заново");
-                            n = InputManager.ReadValueInt();
-                        }
-                        while (n < 0);
+                        n = InputManager.ReadValueUInt();
                         MyIntArray mm = new MyIntArray(n);
                         Console.WriteLine("Введите 1 если хотите заполнять сами");
                         mm.SetBorderRand(1, 10);
@@ -92,16 +65,10 @@ namespace lab_5
                         mat2.Fill();
                         Console.Clear();
                         mat2.Write(2);
-                        Console.WriteLine("Введите индекс строки");
-                        int ind = 0;
-                        do
-                        {
-                            if (ind < 0)
-                                Console.WriteLine("индекс не может быть отрицательным введите заново");
-                            ind = InputManager.ReadValueInt();
-                        }
-                        while (ind < 0);
+                        Console.WriteLine("Введите номер строки");
+                        int ind = InputManager.ReadValueUInt() - 1;
                         mat2.DeleteElem(ind);
+                        Console.WriteLine("Результат:");
                         mat2.Write(2);
                         Console.WriteLine("Нажмите Enter для продолжения");
                         Console.ReadLine();
@@ -111,6 +78,7 @@ namespace lab_5
                         string buff = Console.ReadLine();
                         MyString s = new MyString(buff);
                         var sentence = s.GetSentence();
+                        Console.WriteLine("Результат:");
                         for (int i = 0; i < sentence.Count; i++)
                         {
                             sentence[i].Write();

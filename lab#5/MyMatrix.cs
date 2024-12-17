@@ -56,7 +56,7 @@ namespace lab_5
             {
                 for (int j = 0; j < Column; j++)
                 {
-                    result[i, j] = numbers[i - Row, j];
+                    result[i, j] = numbers[i - matrix.Row, j];
                 }
             }
             Row += matrix.Row;
