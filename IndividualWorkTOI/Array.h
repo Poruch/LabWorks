@@ -1,27 +1,35 @@
 #include <string>
 
-
 namespace MyTypes {
-struct Image;
+	struct Image;
+}
+namespace Arrays {
+	void GetArrayFromFile(MyTypes::Image** arr,int* len, std::string fileName);
+	void GetArray(MyTypes::Image** arr, int len);
+	void Reconstruct(MyTypes::Image* arr, int len);
 
-	void GetArrayFromFile(Image** arr,int* len, std::string fileName);
+	void WriteArray(MyTypes::Image* arr, int len);
+
+	void SortArray(MyTypes::Image* arr, int len, int (*criterion)(MyTypes::Image), bool rise = true);
+
+	void GetSortIndexes(MyTypes::Image* arr, int** indexes, int len, int (*criterion)(MyTypes::Image), bool rise = true);
+	void GetSortIndexes(MyTypes::Image* arr, int** indexes, int len, std::string (*criterion)(MyTypes::Image), bool rise = true);
+
+	int FindAll(MyTypes::Image* arr, int** indexes, int* lenIndexes, int len, int value, int (*criterion)(MyTypes::Image));
+	int FindAll(MyTypes::Image* arr, int** indexes,int* lenIndexes, int len, std::string value, std::string(*criterion)(MyTypes::Image));
+
+	int FindBinary(MyTypes::Image* arr, int len, int value, int(*criterion)(MyTypes::Image));
+	int FindBinary(MyTypes::Image* arr, int len, int value, int(*criterion)(MyTypes::Image), int leftOffset, int rightOffset);
+	int FindBinary(MyTypes::Image* arr, int len, std::string value, std::string(*criterion)(MyTypes::Image));
+	int FindBinary(MyTypes::Image* arr, int len, std::string value, std::string(*criterion)(MyTypes::Image), int leftOffset, int rightOffset);
+	int Find(MyTypes::Image* arr, int len, MyTypes::Image value);
+
+	void DeleteElems(MyTypes::Image** arr, int* len, int value, int(*criterion)(MyTypes::Image));
+	void DeleteElems(MyTypes::Image** arr, int* len, std::string value, std::string(*criterion)(MyTypes::Image));
+
+	void DeleteFirstElem(MyTypes::Image** arr, int* len, int value, int(*criterion)(MyTypes::Image));
+	void DeleteFirstElem(MyTypes::Image** arr, int* len, std::string value, std::string(*criterion)(MyTypes::Image));
 
 
-	void GetArray(Image** arr, int len);
-
-	void WriteArray(Image* arr, int len);
-	void SortArray(Image* arr, int len, int (*criterion)(Image), bool rise = true);
-
-	int FindBinary(Image* arr, int len, int value, int(*criterion)(Image));
-	int FindBinary(Image* arr, int len, std::string value, std::string(*criterion)(Image));
-	int Find(Image* arr, int len, Image value);
-
-	int DeleteElems(Image** arr, int len, int value, int(*criterion)(Image));
-	int DeleteElems(Image** arr, int len, std::string value, std::string(*criterion)(Image));
-
-	int DeleteFirstElem(Image** arr, int len, int value, int(*criterion)(Image));
-	int DeleteFirstElem(Image** arr, int len, std::string value, std::string(*criterion)(Image));
-
-
-	int DeleteFirstElem(Image** arr, int len, Image value);
+	void DeleteFirstElem(MyTypes::Image** arr, int* len, MyTypes::Image value);
 }
