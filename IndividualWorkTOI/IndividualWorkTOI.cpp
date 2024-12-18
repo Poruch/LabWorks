@@ -1,18 +1,20 @@
 ﻿// IndividualWorkTOI.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
 #include <iostream>
-#include "MyList.h"
-#include <vector>
+#include "InputManager.h"
+#include "MyRecord.h"
+#include "Array.h"
+
 
 int main()
 {
-	MyTypes::MyList<int> list = MyTypes::MyList<int>(10);
-	for (int i = 0; i < 10; i++) {
-		list[i] = i;
-	}
-	for (int i = 0; i < 10; i++) {
-		std::cout << list[i];
-	}
+	setlocale(LC_ALL, "Russian");
+	MyTypes::Image* im = 0;
+	int len = 0;
+
+
+	MyTypes::GetArrayFromFile(&im, &len,"Data.txt");
+	MyTypes::WriteArray(im,len);
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
