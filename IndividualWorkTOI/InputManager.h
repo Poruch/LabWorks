@@ -7,7 +7,6 @@ namespace MyTypes {
 namespace DataManage {
 	class InputManager {
 	public:
-		static MyTypes::Image GetRecord();
-		static MyTypes::Image GetRecord(std::string line);
+		static MyTypes::Image GetRecord(int from, std::string line = "", char separator = ' ');
 	};
 }

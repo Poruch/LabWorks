@@ -12,9 +12,19 @@ int main()
 	MyTypes::Image* im = 0;
 	int len = 0;
 
-
 	MyTypes::GetArrayFromFile(&im, &len,"Data.txt");
 	MyTypes::WriteArray(im,len);
+	MyTypes::SortArray(im, len, [](MyTypes::Image image) { return image.width; });
+	MyTypes::WriteArray(im, len);
+	MyTypes::SortArray(im, len, [](MyTypes::Image image) { return image.height; });
+	MyTypes::WriteArray(im, len);
+	MyTypes::SortArray(im, len, [](MyTypes::Image image) { return (int)image.name[0]; });
+	MyTypes::WriteArray(im, len);
+	std::cout << MyTypes::Find(im, len, MyTypes::Image(1, "Луна", 26, 736, 615, 24, "jpg")) << '\n';
+
+	MyTypes::SortArray(im, len, [](MyTypes::Image image) { return image.colorDepth; });
+	MyTypes::WriteArray(im, len);
+	std::cout << MyTypes::FindBinary(im, len, 8, [](MyTypes::Image image) { return image.colorDepth; }) << '\n';
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
