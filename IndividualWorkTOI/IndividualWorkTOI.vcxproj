@@ -133,10 +133,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h" />
+    <ClInclude Include="BinaryTrees.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="List.h" />
     <ClInclude Include="MyRecord.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Data 2.txt" />
     <Text Include="Data.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

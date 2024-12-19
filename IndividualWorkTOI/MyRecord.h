@@ -5,12 +5,12 @@ namespace MyTypes {
 	struct Image {
 	public:
 	
-		int number;
+		long long int number;
 		std::string name;
-		int size;
-		int width;
-		int height;
-		int colorDepth;
+		unsigned int size;
+		unsigned short width;
+		unsigned short height;
+		unsigned char colorDepth;
 		std::string format;
 
 		void Write() {
@@ -19,7 +19,7 @@ namespace MyTypes {
 			std::cout << size << "\t";
 			std::cout << width << "\t";
 			std::cout << height << "\t";
-			std::cout << colorDepth << "\t";
+			std::cout << (int)colorDepth << "\t";
 			std::cout << format.substr(0, 6) << "\t";
 		}
 

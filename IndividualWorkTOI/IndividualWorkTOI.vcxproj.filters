@@ -35,9 +35,18 @@
     <ClInclude Include="Array.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="BinaryTrees.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Data.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="Data 2.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
   </ItemGroup>

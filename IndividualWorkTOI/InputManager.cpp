@@ -39,7 +39,7 @@ MyTypes::Image DataManage::InputManager::GetRecord(int from, std::string line, c
 				a++;
 				break;
 			case 4:
-				result.colorDepth = stoi(line.substr(last, i - last));
+				result.colorDepth = (unsigned char)stoi(line.substr(last, i - last));
 				last = i + 1;
 				a++;
 				break;
