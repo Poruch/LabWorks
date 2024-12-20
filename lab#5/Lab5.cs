@@ -1,7 +1,6 @@
 ﻿using DataManage;
 using MyTypes;
 using System;
-using System.Linq;
 
 namespace lab_5
 {
@@ -30,8 +29,8 @@ namespace lab_5
                         mat = new MyMatrix(n, m);
                         Console.WriteLine("Введите 1 если хотите заполнять вручную, введите любое другое число если нет");
                         n = InputManager.ReadValueInt();
-                        if(n == 1)
-                        mat.Fill(false);
+                        if (n == 1)
+                            mat.Fill(false);
                         else mat.Fill(true);
                         Console.Clear();
                         mat.Write();

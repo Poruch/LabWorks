@@ -1,10 +1,5 @@
 ﻿using DataManage;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace lab_5
 {
@@ -14,30 +9,30 @@ namespace lab_5
         int[,] numbers;
         public int Row;
         public int Column;
-        public MyMatrix(int row,int column)
+        public MyMatrix(int row, int column)
         {
             numbers = new int[row, column];
-            Row = row; 
+            Row = row;
             Column = column;
         }
         public void Fill(bool random)
         {
-            if(random) 
-                for (int i = 0; i < Row; i++)                
-                    for(int j = 0; j < Column; j++)                    
+            if (random)
+                for (int i = 0; i < Row; i++)
+                    for (int j = 0; j < Column; j++)
                         numbers[i, j] = rand.Next(0, 10);
             else
-                for (int i = 0; i < Row; i++)                
-                    for (int j = 0; j < Column; j++)                    
-                        numbers[i, j] = InputManager.ReadValueInt();     
+                for (int i = 0; i < Row; i++)
+                    for (int j = 0; j < Column; j++)
+                        numbers[i, j] = InputManager.ReadValueInt();
         }
         public void Write()
         {
-            for (int i = 0;i < Row; i++)
+            for (int i = 0; i < Row; i++)
             {
-                for(int j = 0;j < Column; j++)
+                for (int j = 0; j < Column; j++)
                 {
-                    Console.Write(numbers[i,j] + " ");
+                    Console.Write(numbers[i, j] + " ");
                 }
                 Console.WriteLine();
             }
@@ -49,7 +44,7 @@ namespace lab_5
             {
                 for (int j = 0; j < Column; j++)
                 {
-                    result[i,j] = matrix[i,j]; 
+                    result[i, j] = matrix[i, j];
                 }
             }
             for (int i = matrix.Row; i < Row + matrix.Row; i++)
@@ -66,11 +61,11 @@ namespace lab_5
         {
             get
             {
-                return numbers[key1,key2];
+                return numbers[key1, key2];
             }
             set
             {
-                numbers[key1,key2] = value;
+                numbers[key1, key2] = value;
             }
         }
     }

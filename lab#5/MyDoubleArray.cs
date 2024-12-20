@@ -266,7 +266,7 @@ namespace MyTypes
             {
                 if (i % 10 != 0)
                     Console.ForegroundColor = (ConsoleColor)(i % 10);
-                Console.Write(items[i].ToString().Substring(0,count) + " ");
+                Console.Write(items[i].ToString().Substring(0, count) + " ");
             }
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.White;

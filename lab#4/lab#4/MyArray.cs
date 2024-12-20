@@ -13,7 +13,7 @@ namespace MyTypes
         private Random rand = new Random();
         private int start = 0;
         private int end = 10;
-        
+
         public void SetBorderRand(int start, int end)
         {
             this.start = start;
@@ -280,7 +280,7 @@ namespace MyTypes
             }
             ints = result;
         }
-        
+
         public int FindFirst(Criterion<bool, int> criterion)
         {
             for (int i = 0; i < length; i++)

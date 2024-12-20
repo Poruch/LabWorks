@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Diagnostics.Tracing;
-using System.Threading;
-using System.Xml.Serialization;
 
 namespace MyTypes
 {
     internal class MyString : MyCollection<char>
     {
-        static readonly MyString points = new MyString() {' ',';', ',', ':' };
+        static readonly MyString points = new MyString() { ' ', ';', ',', ':' };
         static readonly MyString ends = new MyString() { '.', '?', '!' };
         public class Sentence
         {
@@ -21,7 +18,7 @@ namespace MyTypes
             }
             public void Write()
             {
-                for (int i = 0; i < words.Count; i++) 
+                for (int i = 0; i < words.Count; i++)
                 {
                     if (words[i].Count == i + 1)
                     {
@@ -29,19 +26,19 @@ namespace MyTypes
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
                     Console.Write(words[i].ToString());
-                    Console.ForegroundColor= ConsoleColor.White;
+                    Console.ForegroundColor = ConsoleColor.White;
                     Console.Write(points[i].ToString());
                 }
             }
-            public MyString this[int i] 
-            { 
+            public MyString this[int i]
+            {
                 get
                 {
                     return words[i];
                 }
                 set
-                { 
-                    words[i] = value; 
+                {
+                    words[i] = value;
                 }
             }
         }
@@ -83,23 +80,23 @@ namespace MyTypes
                     _points = new MyCollection<MyString>();
                     i++;
                     last = i;
-                    
+
                 }
                 else if (points.Contains(items[i]))
                 {
                     _points.Add(new MyString());
-                    words.Add(new MyString(Copy(last, i)));                    
-                    while (points.Contains(items[i])) 
-                        _points[_points.Count -1 ].Add(items[i++]);
+                    words.Add(new MyString(Copy(last, i)));
+                    while (points.Contains(items[i]))
+                        _points[_points.Count - 1].Add(items[i++]);
                     last = i;
                 }
-            }            
+            }
             return res;
-        }      
-        
+        }
+
         public override string ToString()
         {
-            return new string(Copy(0,Count).GetData());
+            return new string(Copy(0, Count).GetData());
         }
     }
 }

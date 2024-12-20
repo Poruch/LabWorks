@@ -103,7 +103,7 @@ namespace MyTypes
                 for (int i = 0; i < Count; i++)
                     items[i] = InputManager.ReadValueInt();
             }
-        }       
+        }
 
 
         public void AddElem(int ind, int count = 1, bool fill = false, bool random = true)
@@ -151,7 +151,7 @@ namespace MyTypes
 
         public void SelectionSort(bool rise = true)
         {
-            for (int i = 0; i < Count    - 1; i++)
+            for (int i = 0; i < Count - 1; i++)
             {
                 int buff1 = items[i];
                 int buff2 = !rise ? int.MinValue : int.MaxValue;

@@ -3,7 +3,7 @@ using System.Collections;
 namespace MyTypes
 {
     delegate T Criterion<T, J>(J a);
-    class MyCollection<T> : IEnumerable, IEnumerator 
+    class MyCollection<T> : IEnumerable, IEnumerator
     {
         private int length;
         protected T[] items;
@@ -12,7 +12,7 @@ namespace MyTypes
             get { return length; }
             protected set { length = value; }
         }
-        public  MyCollection(int size)
+        public MyCollection(int size)
         {
             int p = 2;
             while (p < size) p *= 2;
@@ -40,6 +40,10 @@ namespace MyTypes
                 if (!(value < length && value >= 0))
                     throw new ArgumentOutOfRangeException("Выход за границы коллекции типа - " + typeof(T).Name);
             }
+        }
+        public bool InBorder(int value)
+        {  
+                return value < length && value >= 0;
         }
         protected void SetSize(int size)
         {
@@ -139,7 +143,7 @@ namespace MyTypes
 
             for (int i = length; i > ind; i--)
             {
-                items[i] = items[i-1];
+                items[i] = items[i - 1];
             }
             items[ind] = value;
             length++;
@@ -149,7 +153,7 @@ namespace MyTypes
             int newLen = 1;
             while (length + 1 > newLen)
                 newLen *= 2;
-            SetSize(newLen);            
+            SetSize(newLen);
             items[length] = value;
             length++;
         }
@@ -181,7 +185,7 @@ namespace MyTypes
                     result[k++] = items[i];
             }
             items = result;
-        }     
+        }
 
 
         public MyCollection<T> Copy(int indS)
@@ -199,7 +203,7 @@ namespace MyTypes
         }
         public MyCollection<T> Copy(int indS, int indE)
         {
-            try { inBorder = indS;}
+            try { inBorder = indS; }
             catch
             {
                 Console.WriteLine("Копирование невозможно, выход за границы массива");
@@ -296,7 +300,7 @@ namespace MyTypes
         public T[] GetData()
         {
             T[] result = new T[Count];
-            for (int i = 0;i < Count;i++)
+            for (int i = 0; i < Count; i++)
                 result[i] = items[i];
             return result;
         }
