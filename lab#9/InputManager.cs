@@ -1,7 +1,8 @@
-﻿using lab_9;
-using MyTypes;
+﻿using MyTypes;
 using System;
-using System.Threading;
+using System.Diagnostics;
+using System.IO;
+
 
 namespace DataManage
 {
@@ -25,7 +26,7 @@ namespace DataManage
             do
             {
                 string s = Console.ReadLine();
-                if (int.TryParse(s, out int a) && a > 0)
+                if (int.TryParse(s, out int a) && a >= 0)
                     return a;
                 else
                     Console.WriteLine($"Вы ввели не целое или целое отрицательное число {s}, введите число правильно");
@@ -39,7 +40,7 @@ namespace DataManage
             do
             {
                 string s = Console.ReadLine();
-                if (int.TryParse(s, out int a) && a >= 0)
+                if (int.TryParse(s, out int a) && a > 0)
                     if (param(a))
                         return a;
                     else
@@ -107,6 +108,29 @@ namespace DataManage
                     break;
             }
             return result; 
+        }
+        public static MyCollection<Student> GetStudentsFromFile(string FileName)
+        {
+            MyCollection<Student> result = new MyCollection<Student>();
+            if(!File.Exists(FileName))            
+                throw new FileNotFoundException(FileName);
+            
+            using (StreamReader file = File.OpenText(FileName))
+            {
+                while (!file.EndOfStream)
+                {
+                    string line = file.ReadLine();
+                    var fields = line.Split('\t');
+                    try {
+                        result.Add(new Student(fields[0], int.Parse(fields[1]), double.Parse(fields[2])));
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Содержимое файла не подходит для извлечения студентов");
+                    }
+                }               
+            }
+            return result;
         }
     }
 }

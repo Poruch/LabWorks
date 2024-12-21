@@ -64,7 +64,7 @@ namespace MyTypes
 
         public static explicit operator int(Student s)
         {
-            return s.age;
+            return s.age - 17;
         }
         public static implicit operator bool(Student s)
         {

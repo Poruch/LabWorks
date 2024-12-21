@@ -19,6 +19,15 @@ namespace MyTypes
             items = new T[p];
             length = size;
         }
+        public MyCollection(MyCollection<T> collection)
+        {
+            items = new T[collection.Count];
+            for (int i = 0; i < collection.Count; i++)
+            {
+                items[i] = collection[i];
+            }
+            length = collection.length;
+        }
         public MyCollection()
         {
             items = new T[0];
@@ -248,11 +257,8 @@ namespace MyTypes
                 if (criterion(items[i]))
                     currarray[k++] = items[i];
             result = new T[k];
-            for (int i = 0; i < k; i++)
-            {
+            for (int i = 0; i < k; i++)            
                 result[i] = currarray[i];
-            }
-
             return new MyCollection<T>(result);
         }
 

@@ -5,6 +5,8 @@ namespace MyTypes
 {
     internal class StudentArray : MyCollection<Student>
     {
+        public StudentArray(MyCollection<Student> collection) : base(collection) { }
+        public StudentArray() : base() { }
 
         public Student GetTHEFIRST()
         {
@@ -17,12 +19,15 @@ namespace MyTypes
             }
             return THEFIRST;
         }
-        public void Write()
+
+        public override string ToString()
         {
+            string s = "";
             foreach(Student student in this)
             {
-                Console.WriteLine(student.ToString());
+                 s += (student.ToString()) + "\n";
             }
+            return s;
         }
     }
 }
