@@ -24,7 +24,7 @@ namespace lab_9
                         Tuple.Create<string,MyIntarface.Block>("Добавить студента в массив",() => {
                             studentArray.Add(InputManager.ReadValueStudent());
                         }),
-                        Tuple.Create<string,MyIntarface.Block>("Стравнить двух студентов",() => {
+                        Tuple.Create<string,MyIntarface.Block>("Сравнить двух студентов",() => {
                             Console.WriteLine("Введите два номера студента");
                             int number1 = InputManager.ReadValueUInt(param, "Такого студента нет") - 1;
                             int number2 = InputManager.ReadValueUInt(param, "Такого студента нет") - 1;
