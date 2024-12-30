@@ -1,7 +1,6 @@
 ﻿using DataManage;
 using MyTypes;
 using System;
-using System.Threading;
 
 namespace lab_9
 {

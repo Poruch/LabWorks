@@ -37,18 +37,15 @@ namespace MyTypes
             }
         }
 
-        public static void WriteCompare(Student s1, Student s2)
+        public static string GetCompare(Student s1, Student s2)
         {
             string res = "ровестник";
             string res2 = "равен";
             res = s1.Age > s2.Age ? "старше" : res;
             res = s1.Age < s2.Age ? "младше" : res;
-
             res2 = s1.Gpa > s2.Gpa ? "больше" : res2;
             res2 = s1.Gpa < s2.Gpa ? "меньше" : res2;
-
-            Console.WriteLine($"Студент {s1.name} {res} студента {s2.name}");
-            Console.WriteLine($"GPA студента {s1.name} {res2} GPA студента {s2.name}");
+            return $"Студент {s1.name} {res} студента {s2.name}\n" + $"GPA студента {s1.name} {res2} GPA студента {s2.name}";
         }
 
         public static Student operator ~(Student s)

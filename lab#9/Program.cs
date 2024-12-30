@@ -28,7 +28,7 @@ namespace lab_9
                             Console.WriteLine("Введите два номера студента");
                             int number1 = InputManager.ReadValueUInt(param, "Такого студента нет") - 1;
                             int number2 = InputManager.ReadValueUInt(param, "Такого студента нет") - 1;
-                            Student.WriteCompare(studentArray[number1],studentArray[number2]);
+                            Console.WriteLine(Student.GetCompare(studentArray[number1],studentArray[number2]));
                         }),
                         Tuple.Create<string,MyIntarface.Block>("Нормализовать имена студентов",() => {
                             for (int i = 0; i < studentArray.Count; i++)
