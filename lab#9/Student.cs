@@ -39,7 +39,7 @@ namespace MyTypes
 
         public static string GetCompare(Student s1, Student s2)
         {
-            string res = "ровестник";
+            string res = "ровесник";
             string res2 = "равен";
             res = s1.Age > s2.Age ? "старше" : res;
             res = s1.Age < s2.Age ? "младше" : res;

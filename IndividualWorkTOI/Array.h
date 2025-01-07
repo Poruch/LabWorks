@@ -4,6 +4,7 @@ namespace MyTypes {
 	struct Image;
 }
 namespace Arrays {
+
 	void GetArrayFromFile(MyTypes::Image** arr,int* len, std::string fileName);
 	void GetArray(MyTypes::Image** arr, int len);
 	void Reconstruct(MyTypes::Image* arr, int len);

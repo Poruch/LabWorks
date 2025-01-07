@@ -13,10 +13,6 @@ namespace lab_9
             Console.WriteLine("Лабораторная #9 ᗜˬᗜ");
             StudentArray studentArray = new StudentArray();
             InputManager.AddParam param = (int n) => { return (studentArray.InBorder(n - 1)); };
-
-
-
-
             MyIntarface.Block studentAction = () =>
             {
                 while (MyIntarface.Intarface(new MyCollection<Tuple<string, MyIntarface.Block>>()

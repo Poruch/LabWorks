@@ -4,7 +4,8 @@
 #include "InputManager.h"
 #include "MyRecord.h"
 #include "Array.h"
-
+#include "BinaryTrees.h"
+#include "List.h"
 
 int main()
 {
@@ -13,15 +14,14 @@ int main()
 	int len = 0;
 	Arrays::GetArrayFromFile(&im, &len,"Data.txt");
 	Arrays::WriteArray(im,len);
+	Trees::TreeNode<int> root(0,MyTypes::Image());
+	Trees::GetTree<int>(&root, im, len, [](MyTypes::Image im) {return (int)im.height; });
+	Trees::WriteTree<int>(&root, [](MyTypes::Image im) { return (int)im.height; }, false);
+
+	Lists::ListNode<int> list(0, MyTypes::Image());
+	Lists::GetList<int>(&list,im,len, [](MyTypes::Image im) { return (int)im.height; });
+	Lists::WriteList<int>(&list, [](MyTypes::Image im) { return (int)im.height; });
+
+
 }
 
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
-
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
