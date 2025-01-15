@@ -89,6 +89,7 @@ namespace Trees {
 		}
 		return -1;
 	}
+
 	template <typename T>
 	int TFind(TreeNode<T> root, std::string value, std::string(*criterion)(MyTypes::Image)) {
 		if (root != nullptr) {

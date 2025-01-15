@@ -35,47 +35,60 @@ void foo3() {
 
 //LAB2
 //////////////////
-int iterAdd(int x, int y) {
-	for (int i = 0; i < y; i++) {
-		x++;
-	}
+
+int Inc(int x) {
+	return x + 1;
+}
+
+int Z(int x) {
+	return 0;
+}
+
+int L11(int x) {
 	return x;
 }
 
+int iterAdd(int x, int y) {
+	for (int i = 0; i < y; i++) {
+		x = Inc(x);
+	}
+	return L11(x);
+}
+
 int recAdd(int x, int y) {
-	if (y == 0) return x;
-	return recAdd(x,y-1) + 1;
+	if (y == 0) return L11(x);
+	return Inc(recAdd(x,y-1));
 }
 
 int iterMulty(int x, int y) {
-	int res = 0;
-	for (int i = 0; i < y; i++) {
-		iterAdd(res, x);
+	int res = Z(x);
+	for (int i = Z(x); i < y; i = Inc(i)) {
+		res = iterAdd(res, x);
 	}
-	return res;
+	return L11(res);
 }
 
 int recMulty(int x, int y) {
-	if (y == 0) return 0;
+	if (y == 0) return Z(x);
 	return recAdd(x, recMulty(x, y - 1));
 }
 
 int iterPower(int x, int y) {
-	int res = 1;
-	for (int i = 0; i < y; i++) {
+	int res = Inc(Z(x));
+	for (int i = Z(x); i < y; i = Inc(i)) {
 		res = iterMulty(res, x);
 	}
-	return res;
+	return L11(res);
 }
 
 int recPower(int x, int y) {
-	if (y == 0) return 1;
+	if (y == 0) return Inc(Z(x));
 	return recMulty(x, recPower(x, y - 1));
 }
 
 int foo4(int n) {
-	if (n <= 2) return 1;
-	return foo4(n - 1) + foo4(n - 2);
+	if ((n == 1) || (n == 2)) return 1;
+	return foo4(n - 2) + foo4(n - 1) ;
 }
 
 int foo5(int n) {
@@ -170,8 +183,7 @@ int main()
 	std::cin >> n;
 	std::cin >> m;
 	std::cout << fooA(m, n);
-
-
+	
 
 	std::cout << std::endl; std::cout << std::endl;
 
@@ -196,6 +208,8 @@ int main()
 	std::cout << iterMulty(4, 2) << std::endl;
 	std::cout << iterPower(4, 2) << std::endl;
 	std::cout << std::endl;
+
+	return 0;
 
 	for (int i = 0; i < 7; i++) {
 		std::cout << '\n';

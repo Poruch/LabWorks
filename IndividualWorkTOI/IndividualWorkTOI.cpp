@@ -13,13 +13,17 @@ int main()
 	MyTypes::Image* im = 0;
 	int len = 0;
 	Arrays::GetArrayFromFile(&im, &len,"Data.txt");
-	Arrays::WriteArray(im,len);
+	Arrays::WriteArray(im,len);	
+	Arrays::AddElems(&im,&len, "Data 2.txt");
+	Arrays::WriteArray(im, len);
+
 	Trees::TreeNode<int> root(0,MyTypes::Image());
 	Trees::GetTree<int>(&root, im, len, [](MyTypes::Image im) {return (int)im.height; });
 	Trees::WriteTree<int>(&root, [](MyTypes::Image im) { return (int)im.height; }, false);
+	std::cout << "\n";
 
 	Lists::ListNode<int> list(0, MyTypes::Image());
-	Lists::GetList<int>(&list,im,len, [](MyTypes::Image im) { return (int)im.height; });
+	Lists::GetList<int>(&list, im, len, [](MyTypes::Image im) { return (int)im.height; });
 	Lists::WriteList<int>(&list, [](MyTypes::Image im) { return (int)im.height; });
 
 
