@@ -5,9 +5,11 @@ namespace MyTypes
 {
     internal class StudentArray : MyCollection<Student>
     {
-        public StudentArray(MyCollection<Student> collection) : base(collection) { }
-        public StudentArray() : base() { }
+        public static int countArrayes = 0;
+        public StudentArray(MyCollection<Student> collection) : base(collection) { countArrayes++; }
+        public StudentArray() : base() { countArrayes++; }
 
+        ~StudentArray() { countArrayes--; }
         public Student GetTHEFIRST()
         {
             var students = FindAll((Student s) => { return s.Gpa > 8; });
@@ -23,9 +25,11 @@ namespace MyTypes
         public override string ToString()
         {
             string s = "";
+            int count = 1;
+
             foreach(Student student in this)
             {
-                 s += (student.ToString()) + "\n";
+                 s += count++ + " " + (student.ToString()) + "\n";
             }
             return s;
         }

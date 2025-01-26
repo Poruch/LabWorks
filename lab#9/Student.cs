@@ -1,4 +1,4 @@
-﻿using System;
+﻿using DataManage;
 
 namespace MyTypes
 {
@@ -8,6 +8,7 @@ namespace MyTypes
         private int age;
         private double gpa;
 
+        public static int countStudents = 0; 
         public string Name
         {
             get { return name; }
@@ -31,9 +32,7 @@ namespace MyTypes
             get { return gpa; }
             set
             {
-                if (value < 0)
-                    value = 0;
-                gpa = value;
+                gpa = MyMath.Clamp(value, 0, 10);
             }
         }
 
@@ -95,16 +94,17 @@ namespace MyTypes
         }
         public override string ToString()
         {
-            return $"Имя студента: {name}, возраст: {age}, средний бал: {gpa}";
+            return $"Имя студента:  {name}, возраст: {age}, средний бал: {gpa}";
         }
-        public Student() { }
-        public Student(Student s)
+        public Student() { countStudents++; }
+        ~Student() {  countStudents--; }
+        public Student(Student s) : this()
         {
             Gpa = s.gpa;
             Name = s.name;
             Age = s.age;
         }
-        public Student(string name, int age, double gpa)
+        public Student(string name, int age, double gpa) :this()
         {
             Name = name;
             Age = age;

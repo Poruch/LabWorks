@@ -94,6 +94,12 @@ namespace MyTypes
                 Console.WriteLine("Ошибка в количестве добавляемых элементов");
                 return;
             }
+            if(items.Length == 0)
+            {
+                items = array.items;
+                length = array.length;
+                return;
+            }
             int newLen = items.Length;
             while (length + array.Count >= newLen)
                 newLen *= 2;
@@ -310,6 +316,7 @@ namespace MyTypes
                 result[i] = items[i];
             return result;
         }
+
         public void Reset()
         {
             index = -1;

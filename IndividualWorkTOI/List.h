@@ -14,7 +14,7 @@ namespace Lists {
 		ListNode(int ind, MyTypes::Image im) {
 			index = ind;
 			record = im;
-			nextListNode = new ListNode<T>();
+			nextListNode = nullptr;
 		}
 
 		ListNode() {
@@ -33,22 +33,76 @@ namespace Lists {
 	};
 
 	template <typename T>
-	void GetReverseList(ListNode<T>* root) {
-		ListNode<T> newList(0, MyTypes::Image());
+	ListNode<T>* GetReverseListIt(ListNode<T>* root) {
+		ListNode<T>* new_root = 0;
+		while (root) {
+			ListNode<T>* next = root->nextListNode;
+			root->nextListNode = new_root;
+			new_root = root;
+			root = next;
+		}
+		return new_root;
 	}
+
+	template <typename T>
+	ListNode<T>* GetReverseListRec(ListNode<T>* root) {
+		if (root == nullptr || root->nextListNode == nullptr)
+			return root;
+		ListNode<T>* rest = GetReverseListRec(root->nextListNode);
+		root->nextListNode->nextListNode = root;
+		root->nextListNode = nullptr;
+		return rest;
+	}
+
 	//Имя файла это адресс первого байта этого файла
+
+
+
 	template <typename T>
 	void AddElem(ListNode<T>** root, MyTypes::Image image, int(*criterion)(MyTypes::Image)) {
-		
+		ListNode<T>* currentNode = *root;
+		ListNode<T>* res = new ListNode<T>(0, image);
+
+		if (currentNode->GetValue(criterion) >= res->GetValue(criterion)) {
+			*root = res;
+			res->nextListNode = currentNode;			
+		}
+		else {
+			if (currentNode->nextListNode == nullptr)
+			{
+				currentNode->nextListNode = res;
+				return;
+			}
+			while (currentNode->nextListNode->GetValue(criterion) < res->GetValue(criterion)) {				
+				currentNode = currentNode->nextListNode;
+				if (currentNode->nextListNode == nullptr)
+				{
+					currentNode->nextListNode = res;
+					return;
+				}
+			}
+			res->nextListNode = currentNode->nextListNode;
+			currentNode->nextListNode = res;			
+		}
 	}
 
 	void AddElem() {
-
+		
 	}
 
 	template <typename T>
-	void GetList(ListNode<T>* root, MyTypes::Image* arr, int len, int(*criterion)(MyTypes::Image), int count = 0) {		
-		
+	void GetList(ListNode<T>** root, MyTypes::Image* arr, int len, int(*criterion)(MyTypes::Image), int count = 0) {			
+		*root = new ListNode<T>(0,arr[0]);
+		for (size_t i = 1; i < len; i++)
+		{
+			AddElem(root, arr[i], criterion);
+		}
+		int k = 0;
+		ListNode<T>* iterator = *root;
+		while (iterator) {
+			(iterator)->index = k++;
+			iterator = (iterator)->nextListNode;
+		}
 	}
 
 	template <typename T>

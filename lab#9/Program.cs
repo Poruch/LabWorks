@@ -65,6 +65,9 @@ namespace lab_9
                         Tuple.Create<string,MyIntarface.Block>("Получить информацию самого старшего студента с GPA > 8",() => {
                             Console.WriteLine(studentArray.GetTHEFIRST().ToString());
                         }),
+                        Tuple.Create<string,MyIntarface.Block>("Узнать сколько коллекций и сколько студентов",() => {
+                            Console.WriteLine("Коллекций - " + StudentArray.countArrayes.ToString() + " Количетсво студентов - " + Student.countStudents.ToString() );
+                        }),
                     }))
                 {
                     Console.Clear();
@@ -93,7 +96,7 @@ namespace lab_9
                             Console.WriteLine("Введите название файла");
                             do
                                 try {
-                                    studentArray = new StudentArray(InputManager.GetStudentsFromFile("D:\\Repos\\LabWorks\\lab#9\\Students.txt"));
+                                    studentArray.Insert(0,InputManager.GetStudentsFromFile("D:\\Repos\\LabWorks\\lab#9\\Students.txt"));
                                     break;
                                 }
                                 catch(Exception e) {
