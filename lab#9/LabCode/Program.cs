@@ -5,7 +5,7 @@ using System.Text;
 
 namespace lab_9
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {

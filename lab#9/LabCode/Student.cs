@@ -2,7 +2,7 @@
 
 namespace MyTypes
 {
-    internal class Student
+    public class Student
     {
         private string name;
         private int age;
@@ -96,7 +96,13 @@ namespace MyTypes
         {
             return $"Имя студента:  {name}, возраст: {age}, средний бал: {gpa}";
         }
-        public Student() { countStudents++; }
+        public Student() 
+        { 
+            countStudents++;
+            name = "NoName";
+            Age = 0;
+            Gpa = 0;
+        }
         ~Student() {  countStudents--; }
         public Student(Student s) : this()
         {

@@ -2,8 +2,8 @@
 using System.Collections;
 namespace MyTypes
 {
-    delegate T Criterion<T, J>(J a);
-    class MyCollection<T> : IEnumerable, IEnumerator
+    public delegate T Criterion<T, J>(J a);
+    public class MyCollection<T> : IEnumerable, IEnumerator
     {
         private int length;
         protected T[] items;

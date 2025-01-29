@@ -3,7 +3,7 @@ using System.Xml.Schema;
 
 namespace MyTypes
 {
-    internal class StudentArray : MyCollection<Student>
+    public class StudentArray : MyCollection<Student>
     {
         public static int countArrayes = 0;
         public StudentArray(MyCollection<Student> collection) : base(collection) { countArrayes++; }
