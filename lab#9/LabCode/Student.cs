@@ -60,7 +60,10 @@ namespace MyTypes
 
         public static explicit operator int(Student s)
         {
-            return s.age - 17;
+            int course = s.age - 17;
+            if (course < 1 || course > 5)
+                return -1;
+            return course;
         }
         public static implicit operator bool(Student s)
         {
