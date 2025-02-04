@@ -7,7 +7,7 @@ using System.IO;
 namespace DataManage
 {
 
-    static class InputManager
+    public static class InputManager
     {
         public static int ReadValueInt()
         {

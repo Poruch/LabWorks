@@ -4,7 +4,7 @@ using System;
 
 namespace lab_9
 {
-    internal class MyIntarface
+    public class MyIntarface
     {
         public delegate void Block();
         static int count = 0;
