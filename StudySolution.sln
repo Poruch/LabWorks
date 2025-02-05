@@ -13,7 +13,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IndividualWorkTOI", "Indivi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lab#9", "lab#9\lab#9.csproj", "{19048E07-9CEA-4B10-8353-7D53F633031A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject2", "UnitTestProject2\UnitTestProject2.csproj", "{A3507E12-25C5-4CB0-8DBE-394A36DB4990}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestForLab9", "UnitTestProject2\UnitTestForLab9.csproj", "{A3507E12-25C5-4CB0-8DBE-394A36DB4990}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

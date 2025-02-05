@@ -4,7 +4,7 @@ using MyTypes;
 namespace UnitTestProject2
 {
     [TestClass]
-    public class UnitTest1
+    public class UnitTestForLab9
     {
         [TestMethod]
         public void TestCreatingStudentsAndBasicProperties()
@@ -38,6 +38,9 @@ namespace UnitTestProject2
             Assert.AreEqual(student1.Name, "Антон");
             Assert.AreEqual(student2.Name, "NoName");
         }
+
+
+        [TestMethod]
         public void TestBasicOperationWithStudents()
         {
             //Arange
@@ -50,6 +53,8 @@ namespace UnitTestProject2
 
             ++student1;
 
+            Assert.AreEqual(Student.GetCompare(student1,student2), "Студент Олег ровесник студента Андрей\n" + $"GPA студента Олег меньше GPA студента Андрей");
+
             int course = (int)student1;
 
             bool good = student2;
@@ -58,10 +63,30 @@ namespace UnitTestProject2
             student2 = student2 - 5;
 
             //Assert
+            Assert.AreEqual(student1.Name, "Олег");
+            Assert.AreEqual(student2.Name, "Андрей");
+
+            Assert.AreEqual(student1.Age,19);
+            Assert.AreEqual(student2.Age, 19);
+
+            Assert.AreEqual(course, 2);
+
+            Assert.IsTrue(good);
+
+            Student student4 = new Student(student1);
+            student4.Name = "Дарья";
+            Assert.AreEqual(~student3, student4);
+
+            Assert.AreEqual(student2.Gpa, 2);
+            student2 = student2 - 9;
+            Assert.AreEqual(student2.Gpa, 0);
         }
 
         public void TestMassiveStudents()
         {
+            StudentArray studentArray = new StudentArray();
+            studentArray.Add(new Student());
+
 
         }
     }

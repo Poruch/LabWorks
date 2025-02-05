@@ -65,6 +65,7 @@ namespace MyTypes
                 return -1;
             return course;
         }
+
         public static implicit operator bool(Student s)
         {
             return s.Gpa > 6;
