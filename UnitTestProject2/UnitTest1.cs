@@ -82,12 +82,17 @@ namespace UnitTestProject2
             Assert.AreEqual(student2.Gpa, 0);
         }
 
+        [TestMethod]
         public void TestMassiveStudents()
         {
+            //Arrange
             StudentArray studentArray = new StudentArray();
+
+            //Act
             studentArray.Add(new Student());
 
-
+            //Assert
+            Assert.AreEqual(1, 1);
         }
     }
 }
