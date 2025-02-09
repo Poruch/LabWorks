@@ -96,7 +96,7 @@ namespace lab_9
                             Console.WriteLine("Введите название файла");
                             do
                                 try {
-                                    studentArray.Insert(0,InputManager.GetStudentsFromFile("D:\\Repos\\LabWorks\\lab#9\\Students.txt"));
+                                    studentArray.Insert(0,InputManager.GetStudentsFromFile("F:\\Вшэ\\LabWorks\\lab#9\\Students.txt"));
                                     break;
                                 }
                                 catch(Exception e) {
@@ -109,6 +109,7 @@ namespace lab_9
                         }),
                     }))
                     {
+                        studentArray.Clear();
                         Console.Clear();
                     }
                 }),

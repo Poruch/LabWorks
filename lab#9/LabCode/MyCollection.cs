@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Data.SqlTypes;
 namespace MyTypes
 {
     public delegate T Criterion<T, J>(J a);
@@ -174,8 +175,8 @@ namespace MyTypes
         }
         public void Clear()
         {
-            for (int i = 0; i < length; i++)
-                items[i] = default;
+            items = new T[0];
+            length = 0;
         }
 
         public void Move(int count, bool right = true)

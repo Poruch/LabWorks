@@ -26,7 +26,7 @@ namespace MyTypes
         {
             string s = "";
             int count = 1;
-
+            if(this != null)
             foreach(Student student in this)
             {
                  s += count++ + " " + (student.ToString()) + "\n";
