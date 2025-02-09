@@ -135,7 +135,7 @@
   <ItemGroup>
     <Compile Include="LabCode\InputManager.cs" />
     <Compile Include="LabCode\MyCollection.cs" />
-    <Compile Include="LabCode\MyIntarface.cs" />
+    <Compile Include="LabCode\MyInterface.cs" />
     <Compile Include="LabCode\MyMath.cs" />
     <Compile Include="LabCode\Program.cs" />
     <Compile Include="LabCode\Student.cs" />

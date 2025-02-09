@@ -5,11 +5,11 @@ namespace MyTypes
 {
     public class StudentArray : MyCollection<Student>
     {
-        public static int countArrayes = 0;
-        public StudentArray(MyCollection<Student> collection) : base(collection) { countArrayes++; }
-        public StudentArray() : base() { countArrayes++; }
+        public static int countArrays = 0;
+        public StudentArray(MyCollection<Student> collection) : base(collection) { countArrays++; }
+        public StudentArray() : base() { countArrays++; }
 
-        ~StudentArray() { countArrayes--; }
+        ~StudentArray() { countArrays--; }
         public Student GetTHEFIRST()
         {
             var students = FindAll((Student s) => { return s.Gpa >= 8; });

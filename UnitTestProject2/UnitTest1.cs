@@ -118,13 +118,13 @@ namespace UnitTestProject2
             Assert.AreNotEqual(studentArray1, studentArray);
 
 
-            Assert.AreEqual(StudentArray.countArrayes,3);
+            Assert.AreEqual(StudentArray.countArrays,3);
             array2 = new StudentArray();
 
-            Assert.AreEqual(StudentArray.countArrayes, 4);
+            Assert.AreEqual(StudentArray.countArrays, 4);
             array2.Add(new Student());
             array2.DeleteElem(0);
-            Assert.AreEqual(StudentArray.countArrayes, 4);
+            Assert.AreEqual(StudentArray.countArrays, 4);
             array2.Add(new Student());
             array2.Add(new Student());
             array2.DeleteElem(1);
