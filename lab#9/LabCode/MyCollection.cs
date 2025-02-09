@@ -4,7 +4,7 @@ using System.Data.SqlTypes;
 namespace MyTypes
 {
     public delegate T Criterion<T, J>(J a);
-    public class MyCollection<T> : IEnumerable, IEnumerator
+    public class MyCollection<T>  : IEnumerable, IEnumerator 
     {
         private int length;
         protected T[] items;
@@ -112,7 +112,7 @@ namespace MyTypes
                 items[i] = array[i - ind];
             length += array.Count;
         }
-        public void DeleteElem(Criterion<bool, T> criterion)
+        public void DeleteElems(Criterion<bool, T> criterion)
         {
             var currarray = new T[length];
             int count = 0;
@@ -203,8 +203,12 @@ namespace MyTypes
             items = result;
         }
 
-
-        public MyCollection<T> Copy(int indS)
+        /// <summary>
+        /// creates object MyCollection using deep copying
+        /// </summary>
+        /// <param name="indS"></param>
+        /// <returns></returns>
+        public MyCollection<T> Copy(int indS) 
         {
             try { inBorder = indS; }
             catch
@@ -214,7 +218,10 @@ namespace MyTypes
             }
             MyCollection<T> result = new MyCollection<T>(Count - indS);
             for (int i = indS; i < Count; i++)
-                result[i - indS] = items[i];
+                if(items[i] is ICloneable item)
+                    result[i - indS] = (T)item.Clone();
+                else
+                    result[i - indS] = items[i];
             return result;
         }
         public MyCollection<T> Copy(int indS, int indE)
@@ -228,9 +235,17 @@ namespace MyTypes
             indE = indE > Count ? Count : indE;
             MyCollection<T> result = new MyCollection<T>(indE - indS);
             for (int i = indS; i < indE; i++)
-                result[i - indS] = items[i];
+                if (items[i] is ICloneable item)
+                    result[i - indS] = (T)item.Clone();
+                else
+                    result[i - indS] = items[i];
             return result;
         }
+        /// <summary>
+        /// Returns link to elem in collection to criterion
+        /// </summary>
+        /// <param name="criterion"></param>
+        /// <returns></returns>
         public T FindFirst(Criterion<bool, T> criterion)
         {
             for (int i = 0; i < length; i++)
@@ -240,12 +255,17 @@ namespace MyTypes
                     return items[i];
                 }
             }
-            Console.WriteLine("Ни один элемент не подешел по критерию");
+            Console.WriteLine("Ни один элемент не подошел по критерию");
             return default;
         }
+        /// <summary>
+        /// Returns link to elem in collection to criterion
+        /// </summary>
+        /// <param name="criterion"></param>
+        /// <returns></returns>
         public T FindLast(Criterion<bool, T> criterion)
         {
-            for (int i = length; i >= 0; i--)
+            for (int i = length-1; i >= 0; i--)
             {
                 if (criterion(items[i]))
                 {
@@ -255,6 +275,11 @@ namespace MyTypes
             Console.WriteLine("Ни один элемент не подешел по критерию");
             return default;
         }
+        /// <summary>
+        /// Returns links to elem in collection to criterion
+        /// </summary>
+        /// <param name="criterion"></param>
+        /// <returns></returns>
         public MyCollection<T> FindAll(Criterion<bool, T> criterion)
         {
             var currarray = new T[length];

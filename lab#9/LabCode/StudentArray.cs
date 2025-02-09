@@ -12,7 +12,7 @@ namespace MyTypes
         ~StudentArray() { countArrayes--; }
         public Student GetTHEFIRST()
         {
-            var students = FindAll((Student s) => { return s.Gpa > 8; });
+            var students = FindAll((Student s) => { return s.Gpa >= 8; });
             Student THEFIRST = new Student();
             for (int i = 0;i < students.Count; i++)
             {

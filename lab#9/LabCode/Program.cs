@@ -1,6 +1,7 @@
 ﻿using DataManage;
 using MyTypes;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace lab_9
@@ -15,7 +16,7 @@ namespace lab_9
             InputManager.AddParam param = (int n) => { return (studentArray.InBorder(n - 1)); };
             MyIntarface.Block studentAction = () =>
             {
-                while (MyIntarface.Intarface(new MyCollection<Tuple<string, MyIntarface.Block>>()
+                while (MyIntarface.Intarface(new List<Tuple<string, MyIntarface.Block>>()
                     {
                         Tuple.Create<string,MyIntarface.Block>("Добавить студента в массив",() => {
                             studentArray.Add(InputManager.ReadValueStudent());
@@ -66,7 +67,7 @@ namespace lab_9
                             Console.WriteLine(studentArray.GetTHEFIRST().ToString());
                         }),
                         Tuple.Create<string,MyIntarface.Block>("Узнать сколько коллекций и сколько студентов",() => {
-                            Console.WriteLine("Коллекций - " + StudentArray.countArrayes.ToString() + " Количетсво студентов - " + Student.countStudents.ToString() );
+                            Console.WriteLine("Коллекций - " + StudentArray.countArrayes.ToString() + " Количеcтво студентов - " + Student.countStudents.ToString() );
                         }),
                     }))
                 {
@@ -75,11 +76,11 @@ namespace lab_9
                 }
             };
 
-            while (MyIntarface.Intarface(new MyCollection<Tuple<string, MyIntarface.Block>>()
+            while (MyIntarface.Intarface(new List<Tuple<string, MyIntarface.Block>>()
             {
                 Tuple.Create<string,MyIntarface.Block>("Создать массив студентов",() =>
                 {
-                    while(MyIntarface.Intarface(new MyCollection<Tuple<string, MyIntarface.Block>>()
+                    while(MyIntarface.Intarface(new List<Tuple<string, MyIntarface.Block>>()
                     {
                         Tuple.Create<string,MyIntarface.Block>("Ввести с консоли", () =>
                         {

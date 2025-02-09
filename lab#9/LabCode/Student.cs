@@ -1,8 +1,9 @@
 ﻿using DataManage;
+using System;
 
 namespace MyTypes
 {
-    public class Student
+    public class Student : ICloneable
     {
         private string name;
         private int age;
@@ -85,7 +86,7 @@ namespace MyTypes
         public override bool Equals(object obj)
         {
             if (obj is Student student)
-                return name == student.name;
+                return name == student.name && Gpa == student.Gpa && Age == student.Age;
             return false;
         }
         public override int GetHashCode()
@@ -100,6 +101,12 @@ namespace MyTypes
         {
             return $"Имя студента:  {name}, возраст: {age}, средний бал: {gpa}";
         }
+
+        public object Clone()
+        {
+            return new Student(this);
+        }
+
         public Student() 
         { 
             countStudents++;

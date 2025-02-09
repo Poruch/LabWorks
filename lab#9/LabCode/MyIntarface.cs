@@ -1,6 +1,7 @@
 ﻿using DataManage;
 using MyTypes;
 using System;
+using System.Collections.Generic;
 
 namespace lab_9
 {
@@ -8,7 +9,7 @@ namespace lab_9
     {
         public delegate void Block();
         static int count = 0;
-        public static bool Intarface(MyCollection<Tuple<string, Block>> blocks)
+        public static bool Intarface(List<Tuple<string, Block>> blocks)
         {            
             count++;
             Console.WriteLine("Любое число кроме представленных ниже - " + (count == 1 ? "выход из программы":"выход к предыдущему циклу"));
