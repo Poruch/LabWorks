@@ -8,6 +8,10 @@
 #include "List.h"
 #include <vector>
 
+#define ARRAY Arrays::MyArray
+#define LIST Lists::ListNode
+#define RECORD MyTypes::Image
+
 int ReadValueUInt() {
 	int a = 0;
 	do {
@@ -42,15 +46,14 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 
-	MyTypes::Image* im = 0;
-	int len = 0;
-	Arrays::GetArrayFromFile(&im, &len,"Data.txt");
-	Arrays::WriteArray(im,len);	
-	Arrays::AddElems(&im,&len, "Data 2.txt");
-	Arrays::WriteArray(im, len);
+	ARRAY array = ARRAY::GetArrayFromFile("Data.txt");
+	array.WriteArray();
+	array.AddElems("Data 2.txt");
+	array.WriteArray();
 
-	Lists::ListNode<int>* list = new Lists::ListNode<int>(0, MyTypes::Image());
-	Lists::GetList<int>(&list, im, len, [](MyTypes::Image im) { return (int)im.height; });
+
+	LIST<int>* list = new LIST<int>(0, MyTypes::Image());
+	Lists::GetList<int>(&list, array.GetData(), array.Count(), [](MyTypes::Image im) { return (int)im.height; });
 	std::cout << "\n";
 	Lists::WriteList<int>(list, [](MyTypes::Image im) { return (int)im.height; });
 	std::cout << "\n";

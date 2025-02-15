@@ -1,5 +1,5 @@
 #include <string>
-
+#include "MyRecord.h"
 #define RECORD MyTypes::Image
 namespace MyTypes {
 	struct Image;
@@ -11,26 +11,36 @@ namespace Arrays {
 
 		MyArray();
 		MyArray(int len);
+		MyArray(const MyArray& array);
 		~MyArray();
-
+		
 		static MyArray GetArrayFromFile(std::string fileName);
 		
 		void Reconstruct();
 
 		void WriteArray();
 
-		void SortArray(int (*criterion)(RECORD), bool rise = true);
+		void Sort(int (*criterion)(RECORD), bool rise = true);
+		void QuickSort(int (*criterion)(RECORD), bool rise = true);
+		
+		void GetSortIndexes(int** indexes, int (*criterion)(RECORD), bool rise = true);
 
-		template <typename T>
-		void GetSortIndexes(int** indexes, T(*criterion)(RECORD), bool rise = true);
+		int Find(RECORD value);
+		void DeleteFirstElem(RECORD value);
 
+		void AddElem(RECORD value);
+
+		void AddElems(int count);
+		void AddElems(std::string fileName);
+
+		void RecoverIndexes(bool rise = true);
 		template <typename T>
 		int FindAll(int** indexes, int* lenIndexes, T value, T (*criterion)(RECORD)) {
 			delete[](*indexes);
 			int count = 0;
-			(*indexes) = new int[len];
-			for (int i = 0; i < len; i++) {
-				if (criterion(arr[i]) == value)
+			(*indexes) = new int[length];
+			for (int i = 0; i < length; i++) {
+				if (criterion(records[i]) == value)
 					(*indexes)[count++] = i;
 			}
 			if (count == 0)
@@ -47,20 +57,38 @@ namespace Arrays {
 
 		template <typename T>
 		int FindBinary(T value, T(*criterion)(RECORD)) {
-
+			int offsetLeft = 0;
+			int offsetRight = length - 1;
+			while (offsetLeft <= offsetRight) {
+				int m = (offsetLeft + offsetRight) / 2;
+				if (criterion(records[m]) < value)
+					offsetLeft = m + 1;
+				else if (criterion(records[m]) > value)
+					offsetRight = m - 1;
+				else
+					return m;
+			}
+			return -1;
 		}
 
 		template <typename T>
-		int FindBinary(T value, T(*criterion)(RECORD), int leftOffset, int rightOffset) {
-
+		int FindBinary(T value, T(*criterion)(RECORD), int offsetLeft, int offsetRight) {
+			int m = (offsetLeft + offsetRight) / 2;
+			if (offsetLeft > offsetRight)
+				return -1;
+			if (criterion(records[m]) < value)
+				return FindBinary(value, criterion, m + 1, offsetRight);
+			else if (criterion(records[m]) > value)
+				return FindBinary(value, criterion, offsetLeft, m - 1);
+			else
+				return m;
 		}
 
-		int Find(RECORD value);
-
+		
 		template <typename T>
 		int Find(T value, T(*criterion)(RECORD)) {
-			for (int i = 0; i < len; i++)
-				if (criterion(arr[i]) == value)
+			for (int i = 0; i < length; i++)
+				if (criterion(records[i]) == value)
 					return i;
 			return -1;
 		}
@@ -72,8 +100,8 @@ namespace Arrays {
 			if (!(FindAll<T>(&indexes, &lenIndexes, value, criterion) + 1))
 				return;
 			int count = 0;
-			RECORD* result = new RECORD[*len - lenIndexes];
-			for (int i = 0; i < *len; i++) {
+			RECORD* result = new RECORD[length - lenIndexes];
+			for (int i = 0; i < length; i++) {
 				if (i == indexes[count]) {
 					count++;
 				}
@@ -108,13 +136,7 @@ namespace Arrays {
 			length -= 1;
 			RecoverIndexes();
 		}
-		void DeleteFirstElem(RECORD value);
-
-		void AddElem(RECORD value);
-
-		void AddElems(std::string fileName);
-
-		void RecoverIndexes(bool rise = true);
+		
 
 		RECORD& operator[](int index) {
 			InBorder(index);
@@ -124,6 +146,10 @@ namespace Arrays {
 		int Count() const {
 			return length;
 		};
+
+		RECORD* GetData() {
+			return records;
+		}
 	private:
 		RECORD* records;
 		size_t length;

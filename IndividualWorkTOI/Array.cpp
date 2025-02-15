@@ -9,6 +9,29 @@
 #define RECORD MyTypes::Image
 
 namespace Arrays {
+	MyArray::MyArray()
+	{
+		length = 0;
+		records = 0;
+	}
+	MyArray::MyArray(int len)
+	{
+		length = len;
+		records = new RECORD[len];
+	}
+	MyArray::MyArray(const MyArray& array)
+	{
+		length = array.length;
+		records = new RECORD[length];
+		for (size_t i = 0; i < length; i++)
+		{
+			records[i] = array.records[i];
+		}
+	}
+	MyArray::~MyArray()
+	{
+		delete[] records;
+	}
 	MyArray MyArray::GetArrayFromFile(std::string fileName) {
 		std::ifstream file(fileName);
 		int len = 0;
@@ -19,65 +42,57 @@ namespace Arrays {
 			}
 		}
 		else
-			return;
+			return MyArray();
 		file.close();
 		file = std::ifstream(fileName);
-		if (len != 0) {
-			delete[](*arr);
-			(*arr) = new MyTypes::Image[len];
-		}
-		else
+		MyArray result(len);
+		if (len == 0) 
 			throw "Не удалось открыть файл";
 		int i = 0;
-		while (i < *len) {
+		while (i < len) {
 			std::getline(file, s);
-			(*arr)[i] = DataManage::InputManager::GetRecord(FILE,s,'\t');
+			result[i] = DataManage::InputManager::GetRecord(FILE,s,'\t');
 			i++;
 		}
 		file.close();
+		return result;
 	}
 
-	void GetArray(MyTypes::Image** arr, int len) {
-		delete[] (*arr);
-		(*arr) = new MyTypes::Image[len];
-		for (int i = 0; i < len; i++) {
-			(*arr)[i] = DataManage::InputManager::GetRecord(CONSOLE);
-		}
-	}
-	void WriteArray(MyTypes::Image* arr, int len) {
+	void MyArray::WriteArray() {
 		std::cout << "////////////////////////////////////////////////////////////////\n";
 		std::cout << "Number///Name///Size///Width///Height///ColorDepth///Format///\n";
-		for (int i = 0; i < len; i++) {
-			arr[i].Write();
+		for (int i = 0; i < length; i++) {
+			records[i].Write();
 			std::cout << "\n";
 		}
 		std::cout << "////////////////////////////////////////////////////////////////\n";
 	}
 
-	void Reconstruct(MyTypes::Image* arr, int len) {
-		for (int i = 0; i < len; i++) {
-			MyTypes::Image buff = arr[arr[i].number - 1];
-			arr[arr[i].number - 1] = arr[i];
-			arr[i] = buff;
+	void MyArray::Reconstruct() {
+		for (int i = 0; i < length; i++) {
+			RECORD buff = records[records[i].number - 1];
+			records[records[i].number - 1] = records[i];
+			records[i] = buff;
 		}
 	}
 
-	void SortArray(MyTypes::Image* arr, int len, int (*criterion)(MyTypes::Image), bool rise) {
-		for (int i = 0; i < len - 1; i++) {
-			for (int j = i + 1; j < len; j++) {
-				if (criterion(arr[i]) > criterion(arr[j]) == rise) {
-					auto buff = arr[i];
-					arr[i] = arr[j];
-					arr[j] = buff;
+	void MyArray::Sort(int (*criterion)(RECORD), bool rise) {
+		for (int i = 0; i < length - 1; i++) {
+			for (int j = i + 1; j < length; j++) {
+				if (criterion(records[i]) > criterion(records[j]) == rise) {
+					auto buff = records[i];
+					records[i] = records[j];
+					records[j] = buff;
 				}
 			}
 		}
 	}
 
+	void QuickSort(int (*criterion)(RECORD), bool rise = true) {
 
-	template
-	void MyArray::GetSortIndexes(int** indexes, std::string(*criterion)(MyTypes::Image), bool rise) {
-		delete[] (*indexes);
+	}
+	void MyArray::GetSortIndexes(int** indexes, int (*criterion)(RECORD), bool rise) {
+		delete[](*indexes);
 		(*indexes) = new int[length];
 		for (int i = 0; i < length; i++)
 			(*indexes)[i] = i;
@@ -92,61 +107,7 @@ namespace Arrays {
 			}
 		}
 	}
-
-
-	int FindBinary(MyTypes::Image* arr, int len, int value, int (*criterion)(MyTypes::Image)) {
-		int offsetLeft = 0;
-		int offsetRight = len - 1;
-		while (offsetLeft <= offsetRight) {
-			int m = (offsetLeft + offsetRight) / 2;
-			if (criterion(arr[m]) < value)
-				offsetLeft = m + 1;
-			else if (criterion(arr[m]) > value)
-				offsetRight = m - 1;
-			else
-				return m;
-		}
-		return -1;
-	}
-
-	int FindBinary(MyTypes::Image* arr, int len, std::string value, std::string (*criterion)(MyTypes::Image)) {
-		int offsetLeft = 0;
-		int offsetRight = len - 1;
-		while (offsetLeft <= offsetRight) {
-			int m = (offsetLeft + offsetRight) / 2;
-			if (criterion(arr[m]) < value)
-				offsetLeft = m + 1;
-			else if (criterion(arr[m]) > value)
-				offsetRight = m - 1;
-			else
-				return m;
-		}
-		return -1;
-	}
-	int FindBinary(MyTypes::Image* arr, int len, std::string value, std::string(*criterion)(MyTypes::Image), 
-		int offsetLeft, int offsetRight) {
-		int m = (offsetLeft + offsetRight) / 2;
-		if (offsetLeft > offsetRight)
-			return -1;
-		if (criterion(arr[m]) < value)
-			return FindBinary(arr, len, value, criterion, m + 1, offsetRight);
-		else if (criterion(arr[m]) > value)
-			return FindBinary(arr, len, value, criterion, offsetLeft, m - 1);
-		else
-			return m;
-	}
-	int FindBinary(MyTypes::Image* arr, int len, int value, int(*criterion)(MyTypes::Image),
-		int offsetLeft, int offsetRight) {
-		int m = (offsetLeft + offsetRight) / 2;
-		if (offsetLeft > offsetRight)
-			return -1;
-		if (criterion(arr[m]) < value)
-			return FindBinary(arr, len, value, criterion, m + 1, offsetRight);
-		else if (criterion(arr[m]) > value)
-			return FindBinary(arr, len, value, criterion, offsetLeft, m - 1);
-		else
-			return m;
-	}
+	
 	int MyArray::Find(RECORD value) {
 		for (int i = 0; i < length; i++)
 			if (records[i] == value)
@@ -156,9 +117,9 @@ namespace Arrays {
 
 	void MyArray::RecoverIndexes(bool rise) {
 		int* indexes = 0;
-		GetSortIndexes(&indexes, [](MyTypes::Image image) {return (int)image.number; }, rise);
-		for (int i = 0; i < len; i++) {
-			arr[indexes[i]].number = i + 1;
+		GetSortIndexes(&indexes, [](RECORD image) {return (int)image.number; }, rise);
+		for (int i = 0; i < length; i++) {
+			records[indexes[i]].number = i + 1;
 		}
 		delete[] indexes;
 	}
@@ -188,41 +149,39 @@ namespace Arrays {
 		length = newLen;
 	}
 
-	void AddElems(MyTypes::Image** arr, int* len, int count) {		
-		int newLen = count + *len;
-		MyTypes::Image* result = new MyTypes::Image[newLen];
-		for (int i = 0; i < *len; i++) {
-			result[i] = (*arr)[i];
+	void MyArray::AddElems(int count) {
+		int newLen = count + length;
+		RECORD* result = new RECORD[newLen];
+
+		for (int i = 0; i < length; i++) {
+			result[i] = records[i];
 		}
-		for (int i = *len; i < newLen; i++) {
+		for (int i = length; i < newLen; i++) {
 			result[i] = DataManage::InputManager::GetRecord(CONSOLE);
 		}
-		delete[](*arr);
+		delete[] records;
 
-		(*arr) = result;
-		*len = newLen;
+		records = result;
+		length = newLen;
 	}
 
-	void AddElems(MyTypes::Image** arr, int* len, std::string fileName) {
-		MyTypes::Image* arr2 = 0;
-		int len2 = 0;
-		GetArrayFromFile(&arr2,&len2,fileName);
-		int newLen = len2 + *len;
-		MyTypes::Image* result = new MyTypes::Image[newLen];
+	void MyArray::AddElems(std::string fileName) {
+		MyArray addRecords = GetArrayFromFile(fileName);
+		int newLen = addRecords.Count() + length;
+		RECORD* result = new RECORD[newLen];
 		int count = 1;
-		for (int i = 0; i < *len; i++) {
-			result[i] = (*arr)[i];
+		for (int i = 0; i < length; i++) {
+			result[i] = records[i];
 			count++;
 		}
-		for (int i = 0; i < len2; i++) {
-			result[i + *len] = arr2[i];
-			result[i + *len].number = count++;
+		for (int i = 0; i < addRecords.Count(); i++) {
+			result[i + length] = addRecords[i];
+			result[i + length].number = count++;
 		}
-		delete[] arr2;
-		delete[] (*arr);
+		delete[] records;
 
-		(*arr) = result;
-		*len = newLen;
+		records = result;
+		length = newLen;
 	}
 
 	
