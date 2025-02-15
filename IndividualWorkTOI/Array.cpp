@@ -6,25 +6,25 @@
 
 #define CONSOLE 1
 #define FILE  2
-
+#define RECORD MyTypes::Image
 
 namespace Arrays {
-	void GetArrayFromFile(MyTypes::Image** arr, int* len, std::string fileName) {
+	MyArray MyArray::GetArrayFromFile(std::string fileName) {
 		std::ifstream file(fileName);
-		*len = 0;
+		int len = 0;
 		std::string s;
 		if (file.is_open()) {
 			while (std::getline(file, s)) {
-				(*len)++;
+				(len)++;
 			}
 		}
 		else
 			return;
 		file.close();
 		file = std::ifstream(fileName);
-		if (*len != 0) {
+		if (len != 0) {
 			delete[](*arr);
-			(*arr) = new MyTypes::Image[*len];
+			(*arr) = new MyTypes::Image[len];
 		}
 		else
 			throw "Не удалось открыть файл";
@@ -73,31 +73,18 @@ namespace Arrays {
 			}
 		}
 	}
-	void GetSortIndexes(MyTypes::Image* arr,int** indexes, int len, int (*criterion)(MyTypes::Image), bool rise) {
-		delete[](*indexes);
-		(*indexes) = new int[len];
-		for (int i = 0; i < len; i++)
-			(*indexes)[i] = i;
 
-		for (int i = 0; i < len - 1; i++) {
-			for (int j = i + 1; j < len; j++) {
-				if ((criterion(arr[(*indexes)[i]]) > criterion(arr[(*indexes)[j]])) == rise) {
-					auto buff = (*indexes)[i];
-					(*indexes)[i] = (*indexes)[j];
-					(*indexes)[j] = buff;
-				}
-			}
-		}		
-	}
-	void GetSortIndexes(MyTypes::Image* arr, int** indexes, int len, std::string(*criterion)(MyTypes::Image), bool rise) {
+
+	template
+	void MyArray::GetSortIndexes(int** indexes, std::string(*criterion)(MyTypes::Image), bool rise) {
 		delete[] (*indexes);
-		(*indexes) = new int[len];
-		for (int i = 0; i < len; i++)
+		(*indexes) = new int[length];
+		for (int i = 0; i < length; i++)
 			(*indexes)[i] = i;
 
-		for (int i = 0; i < len - 1; i++) {
-			for (int j = i + 1; j < len; j++) {
-				if ((criterion(arr[(*indexes)[i]]) > criterion(arr[(*indexes)[j]])) == rise) {
+		for (int i = 0; i < length - 1; i++) {
+			for (int j = i + 1; j < length; j++) {
+				if ((criterion(records[(*indexes)[i]]) > criterion(records[(*indexes)[j]])) == rise) {
 					auto buff = (*indexes)[i];
 					(*indexes)[i] = (*indexes)[j];
 					(*indexes)[j] = buff;
@@ -105,6 +92,8 @@ namespace Arrays {
 			}
 		}
 	}
+
+
 	int FindBinary(MyTypes::Image* arr, int len, int value, int (*criterion)(MyTypes::Image)) {
 		int offsetLeft = 0;
 		int offsetRight = len - 1;
@@ -158,187 +147,45 @@ namespace Arrays {
 		else
 			return m;
 	}
-	int Find(MyTypes::Image* arr, int len, MyTypes::Image value) {
-		for (int i = 0; i < len; i++)
-			if (arr[i] == value)
+	int MyArray::Find(RECORD value) {
+		for (int i = 0; i < length; i++)
+			if (records[i] == value)
 				return i;
 		return -1;
 	}
-	int Find(MyTypes::Image* arr, int len, int value, int(*criterion)(MyTypes::Image)) {
-		for (int i = 0; i < len; i++)
-			if (criterion(arr[i]) == value)
-				return i;
-		return -1;
-	}
-	int Find(MyTypes::Image* arr, int len, std::string value, std::string(*criterion)(MyTypes::Image)) {
-		for (int i = 0; i < len; i++)
-			if (criterion(arr[i]) == value)
-				return i;
-		return -1;
-	}
-	int FindAll(MyTypes::Image* arr,int** indexes, int* lenIndexes, int len,int value, int(*criterion)(MyTypes::Image)) {
-		delete[](*indexes);
-		int count = 0;
-		(*indexes) = new int[len];
-		for (int i = 0; i < len; i++) {
-			if (criterion(arr[i]) == value)
-				(*indexes)[count++] = i;
-		}
-		if (count == 0)
-			return - 1;
-		int* result = new int[count];
-		for (int i = 0; i < count; i++) {
-			result[i] = (*indexes)[i];
-		}
-		delete[](*indexes);
-		(*indexes) = result;
-		*lenIndexes = count;
-		return 1;
-	}
 
-	int FindAll(MyTypes::Image* arr, int** indexes, int* lenIndexes, int len, std::string value, std::string(*criterion)(MyTypes::Image)) {
-		delete[](*indexes);
-		int count = 0;
-		(*indexes) = new int[len];
-		for (int i = 0; i < len; i++) {
-			if (criterion(arr[i]) == value)
-				(*indexes)[count++] = i;
-		}
-		if (count == 0)
-			return -1;
-		int* result = new int[count];
-		for (int i = 0; i < count; i++) {
-			result[i] = (*indexes)[i];
-		}
-		delete[](*indexes);
-		(*indexes) = result;
-		*lenIndexes = count;
-		return 1;
-	}
-
-	void DeleteElems(MyTypes::Image** arr, int* len, int value, int(*criterion)(MyTypes::Image)) {
+	void MyArray::RecoverIndexes(bool rise) {
 		int* indexes = 0;
-		int lenIndexes = 0;
-		if (!(FindAll(*arr, &indexes, &lenIndexes, *len, value, criterion) + 1))
-			return;
-		int count = 0;
-		MyTypes::Image* result = new MyTypes::Image[*len - lenIndexes];
-		for (int i = 0; i < *len; i++) {
-			if (i == indexes[count]) {
-				count++;
-			}
-			else {
-				result[i - count] = (*arr)[i];
-			}
-		}
-		delete[](*arr);
-		(*arr) = result;
-		*len -= lenIndexes;
-		RecoverIndexes(*arr, *len);
-	}
-
-	void DeleteElems(MyTypes::Image** arr, int* len, std::string value, std::string(*criterion)(MyTypes::Image)) {
-		int* indexes = 0;
-		int lenIndexes = 0;
-		if (!(FindAll(*arr, &indexes, &lenIndexes, *len, value, criterion) + 1))
-			return;
-		int count = 0;
-		MyTypes::Image* result = new MyTypes::Image[*len - lenIndexes];
-		for (int i = 0; i < *len; i++) {
-			if (i == indexes[count]) {
-				count++;
-			}
-			else {
-				result[i - count] = (*arr)[i];
-			}
-		}
-		delete[](*arr);
-		delete[](indexes);
-		(*arr) = result;
-		*len -= lenIndexes;
-		RecoverIndexes(*arr,*len);
-	}
-
-	void RecoverIndexes(MyTypes::Image* arr, int len, bool rise) {
-		int* indexes = 0;
-		GetSortIndexes(arr, &indexes, len, [](MyTypes::Image image) {return (int)image.number; }, rise);
+		GetSortIndexes(&indexes, [](MyTypes::Image image) {return (int)image.number; }, rise);
 		for (int i = 0; i < len; i++) {
 			arr[indexes[i]].number = i + 1;
 		}
 		delete[] indexes;
 	}
-
-	void DeleteFirstElem(MyTypes::Image** arr, int* len, int value, int(*criterion)(MyTypes::Image)) {
-		int ind = Find((*arr), *len,value, criterion);
+	void MyArray::DeleteFirstElem(RECORD value) {
+		int ind = Find(value);
 		if (ind == -1)
 			return;
-		MyTypes::Image* currentArray = new MyTypes::Image[*len - 1];
+		RECORD* currentArray = new RECORD[length - 1];
 		int j = 0;
 		for (int i = 0; i < ind; i++)
 		{
-			currentArray[j++] = (*arr)[i];
+			currentArray[j++] = records[i];
 		}
-		for (int i = ind + 1; i < *len; i++)
+		for (int i = ind + 1; i < length; i++)
 		{
-			currentArray[j++] = (*arr)[i];
+			currentArray[j++] = records[i];
 		}
-		delete[](*arr);
-		(*arr) = currentArray;
-		*len -= 1;
-		RecoverIndexes(*arr, *len);
+		delete[] records;
+		records = currentArray;
+		length -= 1;
+		RecoverIndexes();
 	}
-
-	void DeleteFirstElem(MyTypes::Image** arr, int* len, std::string value, std::string(*criterion)(MyTypes::Image)) {
-		int ind = Find((*arr), *len, value, criterion);
-		if (ind == -1)
-			return;
-		MyTypes::Image* currentArray = new MyTypes::Image[*len - 1];
-		int j = 0;
-		for (int i = 0; i < ind; i++)
-		{
-			currentArray[j++] = (*arr)[i];
-		}
-		for (int i = ind + 1; i < *len; i++)
-		{
-			currentArray[j++] = (*arr)[i];
-		}
-		delete[](*arr);
-		(*arr) = currentArray;
-		*len -= 1;
-		RecoverIndexes(*arr, *len);
-	}
-
-	void DeleteFirstElem(MyTypes::Image** arr, int* len, MyTypes::Image value) {
-		int ind = Find((*arr), *len, value);
-		if (ind == -1)
-			return;		
-		MyTypes::Image* currentArray = new MyTypes::Image[*len - 1];
-		int j = 0;
-		for (int i = 0; i < ind; i++)
-		{
-			currentArray[j++] = (*arr)[i];
-		}
-		for (int i = ind + 1; i < *len; i++)
-		{
-			currentArray[j++] = (*arr)[i];
-		}
-		delete[](*arr);
-		(*arr) = currentArray;
-		*len -= 1;
-		RecoverIndexes(*arr, *len);
-	}
-	void AddElem(MyTypes::Image** arr, int* len, MyTypes::Image value) {
-		int newLen = 1 + *len;
-		MyTypes::Image* result = new MyTypes::Image[newLen];
-		for (int i = 0; i < *len; i++) {
-			result[i] = (*arr)[i];
-		}		
-		result[*len] = value;
-		
-		delete[](*arr);
-
-		(*arr) = result;
-		*len = newLen;
+	void MyArray::AddElem(RECORD value) {
+		int newLen = 1 + length;
+		ReSize(newLen);
+		records[length] = value;
+		length = newLen;
 	}
 
 	void AddElems(MyTypes::Image** arr, int* len, int count) {		
@@ -378,9 +225,14 @@ namespace Arrays {
 		*len = newLen;
 	}
 
-	void InBorder(int index,int len) {
-		if (index < 0 || index >= len) {
-			throw "Выход за границу массива";
+	
+
+	void MyArray::ReSize(size_t newLen) {
+		RECORD* newRecords = new RECORD[newLen];
+		for (int i = 0; i < length; i++) {
+			newRecords[i] = records[i];
 		}
+		delete[] records;
+		records = newRecords;
 	}
 }
