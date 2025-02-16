@@ -9,7 +9,7 @@
 #include <vector>
 
 #define ARRAY Arrays::MyArray
-#define LIST Lists::ListNode
+#define LIST Lists::List
 #define RECORD MyTypes::Image
 
 int ReadValueUInt() {
@@ -51,13 +51,12 @@ int main()
 	array.AddElems("Data 2.txt");
 	array.WriteArray();
 
-
-	LIST<int>* list = new LIST<int>(0, MyTypes::Image());
-	Lists::GetList<int>(&list, array.GetData(), array.Count(), [](MyTypes::Image im) { return (int)im.height; });
-	std::cout << "\n";
-	Lists::WriteList<int>(list, [](MyTypes::Image im) { return (int)im.height; });
-	std::cout << "\n";
-	list = Lists::GetReverseListRec(list);
-	Lists::WriteList<int>(list, [](MyTypes::Image im) { return (int)im.height; });
+	LIST list;
+	for(int i = 0 ; i < array.Count(); i++)
+		list.SortedPush(array[i], [](RECORD record) { return (int)record.height; },false);
+	list.WriteList();
+	list.ReverseIter();
+	list.WriteList();
+	
 }
 

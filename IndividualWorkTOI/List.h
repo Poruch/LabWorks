@@ -1,151 +1,161 @@
 #pragma once
 #include "MyRecord.h"
-
+#define RECORD MyTypes::Image
 
 namespace Lists {
 
-	template <typename T>
-	struct ListNode
+	
+	struct Node
 	{
-		ListNode* nextListNode;
+		Node* nextNode;
 		int index = 0;
-		MyTypes::Image record;
+		RECORD record;
 
-		ListNode(int ind, MyTypes::Image im) {
+		Node(int ind, RECORD im) {
 			index = ind;
 			record = im;
-			nextListNode = nullptr;
+			nextNode = nullptr;
 		}
-
-		ListNode() {
+		Node() {
 			index = 0;
-			record = MyTypes::Image();
-			nextListNode = nullptr;
+			record = RECORD();
+			nextNode = nullptr;
 		}
 
-		~ListNode() {
-			delete nextListNode;
-		}
 
-		T GetValue(T(*criterion)(MyTypes::Image)) {
+		template <typename T>
+		T GetValue(T(*criterion)(RECORD)) {
 			return criterion(record);
+		}
+		
+
+	};
+	struct List {
+		Node* first;
+		Node* last;
+		List() {
+			first = nullptr;
+			last = nullptr;
+			count = 0;
+		}
+		int count;
+		int Count() {
+			return count;
+		}
+
+		bool IsEmpty() {
+			return first == nullptr;
+		}
+
+
+		void SortedPush(RECORD value, int (*criterion)(RECORD), bool rise = true);
+		void PushBack(RECORD value);
+		void Push(RECORD value);
+		void RemoveFirst();
+		void RemoveLast();
+		Node* operator[] (const int index);
+		void WriteList();
+		void ReverseIter();
+		void ReverseRec();
+		Node* GetReverseListIt(Node* root);
+		Node* GetReverseListRec(Node* root);
+
+
+		template <typename T>
+		void Remove(T value, T(*criterion)(RECORD)) {
+			if (IsEmpty()) return;
+			if (first->GetValue(criterion) == value) {
+				RemoveFirst();
+				return;
+			}
+			else if (last->GetValue(criterion) == value) {
+				RemoveLast();
+				return;
+			}
+			Node* slow = first;
+			Node* fast = first->nextNode;
+			while (fast && fast->GetValue(criterion) != value) {
+				fast = fast->nextNode;
+				slow = slow->nextNode;
+			}
+			if (!fast) {
+				std::cout << "This element does not exist" << std::endl;
+				return;
+			}
+			slow->nextNode = fast->nextNode;
+			delete fast;
+		}
+
+		template <typename T>
+		void WriteList(T(*criterion)(RECORD)) {
+			if (IsEmpty()) return;
+			Node* current = first;
+			while (current)
+			{
+				std::cout << current->GetValue(criterion) << std::endl;
+				current = current->nextNode;
+			}
+		}		
+
+		template <typename T>
+		Node* LFind(T value, T(*criterion)(RECORD)) {
+			Node* current = first;
+			while (current && current->GetValue(criterion) != value) {
+				current = current->nextNode;
+			}
+			return current;
 		}
 	};
 
-	template <typename T>
-	ListNode<T>* GetReverseListIt(ListNode<T>* root) {
-		ListNode<T>* new_root = 0;
-		while (root) {
-			ListNode<T>* next = root->nextListNode;
-			root->nextListNode = new_root;
-			new_root = root;
-			root = next;
-		}
-		return new_root;
-	}
 
-	template <typename T>
-	ListNode<T>* GetReverseListRec(ListNode<T>* root) {
-		if (root == nullptr || root->nextListNode == nullptr)
-			return root;
-		ListNode<T>* rest = GetReverseListRec(root->nextListNode);
-		root->nextListNode->nextListNode = root;
-		root->nextListNode = nullptr;
-		return rest;
-	}
+	
 
-	//Имя файла это адресс первого байта этого файла
+	
 
 
 
-	template <typename T>
-	void AddElem(ListNode<T>** root, MyTypes::Image image, int(*criterion)(MyTypes::Image)) {
-		ListNode<T>* currentNode = *root;
-		ListNode<T>* res = new ListNode<T>(0, image);
+	//template <typename T>
+	//void AddElem(Node<T>** root, MyTypes::Image image, int(*criterion)(MyTypes::Image)) {
+	//	Node<T>* currentNode = *root;
+	//	Node<T>* res = new Node<T>(0, image);
 
-		if (currentNode->GetValue(criterion) >= res->GetValue(criterion)) {
-			*root = res;
-			res->nextListNode = currentNode;			
-		}
-		else {
-			if (currentNode->nextListNode == nullptr)
-			{
-				currentNode->nextListNode = res;
-				return;
-			}
-			while (currentNode->nextListNode->GetValue(criterion) < res->GetValue(criterion)) {				
-				currentNode = currentNode->nextListNode;
-				if (currentNode->nextListNode == nullptr)
-				{
-					currentNode->nextListNode = res;
-					return;
-				}
-			}
-			res->nextListNode = currentNode->nextListNode;
-			currentNode->nextListNode = res;			
-		}
-	}
+	//	if (currentNode->GetValue(criterion) >= res->GetValue(criterion)) {
+	//		*root = res;
+	//		res->nextListNode = currentNode;			
+	//	}
+	//	else {
+	//		if (currentNode->nextListNode == nullptr)
+	//		{
+	//			currentNode->nextListNode = res;
+	//			return;
+	//		}
+	//		while (currentNode->nextListNode->GetValue(criterion) < res->GetValue(criterion)) {				
+	//			currentNode = currentNode->nextListNode;
+	//			if (currentNode->nextListNode == nullptr)
+	//			{
+	//				currentNode->nextListNode = res;
+	//				return;
+	//			}
+	//		}
+	//		res->nextListNode = currentNode->nextListNode;
+	//		currentNode->nextListNode = res;			
+	//	}
+	//}
 
-	void AddElem() {
-		
-	}
 
-	template <typename T>
-	void GetList(ListNode<T>** root, MyTypes::Image* arr, int len, int(*criterion)(MyTypes::Image), int count = 0) {			
-		*root = new ListNode<T>(0,arr[0]);
-		for (size_t i = 1; i < len; i++)
-		{
-			AddElem(root, arr[i], criterion);
-		}
-		int k = 0;
-		ListNode<T>* iterator = *root;
-		while (iterator) {
-			(iterator)->index = k++;
-			iterator = (iterator)->nextListNode;
-		}
-	}
-
-	template <typename T>
-	void WriteList(ListNode<T>* root, T(*criterion)(MyTypes::Image), bool rise = true) {
-		while (root != nullptr)
-		{
-			std::cout << root->GetValue(criterion) << std::endl;
-			root = root->nextListNode;
-		}
-	}
-
-	template <typename T>
-	int LFind(ListNode<T> root, MyTypes::Image value) {
-		while (root != nullptr)
-		{
-			if (root.record == value)
-				return root.index;
-			root = root->nextListNode;
-		}
-		return - 1;
-	}
-
-	template <typename T>
-	int LFind(ListNode<T> root, int value, int(*criterion)(MyTypes::Image)) {
-		while (root != nullptr)
-		{
-			if (root.GetValue(criterion) == value)
-				return root.index;
-			root = root->nextListNode;
-		}
-		return -1;
-	}
-
-	template <typename T>
-	int LFind(ListNode<T> root, std::string value, std::string(*criterion)(MyTypes::Image)) {
-		while (root != nullptr)
-		{
-			if (root.GetValue(criterion) == value)
-				return root.index;
-			root = root->nextListNode;
-		}
-		return -1;
-	}
-
+	//template <typename T>
+	//void GetList(Node<T>** root, MyTypes::Image* arr, int len, int(*criterion)(MyTypes::Image), int count = 0) {			
+	//	*root = new Node<T>(0,arr[0]);
+	//	for (size_t i = 1; i < len; i++)
+	//	{
+	//		AddElem(root, arr[i], criterion);
+	//	}
+	//	int k = 0;
+	//	Node<T>* iterator = *root;
+	//	while (iterator) {
+	//		(iterator)->index = k++;
+	//		iterator = (iterator)->nextListNode;
+	//	}
+	//}
 
 };

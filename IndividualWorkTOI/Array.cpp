@@ -76,7 +76,7 @@ namespace Arrays {
 		}
 	}
 
-	void MyArray::Sort(int (*criterion)(RECORD), bool rise) {
+	void MyArray::Sort(int(*criterion)(RECORD), bool rise) {
 		for (int i = 0; i < length - 1; i++) {
 			for (int j = i + 1; j < length; j++) {
 				if (criterion(records[i]) > criterion(records[j]) == rise) {
@@ -88,10 +88,10 @@ namespace Arrays {
 		}
 	}
 
-	void QuickSort(int (*criterion)(RECORD), bool rise = true) {
+	void MyArray::QuickSort(int(*criterion)(RECORD), bool rise) {
 
 	}
-	void MyArray::GetSortIndexes(int** indexes, int (*criterion)(RECORD), bool rise) {
+	void MyArray::GetSortIndexes(int** indexes, int(*criterion)(RECORD), bool rise) {
 		delete[](*indexes);
 		(*indexes) = new int[length];
 		for (int i = 0; i < length; i++)

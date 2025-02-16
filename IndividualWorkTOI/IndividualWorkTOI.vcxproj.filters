@@ -27,6 +27,9 @@
     <ClCompile Include="HashTable.h">
       <Filter>Файлы заголовков</Filter>
     </ClCompile>
+    <ClCompile Include="List.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyRecord.h">

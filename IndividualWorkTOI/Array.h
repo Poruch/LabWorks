@@ -20,10 +20,10 @@ namespace Arrays {
 
 		void WriteArray();
 
-		void Sort(int (*criterion)(RECORD), bool rise = true);
-		void QuickSort(int (*criterion)(RECORD), bool rise = true);
+		void Sort(int(*criterion)(RECORD), bool rise = true);
+		void QuickSort(int(*criterion)(RECORD), bool rise = true);
 		
-		void GetSortIndexes(int** indexes, int (*criterion)(RECORD), bool rise = true);
+		void GetSortIndexes(int** indexes, int(*criterion)(RECORD), bool rise = true);
 
 		int Find(RECORD value);
 		void DeleteFirstElem(RECORD value);
