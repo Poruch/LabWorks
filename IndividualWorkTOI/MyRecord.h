@@ -1,11 +1,13 @@
 #pragma once
 #include <string>
 #include <iostream>
+#define RECORD MyTypes::Image
+
 namespace MyTypes {
 	struct Image {
 	public:
 	
-		long long int number;
+		size_t number;
 		std::string name;
 		unsigned int size;
 		unsigned short width;
