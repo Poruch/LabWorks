@@ -76,7 +76,8 @@ namespace Arrays {
 		}
 	}
 
-	void MyArray::Sort(int(*criterion)(RECORD), bool rise) {
+	void MyArray::Sort(int(*criterion)(RECORD), bool rise,bool quick ) {
+		if(!quick)
 		for (int i = 0; i < length - 1; i++) {
 			for (int j = i + 1; j < length; j++) {
 				if (criterion(records[i]) > criterion(records[j]) == rise) {
@@ -86,11 +87,55 @@ namespace Arrays {
 				}
 			}
 		}
+		else {
+			QuickSort(records,length,criterion,rise);
+		}
 	}
 
-	void MyArray::QuickSort(int(*criterion)(RECORD), bool rise) {
-
+	void MyArray::QuickSort(RECORD* array,int len,int(*criterion)(RECORD),bool rise) {
+		int i = 0;
+		int j = len - 1;
+		int mid = criterion(array[len / 2]);
+		do {
+			if (rise) {
+				while (criterion(array[i]) < mid) {
+					i++;
+				}
+				while (criterion(array[j]) > mid) {
+					j--;
+				}
+				if (i <= j) {
+					RECORD tmp = array[i];
+					array[i] = array[j];
+					array[j] = tmp;
+					i++;
+					j--;
+				}
+			}
+			else {
+				while (criterion(array[i]) > mid) {
+					i++;
+				}
+				while (criterion(array[j]) < mid) {
+					j--;
+				}
+				if (i <= j) {
+					RECORD tmp = array[i];
+					array[i] = array[j];
+					array[j] = tmp;
+					i++;
+					j--;
+				}
+			}
+		} while (i <= j);
+		if (j > 0) {
+			QuickSort(array,j + 1,criterion,rise);
+		}
+		if (i < len) {
+			QuickSort(&array[i], len - i, criterion,rise);
+		}
 	}
+
 	void MyArray::GetSortIndexes(int** indexes, int(*criterion)(RECORD), bool rise) {
 		delete[](*indexes);
 		(*indexes) = new int[length];

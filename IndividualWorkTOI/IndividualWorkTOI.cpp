@@ -23,15 +23,15 @@ int ReadValueUInt() {
 }
 
 int count = 0;
-static bool Intarface(std::vector<std::pair<std::string, void(*)()>> blocks) {
+static bool Intarface(std::pair<std::string, void(*)()>* blocks,int len) {
 	count++;
 	std:: cout <<"Любое число кроме представленных ниже - " << (count == 1 ? "выход из программы" : "выход к предыдущему циклу");
-	for (int i = 0; i < blocks.size(); i++)
+	for (int i = 0; i < len; i++)
 	{
 		std::cout << ((i + 1) + " " + blocks[i].first);
 	}
 	int number = ReadValueUInt();
-	if (number <= 0 || number > blocks.size())
+	if (number <= 0 || number > len)
 	{
 	    count -= 2;
 	    return false;
@@ -49,6 +49,7 @@ int main()
 	ARRAY array = ARRAY::GetArrayFromFile("Data.txt");
 	array.WriteArray();
 	array.AddElems("Data 2.txt");
+	array.Sort([](RECORD record) { return (int)record.height; },false);
 	array.WriteArray();
 
 	LIST list;

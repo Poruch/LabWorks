@@ -20,8 +20,7 @@ namespace Arrays {
 
 		void WriteArray();
 
-		void Sort(int(*criterion)(RECORD), bool rise = true);
-		void QuickSort(int(*criterion)(RECORD), bool rise = true);
+		void Sort(int(*criterion)(RECORD), bool rise = true, bool quick = true);		
 		
 		void GetSortIndexes(int** indexes, int(*criterion)(RECORD), bool rise = true);
 
@@ -143,7 +142,7 @@ namespace Arrays {
 			return records[index];
 		}
 
-		int Count() const {
+		size_t Count() const {
 			return length;
 		};
 
@@ -154,6 +153,7 @@ namespace Arrays {
 		RECORD* records;
 		size_t length;
 
+		void QuickSort(RECORD* array, int len, int(*criterion)(RECORD), bool rise = true);
 		void ReSize(size_t newLen);
 		void InBorder(int index) {
 			if (index < 0 || index >= length) {
