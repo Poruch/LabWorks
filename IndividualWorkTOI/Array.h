@@ -24,7 +24,7 @@ namespace Arrays {
 		void WriteArray();
 
 		void Sort(int(*criterion)(RECORD), bool rise = true, bool quick = true);		
-		
+		void Sort(int indStart,int indEnd,int(*criterion)(RECORD), bool rise = true, bool quick = true);
 		void GetSortIndexes(int** indexes, int(*criterion)(RECORD), bool rise = true);
 
 		int Find(RECORD value);
@@ -163,6 +163,7 @@ namespace Arrays {
 
 		void QuickSort(RECORD* array, int len, int(*criterion)(RECORD), bool rise = true);
 		void ReSize(size_t newLen);
+
 		void InBorder(int index) {
 			if (index < 0 || index >= length) {
 				throw "Выход за границу массива";

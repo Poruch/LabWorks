@@ -49,3 +49,9 @@ MyTypes::Image DataManage::InputManager::GetRecord(int from, std::string line, c
 	}
 	return result;
 }
+
+MyTypes::Image DataManage::InputManager::GetRandomRecord() {
+	MyTypes::Image result = MyTypes::Image();
+	
+	return result;
+}

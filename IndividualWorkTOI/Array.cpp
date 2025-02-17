@@ -67,7 +67,21 @@ namespace Arrays {
 			records[i] = buff;
 		}
 	}
-
+	void MyArray::Sort(int indStart, int indEnd, int(*criterion)(RECORD), bool rise, bool quick) {
+		if (!quick)
+			for (int i = indStart; i < indEnd - 1; i++) {
+				for (int j = i + 1; j < indEnd; j++) {
+					if (criterion(records[i]) > criterion(records[j]) == rise) {
+						auto buff = records[i];
+						records[i] = records[j];
+						records[j] = buff;
+					}
+				}
+			}
+		else {
+			QuickSort(records + indStart, indEnd - indStart , criterion, rise);
+		}
+	}
 	void MyArray::Sort(int(*criterion)(RECORD), bool rise,bool quick ) {
 		if(!quick)
 		for (int i = 0; i < length - 1; i++) {

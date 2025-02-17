@@ -1,11 +1,8 @@
 #pragma once
 #include "MyRecord.h"
 #define RECORD MyTypes::Image
-#define LIST Lists::List
 
-namespace Lists {
-
-	
+namespace Lists {	
 	struct Node
 	{
 		Node* nextNode;

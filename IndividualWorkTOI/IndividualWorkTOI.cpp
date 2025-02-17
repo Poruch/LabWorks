@@ -42,31 +42,56 @@ static bool Intarface(std::pair<std::string, void(*)()>* blocks,int len) {
 	return true;
 }
 
-int criterion(RECORD value) {
+
+int criterionName(RECORD value) {
+	return (int)value.name[0];
+}
+int criterionHeight(RECORD value) {
 	return (int)value.height;
+}
+int criterionWidth(RECORD value) {
+	return (int)value.width;
+}
+int criterionColorDepth(RECORD value) {
+	return (int)value.colorDepth;
+}
+int criterionSize(RECORD value) {
+	return (int)value.size;
+}
+int criterionFormat(RECORD value) {
+	return (int)value.format[0];
 }
 
 int main()
 {
 	setlocale(LC_ALL, "Russian");
-
 	ARRAY array = ARRAY::GetArrayFromFile("Data.txt");
 	array.WriteArray();
 	array.AddElems("Data 2.txt");
-	array.Sort([](RECORD record) { return (int)record.height; },false);
+	array.AddElems("Data 2.txt");
+	array.AddElems("Data 2.txt");
+	array.AddElems("Data 2.txt");
+	array.AddElems("Data 2.txt");
+	array.AddElems("Data.txt");
+	array.AddElems("Data.txt");
+	array.AddElems("Data.txt");
+	array.AddElems("Data.txt");
+	array.AddElems("Data.txt");
+	array.AddElems("Data.txt");
+
+	array.Sort(criterionColorDepth,false);
 	array.WriteArray();
 
-	/*LIST list;
+	LIST list;
 	for(int i = 0 ; i < array.Count(); i++)
-		list.SortedPush(array[i], [](RECORD record) { return (int)record.height; },false);
+		list.SortedPush(array[i], criterionHeight,false);
 	list.WriteList();
 	list.ReverseIter();
-	list.WriteList();*/
+	list.WriteList();
 
-	Trees::BTree<2, criterion> tree = Trees::BTree<2, criterion>();
+	Trees::BTree<5, criterionHeight> tree = Trees::BTree<5, criterionHeight>();
 	for (int i = 0; i < array.Count(); i++)
 		tree.Insert(array[i]);
-
 	tree.WriteTree();
 }
 
