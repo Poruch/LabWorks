@@ -22,15 +22,7 @@ namespace Arrays {
 	MyArray::MyArray(const MyArray& array)
 	{
 		length = array.length;
-		records = new RECORD[length];
-		for (size_t i = 0; i < length; i++)
-		{
-			records[i] = array.records[i];
-		}
-	}
-	MyArray::~MyArray()
-	{
-		delete[] records;
+		records = array.records;
 	}
 	MyArray MyArray::GetArrayFromFile(std::string fileName) {
 		std::ifstream file(fileName);

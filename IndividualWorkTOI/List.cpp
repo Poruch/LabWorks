@@ -131,4 +131,21 @@ namespace Lists {
 		root->nextNode = nullptr;
 		return rest;
 	}
+	RECORD List::PopFirst()
+	{
+		RECORD result = first->record;
+		Node* deleting = first;
+		first = first->nextNode;
+		delete deleting;
+		return result;
+	}
+	RECORD List::PopLast()
+	{
+		RECORD result = last->record;
+		Node* prelast = operator[](count - 1);		
+		Node* deleting = last;
+		last = prelast;
+		delete deleting;
+		return result;
+	}
 }

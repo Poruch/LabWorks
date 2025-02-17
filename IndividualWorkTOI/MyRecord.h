@@ -37,5 +37,8 @@ namespace MyTypes {
 		bool operator ==(Image im1) {
 			return (name == im1.name) && (size == im1.size) && (width == im1.width) && (height == im1.height) && (colorDepth == im1.colorDepth) && (format == im1.format);
 		}
+		bool operator !=(Image im1) {
+			return !operator==(im1);
+		}
 	};
 }

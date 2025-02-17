@@ -42,6 +42,10 @@ static bool Intarface(std::pair<std::string, void(*)()>* blocks,int len) {
 	return true;
 }
 
+int criterion(RECORD value) {
+	return (int)value.height;
+}
+
 int main()
 {
 	setlocale(LC_ALL, "Russian");
@@ -52,12 +56,17 @@ int main()
 	array.Sort([](RECORD record) { return (int)record.height; },false);
 	array.WriteArray();
 
-	LIST list;
+	/*LIST list;
 	for(int i = 0 ; i < array.Count(); i++)
 		list.SortedPush(array[i], [](RECORD record) { return (int)record.height; },false);
 	list.WriteList();
 	list.ReverseIter();
-	list.WriteList();
-	
+	list.WriteList();*/
+
+	Trees::BTree<2, criterion> tree = Trees::BTree<2, criterion>();
+	for (int i = 0; i < array.Count(); i++)
+		tree.Insert(array[i]);
+
+	tree.WriteTree();
 }
 

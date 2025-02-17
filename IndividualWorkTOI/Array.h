@@ -1,6 +1,10 @@
+#pragma once
+
 #include <string>
 #include "MyRecord.h"
 #define RECORD MyTypes::Image
+
+
 namespace MyTypes {
 	struct Image;
 }
@@ -12,7 +16,6 @@ namespace Arrays {
 		MyArray();
 		MyArray(int len);
 		MyArray(const MyArray& array);
-		~MyArray();
 		
 		static MyArray GetArrayFromFile(std::string fileName);
 		
@@ -148,6 +151,11 @@ namespace Arrays {
 
 		RECORD* GetData() {
 			return records;
+		}
+		void DeleteData() {
+			delete[] records;
+			records = new RECORD[0];
+			length = 0;
 		}
 	private:
 		RECORD* records;

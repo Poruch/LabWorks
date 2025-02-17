@@ -52,16 +52,21 @@ namespace Lists {
 		void SortedPush(RECORD value, int (*criterion)(RECORD), bool rise = true);
 		void PushBack(RECORD value);
 		void Push(RECORD value);
+
 		void RemoveFirst();
 		void RemoveLast();
+
 		Node* operator[] (const int index);
+
 		void WriteList();
+
 		void ReverseIter();
 		void ReverseRec();
 		Node* GetReverseListIt(Node* root);
 		Node* GetReverseListRec(Node* root);
 
-
+		RECORD PopFirst();
+		RECORD PopLast();
 		template <typename T>
 		void Remove(T value, T(*criterion)(RECORD)) {
 			if (IsEmpty()) return;
