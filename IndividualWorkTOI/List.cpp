@@ -1,11 +1,22 @@
 #include "List.h"
-
+//#include "List.h"
+#define CRITERION criterions[criterionInd]
 namespace Lists {
 
+	template<int N>
+	RECORD List<N>::Find(int value, int criterionInd) {
+		Node* current = first[criterionInd];
+		while (current && current->GetValue(criterions[criterionInd]) != value) {
+			current = current->nextNode;
+		}
+		return current->record;
+	}
 
-	void List::SortedPush(RECORD value, int (*criterion)(RECORD), bool rise) {
+
+	template<int N>
+	void List<N>::SortedPush(RECORD value) {
 		count++;
-		int val = criterion(value);
+		int val = CRITERION(value);
 		Node* newPointer = new Node(count, value);
 
 		if (IsEmpty()) {
@@ -13,7 +24,7 @@ namespace Lists {
 			last = newPointer;
 			return;
 		}
-		if (val <= first->GetValue(criterion) == rise) {
+		if (val <= first[criterionInd]->GetValue(criterion) == rise) {
 			Push(value);
 			return;
 		}
@@ -31,7 +42,8 @@ namespace Lists {
 		newPointer->nextNode = fast;
 	}
 
-	void List::PushBack(RECORD value) {
+	template<int N>
+	void List<N>::PushBack(RECORD value) {
 		count++;
 		Node* newPointer = new Node(count, value);
 		if (IsEmpty()) {
@@ -43,7 +55,8 @@ namespace Lists {
 		last = newPointer;
 	}
 
-	void List::Push(RECORD value) {
+	template<int N>
+	void List<N>::Push(RECORD value) {
 		count++;
 		Node* newPointer = new Node(count, value);
 		if (IsEmpty()) {
@@ -55,14 +68,16 @@ namespace Lists {
 		first = newPointer;
 	}
 
-	void List::RemoveFirst() {
+	template<int N>
+	void List<N>::RemoveFirst() {
 		if (IsEmpty()) return;
 		Node* current = first;
 		first = current->nextNode;
 		delete current;
 	}
 
-	void List::RemoveLast() {
+	template<int N>
+	void List<N>::RemoveLast() {
 		if (IsEmpty()) return;
 		if (first == last) {
 			RemoveFirst();
@@ -75,7 +90,8 @@ namespace Lists {
 		last = current;
 	}
 
-	Node* List::operator[] (const int index) {
+	template<int N>
+	List<N>::Node* List<N>::operator[] (const int index) {
 		if (IsEmpty()) return nullptr;
 		Node* current = first;
 		for (int i = 0; i < index; i++) {
@@ -85,7 +101,8 @@ namespace Lists {
 		return current;
 	}
 
-	void List::WriteList() {
+	template<int N>
+	void List<N>::WriteList() {
 		if (IsEmpty()) return;
 		Node* current = first;
 
@@ -104,19 +121,21 @@ namespace Lists {
 		std::cout << "////////////////////////////////////////////////////////////////\n";
 	}
 
-	void List::ReverseIter() {
+	template<int N>
+	void List<N>::ReverseIter() {
 		last = first;
 		Node* buffer = GetReverseListIt(first);
 		first = buffer;
 	}
-
-	void List::ReverseRec() {
+	template<int N>
+	void List<N>::ReverseRec() {
 		last = first;
 		Node* buffer = GetReverseListRec(first);
 		first = buffer;
 	}
 
-	Node* List::GetReverseListIt(Node* root) {
+	template<int N>
+	List<N>::Node* List<N>::GetReverseListIt(Node* root) {
 		Node* new_root = 0;
 		while (root) {
 			Node* next = root->nextNode;
@@ -127,7 +146,8 @@ namespace Lists {
 		return new_root;
 	}
 
-	Node* List::GetReverseListRec(Node* root) {
+	template<int N>
+	List<N>::Node* List<N>::GetReverseListRec(Node* root) {
 		if (root == nullptr || root->nextNode == nullptr)
 			return root;
 		Node* rest = GetReverseListRec(root->nextNode);
@@ -135,7 +155,9 @@ namespace Lists {
 		root->nextNode = nullptr;
 		return rest;
 	}
-	RECORD List::PopFirst()
+
+	template<int N>
+	RECORD List<N>::PopFirst()
 	{
 		RECORD result = first->record;
 		Node* deleting = first;
@@ -143,7 +165,9 @@ namespace Lists {
 		delete deleting;
 		return result;
 	}
-	RECORD List::PopLast()
+
+	template<int N>
+	RECORD List<N>::PopLast()
 	{
 		RECORD result = last->record;
 		Node* prelast = operator[](count - 1);		
@@ -152,4 +176,54 @@ namespace Lists {
 		delete deleting;
 		return result;
 	}
+
+	template<int N>
+	void List<N>::Remove(int value, int criterionInd) {
+		if (IsEmpty()) return;
+		if (first->GetValue(criterion) == value) {
+			RemoveFirst();
+			return;
+		}
+		else if (last->GetValue(criterion) == value) {
+			RemoveLast();
+			return;
+		}
+		Node* slow = first;
+		Node* fast = first->nextNode;
+		while (fast && fast->GetValue(criterion) != value) {
+			fast = fast->nextNode;
+			slow = slow->nextNode;
+		}
+		if (!fast) {
+			std::cout << "This element does not exist" << std::endl;
+			return;
+		}
+		slow->nextNode = fast->nextNode;
+		delete fast;
+	}
+
+	template<int N>
+	void List<N>::WriteList() {
+		if (IsEmpty()) return;
+		Node* current = first;
+		while (current)
+		{
+			std::cout << current->GetValue(criterion) << std::endl;
+			current = current->nextNode;
+		}
+	}
+
+	template<int N>
+	void List<N>::WriteList(int criterionInd) {
+		if (IsEmpty()) return;
+		Node* current = first;
+		while (current)
+		{
+			std::cout << current->GetValue(criterion) << std::endl;
+			current = current->nextNode;
+		}
+	}
+
+	
+
 }

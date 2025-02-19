@@ -125,13 +125,7 @@ int main()
 	default:
 		break;
 	}*/
-
-	
-	TREE<2> tree = TREE<2>(criterionColorDepth);
-	for (size_t i = 0; i < array.Count(); i++)
-	{
-		tree.Insert(array[i]);
-	}
-	tree.WriteTree();
+	int (*crits[1])(RECORD) = { criterionName };
+	LIST<2> list = LIST<2>(crits);
 }
 

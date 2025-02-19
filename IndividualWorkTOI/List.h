@@ -3,37 +3,36 @@
 #define RECORD MyTypes::Image
 
 namespace Lists {	
-	struct Node
-	{
-		Node* nextNode;
-		int index = 0;
-		RECORD record;
-
-		Node(int ind, RECORD im) {
-			index = ind;
-			record = im;
-			nextNode = nullptr;
-		}
-		Node() {
-			index = 0;
-			record = RECORD();
-			nextNode = nullptr;
-		}
-
-
-		template <typename T>
-		T GetValue(T(*criterion)(RECORD)) {
-			return criterion(record);
-		}
-		
-
-	};
+	template<int N>
 	struct List {
-		Node* first;
-		Node* last;
-		List() {
-			first = nullptr;
-			last = nullptr;
+	private:
+		struct Node
+		{
+			Node* nextNode[N];
+			int index = 0;
+			RECORD record;
+
+			Node(int ind, RECORD im) {
+				index = ind;
+				record = im;				
+			}
+			Node() {
+				index = 0;
+				record = RECORD();
+			}
+			template <typename T>
+			T GetValue(T(*criterion)(RECORD)) {
+				return criterion(record);
+			}
+		};
+		Node* first[N+1];
+		Node* last[N+1];
+	public:
+		typedef int (*Criterion)(RECORD);
+		List(Criterion criterion[N]) {
+			static_assert(N > 0," оличество критериев должно быть больше 0")
+			for(size_t i = 0; i < N; i++)
+				this->criterions[i] = criterions[i];
 			count = 0;
 		}
 		int count;
@@ -42,17 +41,28 @@ namespace Lists {
 		}
 
 		bool IsEmpty() {
-			return first == nullptr;
+			bool result = true;
+			for (int i = 0; i < N+1; i++) {
+				result = result && (first[i] == nullptr);
+			}
+			return result;
 		}
 
+		bool IsEmpty(int ind) {			
+			return first[ind] == nullptr;
+		}
 
-		void SortedPush(RECORD value, int (*criterion)(RECORD), bool rise = true);
+		Criterion criterions[N];
+		void SortedPush(RECORD value);
+
 		void PushBack(RECORD value);
 		void Push(RECORD value);
 
 		void RemoveFirst();
 		void RemoveLast();
-		void Remove(int value, int(*criterion)(RECORD));
+
+
+		void Remove(int value, int criterionInd);
 
 		Node* operator[] (const int index);
 
@@ -60,55 +70,19 @@ namespace Lists {
 
 		void ReverseIter();
 		void ReverseRec();
+
 		Node* GetReverseListIt(Node* root);
 		Node* GetReverseListRec(Node* root);
 
 		RECORD PopFirst();
 		RECORD PopLast();
 
-		template <typename T>
-		void Remove(T value, T(*criterion)(RECORD)) {
-			if (IsEmpty()) return;
-			if (first->GetValue(criterion) == value) {
-				RemoveFirst();
-				return;
-			}
-			else if (last->GetValue(criterion) == value) {
-				RemoveLast();
-				return;
-			}
-			Node* slow = first;
-			Node* fast = first->nextNode;
-			while (fast && fast->GetValue(criterion) != value) {
-				fast = fast->nextNode;
-				slow = slow->nextNode;
-			}
-			if (!fast) {
-				std::cout << "This element does not exist" << std::endl;
-				return;
-			}
-			slow->nextNode = fast->nextNode;
-			delete fast;
-		}
+		void Remove(int value, int criterionInd);
 
-		template <typename T>
-		void WriteList(T(*criterion)(RECORD)) {
-			if (IsEmpty()) return;
-			Node* current = first;
-			while (current)
-			{
-				std::cout << current->GetValue(criterion) << std::endl;
-				current = current->nextNode;
-			}
-		}		
+		void WriteList();
 
-		template <typename T>
-		Node* LFind(T value, T(*criterion)(RECORD)) {
-			Node* current = first;
-			while (current && current->GetValue(criterion) != value) {
-				current = current->nextNode;
-			}
-			return current;
-		}
+		void WriteList(int criterionInd);
+
+		RECORD Find(int value, int criterionId);
 	};
 };
