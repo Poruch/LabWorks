@@ -128,7 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Array.cpp" />
-    <ClCompile Include="HashTable.h" />
     <ClCompile Include="IndividualWorkTOI.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="List.cpp" />
@@ -136,6 +135,7 @@
   <ItemGroup>
     <ClInclude Include="Array.h" />
     <ClInclude Include="BinaryTrees.h" />
+    <ClInclude Include="HashTable.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="MyRecord.h" />

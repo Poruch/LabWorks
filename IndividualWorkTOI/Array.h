@@ -144,7 +144,6 @@ namespace Arrays {
 			InBorder(index);
 			return records[index];
 		}
-
 		size_t Count() const {
 			return length;
 		};

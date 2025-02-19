@@ -52,7 +52,7 @@ namespace Arrays {
 
 	void MyArray::WriteArray() {
 		std::cout << "////////////////////////////////////////////////////////////////\n";
-		std::cout << "Number///Name///Size///Width///Height///ColorDepth///Format///\n";
+		std::cout << "Number/1 Name/2 Size/3 Width/4 Height/5 ColorDepth/6 Format///\n";
 		for (int i = 0; i < length; i++) {
 			records[i].Write();
 			std::cout << "\n";

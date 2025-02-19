@@ -52,6 +52,7 @@ namespace Lists {
 
 		void RemoveFirst();
 		void RemoveLast();
+		void Remove(int value, int(*criterion)(RECORD));
 
 		Node* operator[] (const int index);
 
@@ -64,6 +65,7 @@ namespace Lists {
 
 		RECORD PopFirst();
 		RECORD PopLast();
+
 		template <typename T>
 		void Remove(T value, T(*criterion)(RECORD)) {
 			if (IsEmpty()) return;

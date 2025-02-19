@@ -1,97 +1,137 @@
-﻿// IndividualWorkTOI.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
+﻿
 #include <iostream>
 #include "InputManager.h"
 #include "MyRecord.h"
 #include "Array.h"
 #include "BinaryTrees.h"
+#include "HashTable.h"
+
 #include "List.h"
 #include <vector>
 
 #define ARRAY Arrays::MyArray
 #define LIST Lists::List
 #define RECORD MyTypes::Image
+#define TABLE HashTables::HashTable
+#define TREE Trees::BTree
+
 
 int ReadValueUInt() {
 	int a = 0;
 	do {
 		std::cin >> a;
+		std::cin.ignore();
 		if (a < 0)
 			std::cout << "Число должно быть больше либо равно нулю\n";
 	} while (a < 0);
 	return a;
 }
-
-int count = 0;
-static bool Intarface(std::pair<std::string, void(*)()>* blocks,int len) {
-	count++;
-	std:: cout <<"Любое число кроме представленных ниже - " << (count == 1 ? "выход из программы" : "выход к предыдущему циклу");
-	for (int i = 0; i < len; i++)
-	{
-		std::cout << ((i + 1) + " " + blocks[i].first);
-	}
-	int number = ReadValueUInt();
-	if (number <= 0 || number > len)
-	{
-	    count -= 2;
-	    return false;
-	}
-	blocks[number - 1].second();
-	std::cout << ("Нажмите Enter для продолжения...");
-	std::cin;
-	return true;
+std::string ReadString() {
+	std::string result = "";
+	std::getline(std::cin,result);
+	return result;
 }
 
-
-int criterionName(RECORD value) {
+int static criterionName(RECORD value) {
 	return (int)value.name[0];
 }
-int criterionHeight(RECORD value) {
+int static criterionHeight(RECORD value) {
 	return (int)value.height;
 }
-int criterionWidth(RECORD value) {
+int static criterionWidth(RECORD value) {
 	return (int)value.width;
 }
-int criterionColorDepth(RECORD value) {
+int static criterionColorDepth(RECORD value) {
 	return (int)value.colorDepth;
 }
-int criterionSize(RECORD value) {
+int static criterionSize(RECORD value) {
 	return (int)value.size;
 }
-int criterionFormat(RECORD value) {
+int static criterionFormat(RECORD value) {
 	return (int)value.format[0];
 }
+void print(std::string str,char end = '\n') {
+	std::cout << str << end;
+}
+
+int (* const criterions[6])(RECORD) = { criterionName, criterionSize, criterionWidth, criterionHeight, criterionColorDepth, criterionFormat };
+
 
 int main()
 {
+	
 	setlocale(LC_ALL, "Russian");
-	ARRAY array = ARRAY::GetArrayFromFile("Data.txt");
+	ARRAY array = ARRAY::GetArrayFromFile(false ? ReadString() : "Data.txt");
+	/*	print("Введите название txt файла из которго создасться таблица");	
+	print("Таблица:");
 	array.WriteArray();
-	array.AddElems("Data 2.txt");
-	array.AddElems("Data 2.txt");
-	array.AddElems("Data 2.txt");
-	array.AddElems("Data 2.txt");
-	array.AddElems("Data 2.txt");
-	array.AddElems("Data.txt");
-	array.AddElems("Data.txt");
-	array.AddElems("Data.txt");
-	array.AddElems("Data.txt");
-	array.AddElems("Data.txt");
-	array.AddElems("Data.txt");
+	print("Выберите 2 ключа для сортировок (1,2,3,4,5,6)");
+	int typeCrit = ReadValueUInt();
+	auto crit1 = criterions[typeCrit- 1];
+	typeCrit = ReadValueUInt();
+	auto crit2 = criterions[typeCrit - 1];
+	print("Введите хотите работать с массивом (1) со списком (2) или с деревом (3)");
 
-	array.Sort(criterionColorDepth,false);
-	array.WriteArray();
+	int task = ReadValueUInt();
+	system("cls");
+	switch (task)
+	{
+	case 1:
+		break;
+		print("Вы работаете с массивом");
+		while (true) {
 
-	LIST list;
-	for(int i = 0 ; i < array.Count(); i++)
-		list.SortedPush(array[i], criterionHeight,false);
-	list.WriteList();
-	list.ReverseIter();
-	list.WriteList();
+		}
+	case 2: {		
+		LIST list[3]{ LIST(), LIST(), LIST() };
+		for (size_t i = 0; i < array.Count(); i++)
+		{
+			list[0].SortedPush(array[i], crit1);
+			list[1].SortedPush(array[i], crit2);
+			list[2].PushBack(array[i]);
+		}
+		while (true) {
+			system("cls");
+			print("Вы работаете со списком");
+			print("1 - вывести отсортированную таблицу по 1 критерию");
+			print("2 - вывести отсортированную таблицу по 2 критерию");
+			print("3 - вывести таблицу в порядке заполнения");
+			int action = ReadValueUInt();
+			switch (action)
+			{
+			case 1:
+				list[0].WriteList();
+				break;
+			case 2:
+				list[1].WriteList();
+				break;
+			case 3:
+				list[2].WriteList();
+				break;
+			default:
+				break;
+			}
+			system("pause");
+		}
+	}
+		break;
+	case 3:
+		print("Вы работаете с деревом");
+		TREE<2,>
+		while (true) {
 
-	Trees::BTree<5, criterionHeight> tree = Trees::BTree<5, criterionHeight>();
-	for (int i = 0; i < array.Count(); i++)
+		}
+		break;
+	default:
+		break;
+	}*/
+
+	
+	TREE<2> tree = TREE<2>(criterionColorDepth);
+	for (size_t i = 0; i < array.Count(); i++)
+	{
 		tree.Insert(array[i]);
+	}
 	tree.WriteTree();
 }
 

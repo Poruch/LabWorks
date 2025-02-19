@@ -5,13 +5,12 @@
 
 namespace Trees {
 
-template <int N,int (*criterion)(RECORD)>
+template<int N>
 struct BTree {
 private:
 	struct BNode
 	{
 		ARRAY records;
-
 		BNode* children[2 * N + 1];
 		BNode* parent;
 
@@ -20,13 +19,14 @@ private:
 		bool leaf;
 
 		BNode() : leaf(true) {
-			records = Arrays::MyArray(2 * N);
+			records = ARRAY(2 * N);
 
 			for (int i = 0; i <= records.Count(); i++) children[i] = nullptr;
 			parent = nullptr;
 			count = 0;
 			countSons = 0;
 		};
+
 		BNode(bool isLeaf) : leaf(isLeaf) {
 			records = ARRAY(2 * N);
 
@@ -36,8 +36,7 @@ private:
 			countSons = 0;
 		};
 
-		template <typename T>
-		T GetValue(int index, T(*criterion)(RECORD)) {
+		int GetValue(int index, int (*criterion)(RECORD)) {
 			return criterion(records[index]);
 		}	
 		
@@ -45,22 +44,26 @@ private:
 			return records[index];
 		}
 	};
+	int (*criterion)(RECORD);
 public:
-	BTree() {
+	BTree(int (*criterion)(RECORD)) {
 		root = nullptr;
-
+		this->criterion = criterion;
 	} 
+	BTree(const BTree& tree) {
+		root = tree.root;
+	}
 	~BTree() {
 		if (root != nullptr)
 			DeleteNode(root);
 	}
 
 	RECORD Find(int value) {
-		return RECORD();
+		return GetRecordWhithKey(value,root);
 	}
 
 	bool Contains(int value) {
-		return false;
+		return FindKey(value,root);
 	}
 
 	void Insert(RECORD value) {
@@ -104,8 +107,8 @@ public:
 		}
 	}
 
-	void Delete() {
-
+	void Delete(int value) {
+		Remove(value, root);
 	}
 	
 	void WriteTree() {
@@ -226,22 +229,387 @@ private:
 		}
 	}
 
-
-	bool FindKey(int key, BNode* node) {
-		return true;
+	bool FindKey(int value, BNode* node) {
+		if (node != nullptr) {
+			if (!node->leaf) {
+				int i;
+				for (i = 0; i < 2 * N ; i++) {
+					if (!(node->records[i] == RECORD())) {
+						if (value == node->GetValue(i)) return true;
+						if ((value < node->GetValue(i))) {
+							return FindKey(value, node->children[i]);
+							break;
+						}
+					}
+					else break;
+				}
+				return FindKey(value, node->children[i]);
+			}
+			else {
+				for (int j = 0; j < node->count; j++)
+					if (value == node->GetValue(j)) return true;
+				return false;
+			}
+		}
+		else return false;
 	}
-	RECORD GerRecordWhithKey(int key, BNode* node) {
-		return RECORD();
+	bool FindKey(int value) {
+		BNode* current = root;
+		while (!current->leaf) {
+			for (int i = 0; i < 2 * N; i++) {
+				if (current->records[i] != RECORD()) {
+					if (value == criterion(current->records[i])) {
+						return true;
+					}
+					if (value < criterion(current->records[i])) {						
+						current = current->children[i];
+						break;
+					}
+					if (((i + 1) == current->count || current->records[i + 1] == RECORD()) && (value > criterion(current->records[i]))) {
+						current = current->children[i + 1];
+						break;
+					}
+				}
+				return false;
+			}
+		}
+		bool result = false;
+		for (int i = 0; i < current->count; i++) {
+			result =  result || (current->GetValue(i) ==value);
+		}
+		return result;
 	}
 
-	void remove(int key, BNode* node);
-	void removeFromNode(int key, BNode* node);
-	void removeLeaf(int key, BNode* node);
-	void lconnect(BNode* node, BNode* othernode);
-	void rconnect(BNode* node, BNode* othernode);
-	void repair(BNode* node);
-	void Split();
 
+	RECORD GetRecordWhithKey(int value) {
+		BNode* current = root;
+		while (!current->leaf) {
+			for (int i = 0; i < 2 * N; i++) {
+				if (current->records[i] != RECORD()) {
+					if (value == criterion(current->records[i])) {
+						return current->records[i];
+					}
+					if (value < criterion(current->records[i])) {
+						current = current->children[i];
+						break;
+					}
+					if (((i + 1) == current->count || current->records[i + 1] == RECORD()) && (value > criterion(current->records[i]))) {
+						current = current->children[i + 1];
+						break;
+					}
+				}
+				return RECORD();
+			}
+		}
+		RECORD result = RECORD();
+		for (int i = 0; i < current->count; i++) {
+			if (current->GetValue(i) == value)
+				result = current->records[i];
+		}
+		return result;
+	}
+	RECORD GetRecordWhithKey(int value, BNode* node) {
+		if (node != nullptr) {
+			if (!node->leaf) {
+				int i;
+				for (i = 0; i < 2 * N; i++) {
+					if (!(node->records[i] == RECORD())) {
+						if (value == node->GetValue(i)) return node->records[i];
+						if ((value < node->GetValue(i))) {
+							return GetRecordWhithKey(value, node->children[i]);
+							break;
+						}
+					}
+					else break;
+				}
+				return GetRecordWhithKey(value, node->children[i]);
+			}
+			else {
+				for (int j = 0; j < node->count; j++)
+					if (value == node->GetValue(j)) return node->records[j];
+				return RECORD();
+			}
+		}
+		else return RECORD();
+	}
+
+
+	void Remove(int value, BNode* node) {
+		BNode* current = this->root;
+		int position;
+		int positionSon;
+		int i;
+		if (!FindKey(value, current)) {
+			return;
+		}
+		else {
+			for (i = 0; i < current->count ; i++) {
+				if (current->records[i] != RECORD()) {
+					if (value == current->GetValue(i)) {
+						position = i;
+						break;
+					}
+					else {
+						if ((value < current->GetValue(i))) {
+							current = current->children[i];
+							positionSon = i;
+							i = -1;
+						}
+						else {
+							if (i == (current->count - 1)) {
+								current = current->children[i + 1];
+								positionSon = i + 1;
+								i = -1;
+							}
+						}
+					}
+				}
+				else break;
+			}
+		}
+		if (current->leaf) {
+			if (current->count >= N )
+				RemoveFromNode(value, current);
+			else 
+				RemoveLeaf(value, current);
+		}
+		else
+			Remove(value, current);
+	}
+
+
+	void RemoveFromNode(int value, BNode* node) {
+		for (int i = 0; i < node->count; i++) {
+			if (node->GetValue(i) == value) {
+				for (int j = i; j < node->count; j++) {
+					node->records[j] = node->records[j + 1];
+					node->children[j] = node->children[j + 1];
+				}
+				node->records[node->count - 1] = RECORD();
+				node->children[node->count - 1] = node->children[node->count];
+				node->children[node->count] = nullptr;
+				break;
+			}
+		}
+		node->count--;
+	}
+
+	void RemoveLeaf(int value, BNode* node) {
+		if ((node == root) && (node->count == 1)) {
+			RemoveFromNode(value, node);
+			root->children[0] = nullptr;
+			delete root;
+			root = nullptr;
+			return;
+		}
+		if (node == root) {
+			RemoveFromNode(value, node);
+			return;
+		}
+		if (node->count > (N - 1)) {
+			RemoveFromNode(value, node);
+			return;
+		}
+		BNode* current = node;
+		RECORD k1;
+		RECORD k2;
+		int position;
+		int positionSon;
+		int i;
+		for (int i = 0; i <= node->count - 1; i++) {
+			if (value == node->GetValue(i)) {
+				position = i;
+				break;
+			}
+		}
+		BNode* parent = current->parent;
+		for (int j = 0; j <= parent->count; j++) {
+			if (parent->children[j] == current) {
+				positionSon = j; 
+				break;
+			}
+		}
+
+		if (positionSon == 0) {
+			if (parent->children[positionSon + 1]->count > (N - 1)) {
+				k1 = parent->children[positionSon + 1]->records[0];
+				k2 = parent->records[positionSon]; 
+				InsertToNode(k2, current);
+				RemoveFromNode(value, current);
+				parent->records[positionSon] = k1; 
+				RemoveFromNode(criterion(k1), parent->children[positionSon + 1]);
+			}
+			else {
+				RemoveFromNode(value, current);
+				if (current->count <= (N - 2))
+					Repair(current);
+			}
+		}
+		else {
+			if (positionSon == parent->count) {
+				if (parent->children[positionSon - 1]->count > (N - 1)) {
+					BNode* temp = parent->children[positionSon - 1];
+					k1 = temp->records[temp->count - 1];
+					k2 = parent->records[positionSon - 1];
+					InsertToNode(k2, current);
+					RemoveFromNode(value, current);
+					parent->records[positionSon - 1] = k1;
+					RemoveFromNode(criterion(k1), temp);
+				}
+				else { 
+					RemoveFromNode(value, current);
+					if (current->count <= (N - 2))
+						Repair(current);
+				}
+			}
+			else { 
+				if (parent->children[positionSon + 1]->count > (N - 1)) {
+					k1 = parent->children[positionSon + 1]->records[0]; 
+					k2 = parent->records[positionSon]; 
+					InsertToNode(k2, current);
+					RemoveFromNode(value, current);
+					parent->records[positionSon] = k1; 
+					RemoveFromNode(criterion(k1), parent->children[positionSon + 1]);
+				}
+				else {
+					if (parent->children[positionSon - 1]->count > (N - 1)) {
+						BNode* temp = parent->children[positionSon - 1];
+						k1 = temp->records[temp->count - 1]; 
+						k2 = parent->records[positionSon - 1]; 
+						InsertToNode(k2, current);
+						RemoveFromNode(value, current);
+						parent->records[positionSon - 1] = k1;
+						RemoveFromNode(criterion(k1), temp);
+					}
+					else { 
+						RemoveFromNode(value, current);
+						if (current->count <= (N - 2)) Repair(current);
+					}
+				}
+			}
+		}
+	}
+
+	void LConnect(BNode* node, BNode* othernode) {
+		if (node == nullptr) return;
+		for (int i = 0; i < othernode->count; i++) {
+			node->records[node->count] = othernode->records[i];
+			node->children[node->count] = othernode->children[i];
+			node->count = node->count + 1;
+		}
+		node->children[node->count] = othernode->children[othernode->count];
+		for (int j = 0; j <= node->count; j++) {
+			if (node->children[j] == nullptr) break;
+			node->children[j]->parent = node;
+		}
+		delete othernode;
+	}
+
+	void RConnect(BNode* node, BNode* othernode) {
+		if (node == nullptr) return;
+		for (int i = 0; i < othernode->count; i++) {
+			node->records[node->count] = othernode->records[i];
+			node->children[node->count + 1] = othernode->children[i + 1];
+			node->count = node->count + 1;
+		}
+		for (int j = 0; j <= node->count; j++) {
+			if (node->children[j] == nullptr) break;
+			node->children[j]->parent = node;
+		}
+		delete othernode;
+	}
+
+	void Repair(BNode* node) {
+		if ((node == root) && (node->count == 0)) {
+			if (root->children[0] != nullptr) {
+				root->children[0]->parent = nullptr;
+				root = root->children[0];
+			}
+			else {
+				delete root;
+			}
+			return;
+		}
+		BNode* current = node;
+		RECORD k1;
+		RECORD k2;
+		int positionSon;
+
+		BNode* parent = current->parent;
+		for (int j = 0; j <= parent->count; j++) {
+			if (parent->children[j] == current) {
+				positionSon = j;
+				break;
+			}
+		}
+		if (positionSon == 0) {
+			InsertToNode(parent->records[positionSon], current);
+			LConnect(current, parent->children[positionSon + 1]);
+			parent->children[positionSon + 1] = current;
+			parent->children[positionSon] = nullptr;
+			RemoveFromNode(criterion(parent->records[positionSon]), parent);
+			if (current->count == 2 * N) {
+				while (current->count == 2 * N) {
+					if (current == root) {
+						Restruct(current);
+						break;
+					}
+					else {
+						Restruct(current);
+						current = current->parent;
+					}
+				}
+			}
+			else
+				if (parent->count <= (N - 2)) Repair(parent);
+		}
+		else {
+			if (positionSon == parent->count) {
+				InsertToNode(parent->records[positionSon - 1], parent->children[positionSon - 1]);
+				LConnect(parent->children[positionSon - 1], current);
+				parent->children[positionSon] = parent->children[positionSon - 1];
+				parent->children[positionSon - 1] = nullptr;
+				RemoveFromNode(criterion(parent->records[positionSon - 1]), parent);
+				BNode* temp = parent->children[positionSon];
+				if (current->count == 2 * N) {
+					while (temp->count == 2 * N) {
+						if (temp == root) {
+							Restruct(temp);
+							break;
+						}
+						else {
+							Restruct(temp);
+							temp = temp->parent;
+						}
+					}
+				}
+				else
+					if (parent->count <= (N - 2)) Repair(parent);
+			}
+			else { 
+				InsertToNode(parent->records[positionSon], current);
+				LConnect(current, parent->children[positionSon + 1]);
+				parent->children[positionSon + 1] = current;
+				parent->children[positionSon] = nullptr;
+				RemoveFromNode(criterion(parent->records[positionSon]), parent);
+				if (current->count == 2 * N) {
+					while (current->count == 2 * N) {
+						if (current == root) {
+							Restruct(current);
+							break;
+						}
+						else {
+							Restruct(current);
+							current = current->parent;
+						}
+					}
+				}
+				else
+					if (parent->count <= (N - 2))
+						Repair(parent);
+			}
+		}
+	}
 
 	BNode* root;
 

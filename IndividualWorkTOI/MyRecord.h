@@ -41,4 +41,4 @@ namespace MyTypes {
 			return !operator==(im1);
 		}
 	};
-}
+};

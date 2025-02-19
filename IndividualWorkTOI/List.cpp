@@ -90,12 +90,16 @@ namespace Lists {
 		Node* current = first;
 
 		std::cout << "////////////////////////////////////////////////////////////////\n";
-		std::cout << "Number///Name///Size///Width///Height///ColorDepth///Format///\n";
+		std::cout << "Number/1 Name/2 Size/3 Width/4 Height/5 ColorDepth/6 Format///\n";
 		while (current)
 		{
 			current->record.Write();
-			std::cout << std::endl;
+			std::cout << std::endl;			
 			current = current->nextNode;
+			if (current) {
+				std::cout << "\t\t|" << std::endl;
+				std::cout << "\t\tV" << std::endl;
+			}
 		}
 		std::cout << "////////////////////////////////////////////////////////////////\n";
 	}
