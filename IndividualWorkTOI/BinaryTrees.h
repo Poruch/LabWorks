@@ -20,7 +20,6 @@ private:
 
 		BNode() : leaf(true) {
 			records = ARRAY(2 * N);
-
 			for (int i = 0; i <= records.Count(); i++) children[i] = nullptr;
 			parent = nullptr;
 			count = 0;
@@ -29,14 +28,13 @@ private:
 
 		BNode(bool isLeaf) : leaf(isLeaf) {
 			records = ARRAY(2 * N);
-
 			for (int i = 0; i <= 2 * N; i++) children[i] = nullptr;
 			parent = nullptr;
 			count = 0;
 			countSons = 0;
 		};
 
-		int GetValue(int index, int (*criterion)(RECORD)) {
+		int GetValue(int index, int (*criterion)(RECORD&)) {
 			return criterion(records[index]);
 		}	
 		
@@ -44,9 +42,9 @@ private:
 			return records[index];
 		}
 	};
-	int (*criterion)(RECORD);
+	int (*criterion)(RECORD&);
 public:
-	BTree(int (*criterion)(RECORD)) {
+	BTree(int (*criterion)(RECORD&)) {
 		root = nullptr;
 		this->criterion = criterion;
 	} 
@@ -57,7 +55,10 @@ public:
 		if (root != nullptr)
 			DeleteNode(root);
 	}
-
+	void DeleteData() {
+		if (root != nullptr)
+			DeleteNode(root);
+	}
 	RECORD Find(int value) {
 		return GetRecordWhithKey(value,root);
 	}
@@ -112,19 +113,23 @@ public:
 	}
 	
 	void WriteTree() {
-		WriteNode(root);
+		WriteNode(root,0);
 	}
-
+	void WriteTreeKeys() {
+		WriteKey(root, 0);
+	}
 	
 	bool IsEmpty() {
 		return root == nullptr;
 	}
 private:	
-	void WriteNode(BNode* node) {
+	void WriteNode(BNode* node, int deep) {
 		if (node == nullptr) return;
 		if (node->leaf) {
 			for (size_t i = 0; i < node->count; i++)
 			{
+				for (int i = 0; i < deep; i++)
+					std::cout << "\t";
 				node->records[i].Write();
 				std::cout << "\n";
 			}
@@ -132,11 +137,36 @@ private:
 		else {
 			for (size_t i = 0; i < node->count; i++)
 			{
-				WriteNode(node->children[i]);
+				WriteNode(node->children[i], deep + 1);
+				for (int i = 0; i < deep; i++)
+					std::cout << "   ";
 				node->records[i].Write();
 				std::cout << "\n";
 			}
-			WriteNode(node->children[node->countSons - 1]);
+			WriteNode(node->children[node->countSons - 1],deep + 1);
+		}
+	}
+	void WriteKey(BNode* node, int deep) {
+		if (node == nullptr) return;
+		if (node->leaf) {
+			for (size_t i = 0; i < node->count; i++)
+			{
+				for (int i = 0; i < deep; i++)
+					std::cout << "\t";
+				std::cout << criterion(node->records[i]);
+				std::cout << "\n";
+			}
+		}
+		else {
+			for (size_t i = 0; i < node->count; i++)
+			{
+				WriteKey(node->children[i], deep + 1);
+				for (int i = 0; i < deep; i++)
+					std::cout << "   ";
+				std::cout << criterion(node->records[i]);
+				std::cout << "\n";
+			}
+			WriteKey(node->children[node->countSons - 1], deep + 1);
 		}
 	}
 	void InsertToNode(RECORD value, BNode* node) {

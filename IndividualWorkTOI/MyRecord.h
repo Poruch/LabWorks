@@ -51,6 +51,26 @@ namespace MyTypes {
 		}
 		bool operator !=(Image im1) {
 			return !operator==(im1);
-		}
+		}		
 	};
+
+	int static criterionName(RECORD& value) {
+		return (int)value.name[0];
+	}
+	int static criterionHeight(RECORD& value) {
+		return (int)value.height;
+	}
+	int static criterionWidth(RECORD& value) {
+		return (int)value.width;
+	}
+	int static criterionColorDepth(RECORD& value) {
+		return (int)value.colorDepth;
+	}
+	int static criterionSize(RECORD& value) {
+		return (int)value.size;
+	}
+	int static criterionFormat(RECORD& value) {
+		return (int)value.format[0];
+	}
+	int (* const criterions[6])(RECORD&) = { criterionName, criterionSize, criterionWidth, criterionHeight, criterionColorDepth, criterionFormat };
 };

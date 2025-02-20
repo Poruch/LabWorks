@@ -32,100 +32,175 @@ std::string ReadString() {
 	return result;
 }
 
-int static criterionName(RECORD value) {
-	return (int)value.name[0];
-}
-int static criterionHeight(RECORD value) {
-	return (int)value.height;
-}
-int static criterionWidth(RECORD value) {
-	return (int)value.width;
-}
-int static criterionColorDepth(RECORD value) {
-	return (int)value.colorDepth;
-}
-int static criterionSize(RECORD value) {
-	return (int)value.size;
-}
-int static criterionFormat(RECORD value) {
-	return (int)value.format[0];
-}
-void print(std::string str,char end = '\n') {
+
+
+void print(std::string str = "", char end = '\n') {
 	std::cout << str << end;
 }
 
-int (* const criterions[6])(RECORD) = { criterionName, criterionSize, criterionWidth, criterionHeight, criterionColorDepth, criterionFormat };
+const int sizeCriterionList = 2;
+int (*criterionsForList[])(RECORD&) = { MyTypes::criterionName, MyTypes::criterionHeight };
+
+const int sizeBTree = 2;
+int (*criterionBTree)(RECORD&) = MyTypes::criterionSize;
+
 
 
 int main()
 {
-	
+	//Задание с массивом
+	////////////////////////// 
+	//////////////////////////
+	//////////////////////////
 	setlocale(LC_ALL, "Russian");
+	///// Создание изначального массива
+	print("Создание изначального массива");
 	ARRAY array = ARRAY::GetArrayFromFile(false ? ReadString() : "Data.txt");
-	/*	print("Введите название txt файла из которго создасться таблица");	
-	print("Таблица:");
 	array.WriteArray();
-	print("Выберите 2 ключа для сортировок (1,2,3,4,5,6)");
-	int typeCrit = ReadValueUInt();
-	auto crit1 = criterions[typeCrit- 1];
-	typeCrit = ReadValueUInt();
-	auto crit2 = criterions[typeCrit - 1];
-	print("Введите хотите работать с массивом (1) со списком (2) или с деревом (3)");
 
-	int task = ReadValueUInt();
-	system("cls");
-	switch (task)
-	{
-	case 1:
-		break;
-		print("Вы работаете с массивом");
-		while (true) {
+	/////
+	print("Функция сортировки самого массива массива 1");
+	///// 
 
-		}
-	case 2: {		
-		LIST list[3]{ LIST(), LIST(), LIST() };
-		for (size_t i = 0; i < array.Count(); i++)
-		{
-			list[0].SortedPush(array[i], crit1);
-			list[1].SortedPush(array[i], crit2);
-			list[2].PushBack(array[i]);
-		}
-		while (true) {
-			system("cls");
-			print("Вы работаете со списком");
-			print("1 - вывести отсортированную таблицу по 1 критерию");
-			print("2 - вывести отсортированную таблицу по 2 критерию");
-			print("3 - вывести таблицу в порядке заполнения");
-			int action = ReadValueUInt();
-			switch (action)
-			{
-			case 1:
-				list[0].WriteList();
-				break;
-			case 2:
-				list[1].WriteList();
-				break;
-			case 3:
-				list[2].WriteList();
-				break;
-			default:
-				break;
-			}
-			system("pause");
-		}
+	print("Сортировка самого массива высоте картинки по возрастанию");
+	array.Sort(MyTypes::criterionHeight);
+	array.WriteArray();
+
+	/////
+	print();
+	print();
+	print("Функция сортировки и вывода по индексам массива 2");
+	/////
+
+	print("Сортировка индексов записей по высоте картинки по убыванию");
+	int* indexes = new int[0];
+	array.SortIndexes(&indexes, MyTypes::criterionHeight, false);
+	array.WriteArray(indexes);
+
+	print("Сортировка индексов записей по размеру картинки по убыванию");
+	array.SortIndexes(&indexes, MyTypes::criterionSize, false);
+	array.WriteArray(indexes);
+
+	/////
+	print();
+	print();
+	print("Функция поиска элементов массива 3");
+	/////
+
+	print("Поиск элемента в массиве по значению размера картинки");
+	int index = array.Find(165,MyTypes::criterionSize);
+	if (index == -1)
+		print("Записи с размером картинки - " + std::to_string(165) + " в таблице нет");
+	else {
+		print("индекс элемента c размером " + std::to_string(165) + " - " + std::to_string(index));
+		array[index].Write();
+		print();
 	}
-		break;
-	case 3:
-		print("Вы работаете с деревом");
-		TREE<2,>
-		while (true) {
 
-		}
-		break;
-	default:
-		break;
-	}*/
-	int (*crits[1])(RECORD) = { criterionName };
-	LIST<2> list = LIST<2>(crits);
+	print("Поиск элемента в массиве по значению высоты картинки");
+	index = array.Find(30000, MyTypes::criterionHeight);
+	if (index == -1)
+		print("Записи с размером картинки - " + std::to_string(30000) + " в таблице нет");
+	else {
+		print("индекс элемента - " + std::to_string(index));
+		array[index].Write();
+		print();
+	}
+	
+	//////
+	print();
+	print();
+	print();
+	//////
+	
+	print("Функция изменения записей в массиве");
+	print("Массив до изменения высоты " + std::to_string(array[4].number) + " картинки");
+	array.Sort(MyTypes::criterionHeight);
+	array.WriteArray();
+
+	array[4].height = 3250;
+	array.SortIndexes(&indexes, MyTypes::criterionHeight, false);
+
+	print("Массив после изменения высоты " + std::to_string(array[4].number) + " картинки");
+	array.WriteArray(indexes);
+
+	//////
+	print();
+	print();
+	print();
+	//////
+
+	print("Функция удаления записи в массиве");
+	
+	print("Массив до удаления картинки собаки");
+	array.Sort(MyTypes::criterionSize);
+	array.WriteArray();
+	std::string name = "Собака на траве";
+	array.DeleteFirstElem<std::string>(name, [](RECORD& record) { return record.name; });
+
+	array.SortIndexes(&indexes, MyTypes::criterionSize, false);
+	print("массив после удаления картинки собаки");
+	array.WriteArray(indexes);
+
+	//////
+	print();
+	print();
+	print();
+	//////
+	
+	print("Функция добавления записей в массив");
+	print("Массив до добавления (отсортирован по 1 букве имени)");
+	array.Sort(MyTypes::criterionName);
+	array.WriteArray();
+	array.AddElems("Data 2.txt");
+
+	print("Массив после добавления");
+	array.Sort(MyTypes::criterionName);
+	array.WriteArray();
+	//////
+	print();
+	print();
+	print();
+	//////
+	print("Функция удаления записей в массиве");
+
+	print("Массив до удаления картинок с форматом png");
+	array.Sort(MyTypes::criterionFormat);
+	array.WriteArray();
+	name = "png";
+	array.DeleteElems<std::string>(name, [](RECORD& record) { return record.format; });
+
+
+	array.SortIndexes(&indexes, MyTypes::criterionFormat, false);
+	print("массив после удаления картинок с форматом png");
+	array.WriteArray(indexes);
+
+	//////
+	print();
+	print();
+	print();
+	//////
+
+	
+
+	//array.AddElems("Data.txt");
+
+	//Задание с деревом
+	////////////////////////// 
+	//////////////////////////
+	//////////////////////////
+
+	TREE<2> tree = TREE<2>(MyTypes::criterionWidth);
+	for (int i = 0; i < array.Count(); i++) {
+		tree.Insert(array[i]);
+	}
+
+
+	tree.WriteTreeKeys();
+	print();
+	print();
+	print();
+	tree.WriteTree();
+	//system("pause");
 }
 

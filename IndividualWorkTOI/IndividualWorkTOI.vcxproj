@@ -130,7 +130,6 @@
     <ClCompile Include="Array.cpp" />
     <ClCompile Include="IndividualWorkTOI.cpp" />
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="List.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h" />

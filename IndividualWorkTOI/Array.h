@@ -22,10 +22,12 @@ namespace Arrays {
 		void Reconstruct();
 
 		void WriteArray();
+		void WriteArray(int* indexes);
+		void Sort(int(*criterion)(RECORD&), bool rise = true, bool quick = true);		
+		void Sort(int indStart,int indEnd,int(*criterion)(RECORD&), bool rise = true, bool quick = true);
 
-		void Sort(int(*criterion)(RECORD), bool rise = true, bool quick = true);		
-		void Sort(int indStart,int indEnd,int(*criterion)(RECORD), bool rise = true, bool quick = true);
-		void GetSortIndexes(int** indexes, int(*criterion)(RECORD), bool rise = true);
+		void SortIndexes(int** indexes, int(*criterion)(RECORD&), bool rise = true, bool quick = true);
+
 
 		int Find(RECORD value);
 		void DeleteFirstElem(RECORD value);
@@ -37,7 +39,7 @@ namespace Arrays {
 
 		void RecoverIndexes(bool rise = true);
 		template <typename T>
-		int FindAll(int** indexes, int* lenIndexes, T value, T (*criterion)(RECORD)) {
+		int FindAll(int** indexes, int* lenIndexes, T value, T (*criterion)(RECORD&)) {
 			delete[](*indexes);
 			int count = 0;
 			(*indexes) = new int[length];
@@ -74,7 +76,7 @@ namespace Arrays {
 		}
 
 		template <typename T>
-		int FindBinary(T value, T(*criterion)(RECORD), int offsetLeft, int offsetRight) {
+		int FindBinary(T value, T(*criterion)(RECORD&), int offsetLeft, int offsetRight) {
 			int m = (offsetLeft + offsetRight) / 2;
 			if (offsetLeft > offsetRight)
 				return -1;
@@ -88,7 +90,7 @@ namespace Arrays {
 
 		
 		template <typename T>
-		int Find(T value, T(*criterion)(RECORD)) {
+		int Find(T value, T(*criterion)(RECORD&)) {
 			for (int i = 0; i < length; i++)
 				if (criterion(records[i]) == value)
 					return i;
@@ -96,7 +98,7 @@ namespace Arrays {
 		}
 
 		template <typename T>
-		void DeleteElems(T value, T(*criterion)(RECORD)) {
+		void DeleteElems(T value, T(*criterion)(RECORD&)) {
 			int* indexes = 0;
 			int lenIndexes = 0;
 			if (!(FindAll<T>(&indexes, &lenIndexes, value, criterion) + 1))
@@ -119,7 +121,7 @@ namespace Arrays {
 		}
 
 		template <typename T>
-		void DeleteFirstElem(T value, T(*criterion)(RECORD)) {
+		void DeleteFirstElem(T value, T(*criterion)(RECORD&)) {
 			int ind = Find<T>(value, criterion);
 			if (ind == -1)
 				return;
@@ -160,7 +162,10 @@ namespace Arrays {
 		RECORD* records;
 		size_t length;
 
-		void QuickSort(RECORD* array, int len, int(*criterion)(RECORD), bool rise = true);
+		void GetSortIndexes(int* indexes, int(*criterion)(RECORD&), bool rise = true);
+		void QuickGetSortIndexes(int* indexes, int len, int(*criterion)(RECORD&), bool rise);
+
+		void QuickSort(RECORD* array, int len, int(*criterion)(RECORD&), bool rise = true);
 		void ReSize(size_t newLen);
 
 		void InBorder(int index) {
