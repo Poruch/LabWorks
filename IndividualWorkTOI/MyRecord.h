@@ -24,11 +24,23 @@ namespace MyTypes {
 			std::cout << (int)colorDepth << "\t";
 			std::cout << format.substr(0, 6) << "\t";
 		}
+		Image(const Image& record)
+			: number(record.number), 
+			name(record.name), 
+			size(record.size), 
+			width(record.width), 
+			height(record.height), 
+			colorDepth(record.colorDepth), 
+			format(record.format) {	}
 
 		Image(int number, const std::string& name, int size, int width, int height, int colorDepth, const std::string& format)
-			: number(number), name(name), size(size), width(width), height(height), colorDepth(colorDepth), format(format)
-		{
-		}
+			: number(number),
+			name(name), 
+			size(size), 
+			width(width),
+			height(height),
+			colorDepth(colorDepth), 
+			format(format) {	}
 
 		Image(): number(0), name(""), size(0), width(0), height(0), colorDepth(0), format("")
 		{

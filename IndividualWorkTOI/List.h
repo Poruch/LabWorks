@@ -10,11 +10,11 @@ namespace Lists {
 		{
 			Node* nextNode[N];
 			int index = 0;
-			RECORD record;
+			RECORD* record;
 
 			Node(int ind, RECORD im) {
 				index = ind;
-				record = im;				
+				record = new RECORD(im);				
 			}
 			Node() {
 				index = 0;
@@ -23,6 +23,10 @@ namespace Lists {
 			template <typename T>
 			T GetValue(T(*criterion)(RECORD)) {
 				return criterion(record);
+			}
+
+			bool operator==(const Node& node) {
+				return record == node.record;
 			}
 		};
 		Node* first[N+1];

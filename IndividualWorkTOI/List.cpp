@@ -1,6 +1,6 @@
 #include "List.h"
 //#include "List.h"
-#define CRITERION criterions[criterionInd]
+#define CRITERION(i) criterions[i]
 namespace Lists {
 
 	template<int N>
@@ -16,57 +16,58 @@ namespace Lists {
 	template<int N>
 	void List<N>::SortedPush(RECORD value) {
 		count++;
-		int val = CRITERION(value);
-		Node* newPointer = new Node(count, value);
+		for (int i = 1; i < N + 1; i++) {
+			int val = CRITERION()(value);
+			Node* newPointer = new Node(count, value);
 
-		if (IsEmpty()) {
-			first = newPointer;
-			last = newPointer;
-			return;
+			if (IsEmpty(i)) {
+				first[i] = newPointer;
+				last[i] = newPointer;
+				return;
+			}
+			if (val <= first[i]->GetValue(CRITERION)) {
+				Push(value);
+				return;
+			}
+			if (val >= last[i]->GetValue(CRITERION)) {
+				PushBack(value);
+				return;
+			}
+			Node* slow = first[i];
+			Node* fast = first[i]->nextNode;
+			while (fast && (val > fast->GetValue(CRITERION))) {
+				slow = fast[i];
+				fast = fast[i]->nextNode;
+			}
+			slow->nextNode = newPointer;
+			newPointer->nextNode = fast;
 		}
-		if (val <= first[criterionInd]->GetValue(criterion) == rise) {
-			Push(value);
-			return;
-		}
-		if (val >= last->GetValue(criterion) == rise) {
-			PushBack(value);
-			return;
-		}
-		Node* slow = first;
-		Node* fast = first->nextNode;
-		while (fast &&  (val > fast->GetValue(criterion) == rise) ) {
-			slow = fast;
-			fast = fast->nextNode;
-		}
-		slow->nextNode = newPointer;
-		newPointer->nextNode = fast;
 	}
 
 	template<int N>
 	void List<N>::PushBack(RECORD value) {
-		count++;
 		Node* newPointer = new Node(count, value);
 		if (IsEmpty()) {
-			first = newPointer;
-			last = newPointer;
+			first[0] = newPointer;
+			last[0] = newPointer;
 			return;
 		}
-		last->nextNode = newPointer;
-		last = newPointer;
+		last[0]->nextNode = newPointer;
+		last[0] = newPointer;
 	}
 
-	template<int N>
-	void List<N>::Push(RECORD value) {
-		count++;
-		Node* newPointer = new Node(count, value);
-		if (IsEmpty()) {
-			first = newPointer;
-			last = newPointer;
-			return;
-		}
-		newPointer->nextNode = first;
-		first = newPointer;
-	}
+	//template<int N>
+	//void List<N>::Push(RECORD value) {
+	//	count++;
+	//	Node* newPointer = new Node(count, value);
+	//	if (IsEmpty()) {
+	//		first = newPointer;
+	//		last = newPointer;
+	//		return;
+	//	}
+	//	newPointer->nextNode = first;
+	//	first = newPointer;
+	//}
 
 	template<int N>
 	void List<N>::RemoveFirst() {
@@ -104,7 +105,7 @@ namespace Lists {
 	template<int N>
 	void List<N>::WriteList() {
 		if (IsEmpty()) return;
-		Node* current = first;
+		Node* current = first[0];
 
 		std::cout << "////////////////////////////////////////////////////////////////\n";
 		std::cout << "Number/1 Name/2 Size/3 Width/4 Height/5 ColorDepth/6 Format///\n";
