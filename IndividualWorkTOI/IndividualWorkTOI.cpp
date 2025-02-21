@@ -182,19 +182,20 @@ int main()
 	//////
 
 	
-
-	//array.AddElems("Data.txt");
+	array.DeleteData();
+	array.AddElems("Data 2.txt");
+	array.AddElems("Data.txt");
 
 	//Задание с деревом
 	////////////////////////// 
 	//////////////////////////
 	//////////////////////////
+	array.WriteArray();
 
 	TREE<2> tree = TREE<2>(MyTypes::criterionWidth);
 	for (int i = 0; i < array.Count(); i++) {
 		tree.Insert(array[i]);
 	}
-
 
 	tree.WriteTreeKeys();
 	print();

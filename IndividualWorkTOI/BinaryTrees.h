@@ -10,7 +10,7 @@ struct BTree {
 private:
 	struct BNode
 	{
-		ARRAY records;
+		RECORD** records;
 		BNode* children[2 * N + 1];
 		BNode* parent;
 
@@ -19,15 +19,17 @@ private:
 		bool leaf;
 
 		BNode() : leaf(true) {
-			records = ARRAY(2 * N);
-			for (int i = 0; i <= records.Count(); i++) children[i] = nullptr;
+			records = new RECORD*[2 * N];
+			for (int i = 0; i < 2 * N; i++) records[i] = nullptr;
+			for (int i = 0; i <= 2 * N; i++) children[i] = nullptr;
 			parent = nullptr;
 			count = 0;
 			countSons = 0;
 		};
 
 		BNode(bool isLeaf) : leaf(isLeaf) {
-			records = ARRAY(2 * N);
+			records = new RECORD * [2 * N];
+			for (int i = 0; i < 2 * N; i++) records[i] = nullptr;
 			for (int i = 0; i <= 2 * N; i++) children[i] = nullptr;
 			parent = nullptr;
 			count = 0;
@@ -67,10 +69,10 @@ public:
 		return FindKey(value,root);
 	}
 
-	void Insert(RECORD value) {
+	void Insert(RECORD& value) {
 		if (IsEmpty()) {
 			BNode* newRoot = new BNode();
-			newRoot->records[0] = value;
+			newRoot->records[0] = &value;
 			newRoot->count++;
 			root = newRoot;
 		}
@@ -78,12 +80,12 @@ public:
 			BNode* current = root;
 			while(!current->leaf) {
 				for (int i = 0; i < 2 * N; i++) {
-					if (current->records[i] != RECORD()) {
-						if (criterion(value) <= criterion(current->records[i])) {
+					if (current->records[i] != nullptr) {
+						if (criterion(value) <= criterion((*current->records[i]))) {
 							current = current->children[i];
 							break;
 						}
-						if (((i + 1) == current->count || current->records[i + 1] == RECORD()) && (criterion(value) > criterion(current->records[i]))) {
+						if (((i + 1) == current->count || current->records[i + 1] == nullptr) && (criterion(value) > criterion((*current->records[i])))) {
 							current = current->children[i + 1];
 							break;
 						}
@@ -130,7 +132,7 @@ private:
 			{
 				for (int i = 0; i < deep; i++)
 					std::cout << "\t";
-				node->records[i].Write();
+				node->records[i]->Write();
 				std::cout << "\n";
 			}
 		}
@@ -140,7 +142,7 @@ private:
 				WriteNode(node->children[i], deep + 1);
 				for (int i = 0; i < deep; i++)
 					std::cout << "   ";
-				node->records[i].Write();
+				node->records[i]->Write();
 				std::cout << "\n";
 			}
 			WriteNode(node->children[node->countSons - 1],deep + 1);
@@ -153,7 +155,7 @@ private:
 			{
 				for (int i = 0; i < deep; i++)
 					std::cout << "\t";
-				std::cout << criterion(node->records[i]);
+				std::cout << criterion(*node->records[i]);
 				std::cout << "\n";
 			}
 		}
@@ -163,16 +165,27 @@ private:
 				WriteKey(node->children[i], deep + 1);
 				for (int i = 0; i < deep; i++)
 					std::cout << "   ";
-				std::cout << criterion(node->records[i]);
+				std::cout << criterion(*node->records[i]);
 				std::cout << "\n";
 			}
 			WriteKey(node->children[node->countSons - 1], deep + 1);
 		}
 	}
-	void InsertToNode(RECORD value, BNode* node) {
-		node->records[node->count] = value;
+	void InsertToNode(RECORD& value, BNode* node) {
+		node->records[node->count] = &value;
 		node->count = node->count + 1;
-		node->records.Sort(0,node->count,criterion);
+		SortNode(node);
+	}
+	void SortNode(BNode* node) {
+		for (int i = 0; i < node->count -1; i++) {
+			for (int j = i + 1; j < node->count; j++) {
+				if (criterion(*node->records[i]) > criterion(*node->records[j])) {
+					auto buff = node->records[i];
+					node->records[i] = node->records[j];
+					node->records[j] = buff;
+				}
+			}
+		}
 	}
 	void Restruct(BNode* node) {
 		if (node->count < 2 * N ) return;
@@ -224,7 +237,7 @@ private:
 			child2->parent = node;
 		}
 		else {
-			InsertToNode(node->records[N - 1], node->parent);
+			InsertToNode(*node->records[N - 1], node->parent);
 			for (int i = 0; i <= (2 * N); i++) {
 				if (node->parent->children[i] == node) 
 					node->parent->children[i] = nullptr;
@@ -249,7 +262,7 @@ private:
 
 	void DeleteNode(BNode* node) {
 		if (node != nullptr) {
-			for (int i = 0; i < 2 * N; i++) {
+			for (int i = 0; i < node->countSons; i++) {
 				if (node->children[i] != nullptr) DeleteNode(node->children[i]);
 				else {
 					delete node;
@@ -643,6 +656,23 @@ private:
 
 	BNode* root;
 
+
+
+	void InsNode(BNode* R, int C) {
+		if (R = nullptr) {
+			new(R);
+			R^ .Inf : = C;
+			R^ .Left : = nil; 
+			R^ .Right : = nil{ всегда добавляем лист }
+		}
+		else {
+			Ищем место для размещения новой вершины
+				в зависимости от введённого значения
+		}
+		if C < R^ .Inf
+			then InsNode(R^ .Left, C) { вставляемое значение меньше - вставляем в левое поддерево }
+		else InsNode(R ^ .Right, C) { вставляемое значение больше - вставляем в правое поддерево }
+	}
 	};
 
 }

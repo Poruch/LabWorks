@@ -138,6 +138,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="MyRecord.h" />
+    <ClInclude Include="Table.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Data 2.txt" />
