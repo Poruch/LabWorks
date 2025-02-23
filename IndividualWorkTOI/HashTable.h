@@ -1,7 +1,9 @@
 #pragma once
 #include "Array.h"
 #include <string>
-#define ARRAY Arrays::MyArray
+
+
+#define TABLE HashTables::HashTable
 namespace HashTables {
 
 	struct HashTable {

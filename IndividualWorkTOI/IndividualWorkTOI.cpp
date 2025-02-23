@@ -3,19 +3,14 @@
 #include "InputManager.h"
 #include "MyRecord.h"
 #include "Array.h"
-#include "BinaryTrees.h"
+#include "BTrees.h"
 #include "HashTable.h"
 
 #include "List.h"
 #include <vector>
 
-#define ARRAY Arrays::MyArray
-#define LIST Lists::List
-#define RECORD MyTypes::Image
-#define TABLE HashTables::HashTable
-#define TREE Trees::BTree
 
-
+#include "Table.h"
 int ReadValueUInt() {
 	int a = 0;
 	do {
@@ -32,176 +27,80 @@ std::string ReadString() {
 	return result;
 }
 
-
-
 void print(std::string str = "", char end = '\n') {
 	std::cout << str << end;
 }
 
-const int sizeCriterionList = 2;
-int (*criterionsForList[])(RECORD&) = { MyTypes::criterionName, MyTypes::criterionHeight };
-
-const int sizeBTree = 2;
-int (*criterionBTree)(RECORD&) = MyTypes::criterionSize;
-
-
-
 int main()
 {
-	//Задание с массивом
-	////////////////////////// 
-	//////////////////////////
-	//////////////////////////
-	setlocale(LC_ALL, "Russian");
-	///// Создание изначального массива
-	print("Создание изначального массива");
-	ARRAY array = ARRAY::GetArrayFromFile(false ? ReadString() : "Data.txt");
-	array.WriteArray();
+	srand(time(NULL));
+	int criterionInds[2] = { 3,4 };
+	setlocale(LC_ALL, "Rus");
+	Table table = Table(criterionInds, "Data.txt");
 
-	/////
-	print("Функция сортировки самого массива массива 1");
-	///// 
 
-	print("Сортировка самого массива высоте картинки по возрастанию");
-	array.Sort(MyTypes::criterionHeight);
-	array.WriteArray();
+	table.WriteArray();
 
-	/////
+	table.WriteSortArray(0,false);
+	table.WriteSortArray(1,true);
+
+	table.WriteSortArrayWithTree();
+
+
+
+	table.WriteArrayWithList();
+
+	table.WriteSortArrayWithList(1);
+	table.WriteSortArrayWithList(2);
+
+	table.WriteSortArrayWithList(1,false);
+	table.WriteSortArrayWithList(2,false);
+
 	print();
-	print();
-	print("Функция сортировки и вывода по индексам массива 2");
-	/////
+	int index = table.FindInArray(24, 1);
+	if(index != -1)
+		table[index].Write();
 
-	print("Сортировка индексов записей по высоте картинки по убыванию");
-	int* indexes = new int[0];
-	array.SortIndexes(&indexes, MyTypes::criterionHeight, false);
-	array.WriteArray(indexes);
-
-	print("Сортировка индексов записей по размеру картинки по убыванию");
-	array.SortIndexes(&indexes, MyTypes::criterionSize, false);
-	array.WriteArray(indexes);
-
-	/////
 	print();
+	table.FindRecordWithList(630,0).Write();
 	print();
-	print("Функция поиска элементов массива 3");
-	/////
-
-	print("Поиск элемента в массиве по значению размера картинки");
-	int index = array.Find(165,MyTypes::criterionSize);
-	if (index == -1)
-		print("Записи с размером картинки - " + std::to_string(165) + " в таблице нет");
-	else {
-		print("индекс элемента c размером " + std::to_string(165) + " - " + std::to_string(index));
-		array[index].Write();
-		print();
-	}
-
-	print("Поиск элемента в массиве по значению высоты картинки");
-	index = array.Find(30000, MyTypes::criterionHeight);
-	if (index == -1)
-		print("Записи с размером картинки - " + std::to_string(30000) + " в таблице нет");
-	else {
-		print("индекс элемента - " + std::to_string(index));
-		array[index].Write();
-		print();
-	}
-	
-	//////
-	print();
-	print();
-	print();
-	//////
-	
-	print("Функция изменения записей в массиве");
-	print("Массив до изменения высоты " + std::to_string(array[4].number) + " картинки");
-	array.Sort(MyTypes::criterionHeight);
-	array.WriteArray();
-
-	array[4].height = 3250;
-	array.SortIndexes(&indexes, MyTypes::criterionHeight, false);
-
-	print("Массив после изменения высоты " + std::to_string(array[4].number) + " картинки");
-	array.WriteArray(indexes);
-
-	//////
-	print();
-	print();
-	print();
-	//////
-
-	print("Функция удаления записи в массиве");
-	
-	print("Массив до удаления картинки собаки");
-	array.Sort(MyTypes::criterionSize);
-	array.WriteArray();
-	std::string name = "Собака на траве";
-	array.DeleteFirstElem<std::string>(name, [](RECORD& record) { return record.name; });
-
-	array.SortIndexes(&indexes, MyTypes::criterionSize, false);
-	print("массив после удаления картинки собаки");
-	array.WriteArray(indexes);
-
-	//////
-	print();
-	print();
-	print();
-	//////
-	
-	print("Функция добавления записей в массив");
-	print("Массив до добавления (отсортирован по 1 букве имени)");
-	array.Sort(MyTypes::criterionName);
-	array.WriteArray();
-	array.AddElems("Data 2.txt");
-
-	print("Массив после добавления");
-	array.Sort(MyTypes::criterionName);
-	array.WriteArray();
-	//////
-	print();
-	print();
-	print();
-	//////
-	print("Функция удаления записей в массиве");
-
-	print("Массив до удаления картинок с форматом png");
-	array.Sort(MyTypes::criterionFormat);
-	array.WriteArray();
-	name = "png";
-	array.DeleteElems<std::string>(name, [](RECORD& record) { return record.format; });
 
 
-	array.SortIndexes(&indexes, MyTypes::criterionFormat, false);
-	print("массив после удаления картинок с форматом png");
-	array.WriteArray(indexes);
 
-	//////
-	print();
-	print();
-	print();
-	//////
+	table.WriteSortArrayWithList(1, false);
+	table.WriteSortArrayWithList(2, false);
 
-	
-	array.DeleteData();
-	array.AddElems("Data 2.txt");
-	array.AddElems("Data.txt");
 
-	//Задание с деревом
-	////////////////////////// 
-	//////////////////////////
-	//////////////////////////
-	array.WriteArray();
+	table[4].SetColorDepth(64);
+	table[4].SetHeifht(4);
 
-	TREE<2> tree = TREE<2>(MyTypes::criterionWidth);
-	for (int i = 0; i < array.Count(); i++) {
-		tree.Insert(array[i]);
-	}
+	table.WriteArray();
+	table.WriteSortArray(1);
+	table.WriteSortArrayWithTree();
+	table.WriteArrayWithList();
 
-	tree.WriteTreeKeys();
-	print();
-	print();
-	print();
-	tree.WriteTree();
-	//system("pause");
+	table.WriteSortArrayWithList(1);
+	table.WriteSortArrayWithList(2);
+
+
+	table.DeleteRecordWhithArray(64,1);
+
+	table.DeleteRecordFromTree(3223);
+	table.DeleteRecordFromTree(1350);
+	table.DeleteRecordFromTree(1350);
+
+	table.WriteArray();
+	table.WriteSortArray(1);
+
+	table.WriteSortArrayWithTree();
+	table.WriteArrayWithList();
+
+	table.WriteSortArrayWithList(1);
+	table.WriteSortArrayWithList(2);
+
+	table.DeleteRecordFromList(8, 1);
+	table.WriteSortArrayWithList(2);
+
+
 }
 

@@ -5,8 +5,10 @@
 
 namespace MyTypes {
 	struct Image {
+		
 	public:
-	
+		
+
 		size_t number;
 		std::string name;
 		unsigned int size;
@@ -51,9 +53,10 @@ namespace MyTypes {
 		}
 		bool operator !=(Image im1) {
 			return !operator==(im1);
-		}		
+		}				
+		
 	};
-
+	typedef int (*Criterion)(RECORD&);
 	int static criterionName(RECORD& value) {
 		return (int)value.name[0];
 	}
@@ -72,5 +75,5 @@ namespace MyTypes {
 	int static criterionFormat(RECORD& value) {
 		return (int)value.format[0];
 	}
-	int (* const criterions[6])(RECORD&) = { criterionName, criterionSize, criterionWidth, criterionHeight, criterionColorDepth, criterionFormat };
+	static Criterion criterions[6] = { criterionName, criterionSize, criterionWidth, criterionHeight, criterionColorDepth, criterionFormat };
 };

@@ -6,7 +6,6 @@
 
 #define CONSOLE 1
 #define FILE  2
-#define RECORD MyTypes::Image
 
 namespace Arrays {
 	MyArray::MyArray()
@@ -24,6 +23,19 @@ namespace Arrays {
 		length = array.length;
 		records = array.records;
 	}
+
+	MyArray MyArray::GetRandom(int length)
+	{
+		MyArray result(length);
+		for (size_t i = 0; i < length; i++)
+		{
+			
+			result[i] = DataManage::InputManager::GetRandomRecord();
+			result[i].number = i + 1;
+		}
+		return result;
+	}
+
 	MyArray MyArray::GetArrayFromFile(std::string fileName) {
 		std::ifstream file(fileName);
 		int len = 0;
@@ -47,6 +59,21 @@ namespace Arrays {
 			i++;
 		}
 		file.close();
+		return result;
+	}
+
+	MyArray MyArray::GetArrayFromConsole()
+	{
+		std::cout << "¬ведите длину массива" << "\n";
+		std::string line = "";
+		std::getline(std::cin, line);
+		int length = std::stoi(line);
+		MyArray result(length);
+		for (size_t i = 0; i < length; i++)
+		{
+			result[i] = DataManage::InputManager::GetRecord(CONSOLE);
+			result[i].number = i + 1;
+		}
 		return result;
 	}
 
@@ -75,7 +102,7 @@ namespace Arrays {
 			records[i] = buff;
 		}
 	}
-	void MyArray::Sort(int indStart, int indEnd, int(*criterion)(RECORD&), bool rise, bool quick) {
+	void MyArray::Sort(int indStart, int indEnd, MyTypes::Criterion criterion, bool rise, bool quick) {
 		if (!quick)
 			for (int i = indStart; i < indEnd - 1; i++) {
 				for (int j = i + 1; j < indEnd; j++) {
@@ -90,7 +117,7 @@ namespace Arrays {
 			QuickSort(records + indStart, indEnd - indStart , criterion, rise);
 		}
 	}
-	void MyArray::Sort(int(*criterion)(RECORD&), bool rise,bool quick ) {
+	void MyArray::Sort(MyTypes::Criterion criterion, bool rise,bool quick ) {
 		if(!quick)
 		for (int i = 0; i < length - 1; i++) {
 			for (int j = i + 1; j < length; j++) {
@@ -150,7 +177,7 @@ namespace Arrays {
 		}
 	}
 
-	void MyArray::GetSortIndexes(int* indexes, int(*criterion)(RECORD&), bool rise) {
+	void MyArray::GetSortIndexes(int* indexes, MyTypes::Criterion criterion, bool rise) {
 		for (int i = 0; i < length - 1; i++) {
 			for (int j = i + 1; j < length; j++) {
 				if ((criterion(records[indexes[i]]) > criterion(records[indexes[j]])) == rise) {
@@ -162,7 +189,7 @@ namespace Arrays {
 		}
 	}
 
-	void MyArray::SortIndexes(int** indexes, int(*criterion)(RECORD&), bool rise, bool quick) {
+	void MyArray::SortIndexes(int** indexes, MyTypes::Criterion criterion, bool rise, bool quick) {
 		delete[](*indexes);
 		(*indexes) = new int[Count()];
 		for (int i = 0; i < Count(); i++) {
@@ -176,7 +203,7 @@ namespace Arrays {
 		}
 	}
 
-	void MyArray::QuickGetSortIndexes(int* indexes, int len, int(*criterion)(RECORD&), bool rise) {
+	void MyArray::QuickGetSortIndexes(int* indexes, int len, MyTypes::Criterion criterion, bool rise) {
 		int i = 0;
 		int j = len - 1;
 		int mid = criterion(records[indexes[len / 2]]);

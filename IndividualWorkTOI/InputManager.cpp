@@ -52,6 +52,12 @@ MyTypes::Image DataManage::InputManager::GetRecord(int from, std::string line, c
 
 MyTypes::Image DataManage::InputManager::GetRandomRecord() {
 	MyTypes::Image result = MyTypes::Image();
-	
+	result.name = randomStrGen(5);
+	result.size = rand() % (1000 - 10 + 1) + 10;
+	result.width = rand() % (5000 - 10 + 1) + 10;
+	result.height = rand() % (5000 - 10 + 1) + 10;
+	result.colorDepth =  pow(2, rand() % (8 - 1 + 1) + 1);
+	result.format = randomStrGen(3);
 	return result;
 }
+

@@ -130,10 +130,11 @@
     <ClCompile Include="Array.cpp" />
     <ClCompile Include="IndividualWorkTOI.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Table.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h" />
-    <ClInclude Include="BinaryTrees.h" />
+    <ClInclude Include="BTrees.h" />
     <ClInclude Include="HashTable.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="List.h" />

@@ -1,7 +1,7 @@
 #pragma once
 #include "MyRecord.h"
 
-#define RECORD MyTypes::Image
+#define LIST Lists::List
 #define CRITERION(indCriterion) criterions[indCriterion]
 
 namespace Lists {	
@@ -38,19 +38,21 @@ namespace Lists {
 			}
 		};
 	public:
-		typedef int (*Criterion)(RECORD&);
 
-		RECORD Find(int value, int criterionInd) {
-			Node* current = first[criterionInd];
+		RECORD* Find(int value, int criterionInd) {
+			Node* current = first[criterionInd + 1];
 			while (current && current->GetValue(CRITERION(criterionInd)) != value) {
 				current = current->nextNode;
 			}
+			if (current == nullptr)
+				return new RECORD();
 			return current->record;
 		}
-		List(Criterion criterions[N]) {
+		List() {
+			int (*criterionsForList[])(RECORD&) = { MyTypes::criterionName, MyTypes::criterionHeight };
 			static_assert(N > 0 && N <= 6, " оличество критериев должно быть больше 0");
 			for (size_t i = 0; i < N; i++) {
-				this->criterions[i] = criterions[i];
+				criterions[i] = criterionsForList[i];
 				first[i] = nullptr;
 				last[i] = nullptr;
 			}
@@ -58,9 +60,18 @@ namespace Lists {
 			last[N] = nullptr;
 			count = 0;
 		}
-		int count;
-		int Count() {
-			return count;
+		int criterionInds[N];
+		List(int criterions[N]) {
+			static_assert(N > 0 && N <= 6, " оличество критериев должно быть больше 0");
+			for (size_t i = 0; i < N; i++) {
+				this->criterions[i] = MyTypes::criterions[criterions[i]];
+				criterionInds[i] = criterions[i];
+				first[i] = nullptr;
+				last[i] = nullptr;
+			}
+			first[N] = nullptr;
+			last[N] = nullptr;
+			count = 0;
 		}
 
 		bool IsEmpty() {
@@ -91,22 +102,25 @@ namespace Lists {
 			for (int i = 0; i < N; i++) {
 				SortedPush(value, i+1);
 			}
-
 		}
 
-		
+		int count = 0;
+		int Count() { return count; }
 		void PushBack(RECORD* value) {
 			count++;
 			Node* newPointer = new Node(count, value);
 			if (IsEmpty(0)) {
 				first[0] = newPointer;
 				last[0] = newPointer;
+				for (int i = 0; i < N; i++) {
+					SortedPush(value, i + 1);
+				}
 				return;
 			}
 			last[0]->nextNode = newPointer;
 			last[0] = newPointer;
 			for (int i = 0; i < N; i++) {
-				SortedPush(value, i);
+				SortedPush(value, i+1);
 			}
 		}
 
@@ -126,17 +140,17 @@ namespace Lists {
 		
 
 		void ReverseIter(int IndCriterion) {
-			last = first[IndCriterion];
+			last[IndCriterion] = first[IndCriterion];
 			Node* buffer = GetReverseListIt(first[IndCriterion]);
-			first = buffer;
+			first[IndCriterion] = buffer;
 		}
 		void ReverseRec(int IndCriterion) {
-			last = first[IndCriterion];
+			last[IndCriterion] = first[IndCriterion];
 			Node* buffer = GetReverseListRec(first[IndCriterion]);
-			first = buffer;
+			first[IndCriterion] = buffer;
 		}
 
-		void Remove(int value, Criterion criterion) {
+		void Remove(int value, MyTypes::Criterion criterion) {
 			if (IsEmpty(0)) return;
 			
 			if (first[0] == last[0]) {
@@ -193,7 +207,58 @@ namespace Lists {
 			delete node;
 		}
 
-		
+		void DeleteWithNumber(int value) {
+			if (IsEmpty(0)) return;
+
+			if (first[0] == last[0]) {
+				for (size_t i = 0; i < N + 1; i++) {
+					delete first[i];
+					first[i] = nullptr;
+					last[i] = nullptr;
+				}
+				return;
+			}
+
+			if (first[0]->record->number == value) {
+				RemoveFirst();
+				return;
+			}
+
+			else if (last[0]->record->number == value) {
+				RemoveLast();
+				return;
+			}
+
+			Node* slow = first[0];
+			Node* fast = first[0]->nextNode;
+			while (fast && fast->record->number != value) {
+				slow = fast;
+				fast = fast->nextNode;
+			}
+
+			if (!fast) {
+				std::cout << "This element does not exist" << std::endl;
+				return;
+			}
+			RemoveNode(fast);
+			slow->nextNode = fast->nextNode;
+			delete fast;
+		}
+
+		void DeleteData() {
+			if (IsEmpty(0))	return;
+			count = 0;
+			for (int i = 0; i < N + 1;i++) {
+				Node* node = first[i];
+				while (node != nullptr) {
+					Node* deleted = node;
+					node = node->nextNode;
+					delete deleted;
+				}
+				last[i] = nullptr;
+				first[i] = nullptr;
+			}
+		}
 
 		void WriteList() {
 			if (IsEmpty(0)) return;
@@ -214,17 +279,18 @@ namespace Lists {
 			}
 			std::cout << "////////////////////////////////////////////////////////////////\n";
 		}
-		void WriteList(int criterionInd) {
+		void WriteList(int criterionInd, bool rise = true) {
 			if (IsEmpty(criterionInd)) return;
-			Node* current = first[criterionInd];
-			int offSet = 0;
+			Node* current;
+			if (!rise)
+				ReverseRec(rise);
+			current = first[criterionInd];
+
 			if (criterionInd == 0) {
 				WriteList();
 				return;
 			}
 			
-			while (MyTypes::criterions[offSet] != criterions[criterionInd - 1]) offSet++;
-			offSet++;
 			std::cout << "////////////////////////////////////////////////////////////////\n";
 			std::cout << "Number/1 Name/2 Size/3 Width/4 Height/5 ColorDepth/6 Format///\n";
 			while (current)
@@ -234,14 +300,16 @@ namespace Lists {
 				std::cout << std::endl;
 				current = current->nextNode;
 				if (current) {
-					for (int i = 0; i < offSet; i++)
+					for (int i = 0; i < criterionInds[criterionInd - 1] + 1; i++)
 						std::cout << "\t";
 					std::cout << "|" << std::endl;
-					for (int i = 0; i < offSet; i++)
+					for (int i = 0; i < criterionInds[criterionInd - 1] + 1; i++)
 						std::cout << "\t";
 					std::cout << "V" << std::endl;
 				}
 			}
+			if (!rise)
+				ReverseRec(criterionInd);
 			std::cout << "////////////////////////////////////////////////////////////////\n";
 		}		
 	private:
@@ -311,6 +379,7 @@ namespace Lists {
 				delete fast;
 			}
 		}
+
 		void RemoveFirstNode(int index) {
 			if (IsEmpty(index))	return;
 			Node* node = first[index];
@@ -328,6 +397,7 @@ namespace Lists {
 			last[index] = current;
 			delete node;
 		}
+
 		void SortedPush(RECORD* value, int indCriterion) {
 			int val = CRITERION(indCriterion - 1)(*value);
 			Node* newPointer = new Node(count, value);
@@ -357,7 +427,7 @@ namespace Lists {
 		}
 
 
-		Criterion criterions[N];
+		MyTypes::Criterion criterions[N];
 		Node* first[N + 1];
 		Node* last[N + 1];
 	};
