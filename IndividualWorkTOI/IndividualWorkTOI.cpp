@@ -141,11 +141,17 @@ int main()
 						break;
 					case 4:
 						print("Введите индекс ключа (0, 1) и значение которое хотите найти");
-						index = ReadValueUInt();
-						value = ReadValueUInt();
+						index = ReadValueUInt(); 
 						if (index > 1)
 							break;
-						findIndex = table.FindInArray(value, index);
+						if (index == 0) {
+							value = ReadValueUInt();
+							findIndex = table.FindInArray(value, index);
+						}
+						if (index == 1) {
+							line = ReadString();
+							findIndex = table.FindInArray(MyTypes::GetIntFromString(line), index);
+						}				
 						if (findIndex != -1) {
 							table[findIndex].Write();
 							print();
