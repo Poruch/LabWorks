@@ -39,7 +39,7 @@ namespace Lists {
 		};
 	public:
 
-		RECORD* Find(int value, int criterionInd) {
+		RECORD* Find(unsigned int value, int criterionInd) {
 			Node* current = first[criterionInd + 1];
 			while (current && current->GetValue(CRITERION(criterionInd)) != value) {
 				current = current->nextNode;
@@ -48,8 +48,10 @@ namespace Lists {
 				return new RECORD();
 			return current->record;
 		}
+
+
 		List() {
-			int (*criterionsForList[])(RECORD&) = { MyTypes::criterionName, MyTypes::criterionHeight };
+			unsigned int (*criterionsForList[])(RECORD&) = { MyTypes::criterionName, MyTypes::criterionHeight };
 			static_assert(N > 0 && N <= 6, " оличество критериев должно быть больше 0");
 			for (size_t i = 0; i < N; i++) {
 				criterions[i] = criterionsForList[i];
@@ -150,7 +152,7 @@ namespace Lists {
 			first[IndCriterion] = buffer;
 		}
 
-		void Remove(int value, MyTypes::Criterion criterion) {
+		void Remove(unsigned int value, MyTypes::Criterion criterion) {
 			if (IsEmpty(0)) return;
 			
 			if (first[0] == last[0]) {
@@ -207,7 +209,7 @@ namespace Lists {
 			delete node;
 		}
 
-		void DeleteWithNumber(int value) {
+		void DeleteWithNumber(unsigned int value) {
 			if (IsEmpty(0)) return;
 
 			if (first[0] == last[0]) {
@@ -399,7 +401,7 @@ namespace Lists {
 		}
 
 		void SortedPush(RECORD* value, int indCriterion) {
-			int val = CRITERION(indCriterion - 1)(*value);
+			unsigned int val = CRITERION(indCriterion - 1)(*value);
 			Node* newPointer = new Node(count, value);
 			if (IsEmpty(indCriterion)) {
 				first[indCriterion] = newPointer;

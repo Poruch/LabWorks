@@ -13,7 +13,7 @@ namespace Arrays {
 		length = 0;
 		records = 0;
 	}
-	MyArray::MyArray(int len)
+	MyArray::MyArray(size_t len)
 	{
 		length = len;
 		records = new RECORD[len];
@@ -24,7 +24,7 @@ namespace Arrays {
 		records = array.records;
 	}
 
-	MyArray MyArray::GetRandom(int length)
+	MyArray MyArray::GetRandom(size_t length)
 	{
 		MyArray result(length);
 		for (size_t i = 0; i < length; i++)
@@ -67,7 +67,7 @@ namespace Arrays {
 		std::cout << "¬ведите длину массива" << "\n";
 		std::string line = "";
 		std::getline(std::cin, line);
-		int length = std::stoi(line);
+		size_t length = std::stoull(line);
 		MyArray result(length);
 		for (size_t i = 0; i < length; i++)
 		{
@@ -80,21 +80,23 @@ namespace Arrays {
 	void MyArray::WriteArray() {
 		std::cout << "////////////////////////////////////////////////////////////////\n";
 		std::cout << "Number/1 Name/2 Size/3 Width/4 Height/5 ColorDepth/6 Format///\n";
-		for (int i = 0; i < length; i++) {
+		for (size_t i = 0; i < length; i++) {
 			records[i].Write();
 			std::cout << "\n";
 		}
 		std::cout << "////////////////////////////////////////////////////////////////\n";
 	}
+
 	void MyArray::WriteArray(int* indexes) {
 		std::cout << "////////////////////////////////////////////////////////////////\n";
 		std::cout << "Number/1 Name/2 Size/3 Width/4 Height/5 ColorDepth/6 Format///\n";
-		for (int i = 0; i < length; i++) {
+		for (size_t i = 0; i < length; i++) {
 			records[indexes[i]].Write();
 			std::cout << "\n";
 		}
 		std::cout << "////////////////////////////////////////////////////////////////\n";
 	}
+
 	void MyArray::Reconstruct() {
 		for (int i = 0; i < length; i++) {
 			RECORD buff = records[records[i].number - 1];
@@ -102,10 +104,10 @@ namespace Arrays {
 			records[i] = buff;
 		}
 	}
-	void MyArray::Sort(int indStart, int indEnd, MyTypes::Criterion criterion, bool rise, bool quick) {
+	void MyArray::Sort(size_t indStart, size_t indEnd, MyTypes::Criterion criterion, bool rise, bool quick) {
 		if (!quick)
-			for (int i = indStart; i < indEnd - 1; i++) {
-				for (int j = i + 1; j < indEnd; j++) {
+			for (size_t i = indStart; i < indEnd - 1; i++) {
+				for (size_t j = i + 1; j < indEnd; j++) {
 					if (criterion(records[i]) > criterion(records[j]) == rise) {
 						auto buff = records[i];
 						records[i] = records[j];
@@ -133,10 +135,29 @@ namespace Arrays {
 		}
 	}
 
-	void MyArray::QuickSort(RECORD* array,int len,int(*criterion)(RECORD&),bool rise) {
-		int i = 0;
-		int j = len - 1;
-		int mid = criterion(array[len / 2]);
+	void MyArray::DeleteWithNumber(size_t value) {
+		size_t ind = value - 1;
+		InBorder(ind);
+		RECORD* result = new RECORD[length - 1];
+		size_t j = 0;
+		for (size_t i = 0; i < ind; i++)
+		{
+			result[j++] = records[i];
+		}
+		for (size_t i = ind + 1; i < length; i++)
+		{
+			result[j++] = records[i];
+		}
+		delete[] records;
+		records = result;
+		length -= 1;
+		RecoverIndexes();
+	}
+
+	void MyArray::QuickSort(RECORD* array, size_t len, MyTypes::Criterion criterion,bool rise) {
+		long long i = 0;
+		long long j = len - 1;
+		unsigned int mid = criterion(array[len / 2]);
 		do {
 			if (rise) {
 				while (criterion(array[i]) < mid) {
@@ -203,10 +224,10 @@ namespace Arrays {
 		}
 	}
 
-	void MyArray::QuickGetSortIndexes(int* indexes, int len, MyTypes::Criterion criterion, bool rise) {
-		int i = 0;
-		int j = len - 1;
-		int mid = criterion(records[indexes[len / 2]]);
+	void MyArray::QuickGetSortIndexes(int* indexes, size_t len, MyTypes::Criterion criterion, bool rise) {
+		long long i = 0;
+		long long j = len - 1;
+		unsigned int mid = criterion(records[indexes[len / 2]]);
 		do {
 			if (rise) {
 				while (criterion(records[indexes[i]]) < mid) {
@@ -255,7 +276,7 @@ namespace Arrays {
 
 	void MyArray::RecoverIndexes(bool rise) {
 		int* indexes = 0;
-		SortIndexes(&indexes, [](RECORD& image) {return (int)image.number; }, rise);
+		SortIndexes(&indexes, [](RECORD& image) {return (unsigned int)image.number; }, rise);
 		for (int i = 0; i < length; i++) {
 			records[indexes[i]].number = i + 1;
 		}
@@ -282,14 +303,14 @@ namespace Arrays {
 		RecoverIndexes();
 	}
 	void MyArray::AddElem(RECORD value) {
-		int newLen = 1 + length;
+		size_t newLen = 1 + length;
 		ReSize(newLen);
 		records[length] = value;
 		length = newLen;
 	}
 
 	void MyArray::AddElems(int count) {
-		int newLen = count + length;
+		size_t newLen = count + length;
 		RECORD* result = new RECORD[newLen];
 
 		for (int i = 0; i < length; i++) {
@@ -306,7 +327,7 @@ namespace Arrays {
 
 	void MyArray::AddElems(std::string fileName) {
 		MyArray addRecords = GetArrayFromFile(fileName);
-		int newLen = addRecords.Count() + length;
+		size_t newLen = addRecords.Count() + length;
 		RECORD* result = new RECORD[newLen];
 		int count = 1;
 		for (int i = 0; i < length; i++) {

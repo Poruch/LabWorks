@@ -10,9 +10,9 @@ namespace Arrays {
 	public:
 
 		MyArray();
-		MyArray(int len);
+		MyArray(size_t len);
 		MyArray(const MyArray& array);
-		static MyArray GetRandom(int length);
+		static MyArray GetRandom(size_t length);
 		static MyArray GetArrayFromFile(std::string fileName);
 		static MyArray GetArrayFromConsole();
 		void Reconstruct();
@@ -20,7 +20,7 @@ namespace Arrays {
 		void WriteArray();
 		void WriteArray(int* indexes);
 		void Sort(MyTypes::Criterion criterion, bool rise = true, bool quick = true);
-		void Sort(int indStart,int indEnd, MyTypes::Criterion criterion, bool rise = true, bool quick = true);
+		void Sort(size_t indStart, size_t indEnd, MyTypes::Criterion criterion, bool rise = true, bool quick = true);
 
 		void SortIndexes(int** indexes, MyTypes::Criterion criterion, bool rise = true, bool quick = true);
 
@@ -72,7 +72,7 @@ namespace Arrays {
 		}
 
 		template <typename T>
-		int FindBinary(int* indexes,T value, T(*criterion)(RECORD&), int offsetLeft, int offsetRight) {
+		int FindBinary(int* indexes,T value, T(*criterion)(RECORD&), size_t offsetLeft, size_t offsetRight) {
 			int m = (offsetLeft + offsetRight) / 2;
 			if (offsetLeft > offsetRight)
 				return -1;
@@ -137,25 +137,8 @@ namespace Arrays {
 			RecoverIndexes();
 		}
 		
-		void DeleteWithNumber(int value) {
-			int ind = value - 1;
-			InBorder(ind);
-			RECORD* result = new RECORD[length - 1];
-			int j = 0;
-			for (int i = 0; i < ind; i++)
-			{
-				result[j++] = records[i];
-			}
-			for (int i = ind + 1; i < length; i++)
-			{
-				result[j++] = records[i];
-			}
-			delete[] records;
-			records = result;
-			length -= 1;
-			RecoverIndexes();
-		}
-		RECORD& operator[](int index) {
+		void DeleteWithNumber(size_t value);
+		RECORD& operator[](size_t index) {
 			InBorder(index);
 			return records[index];
 		}
@@ -171,14 +154,15 @@ namespace Arrays {
 			records = new RECORD[0];
 			length = 0;
 		}
+
 	private:
 		RECORD* records;
 		size_t length;
 
-		void GetSortIndexes(int* indexes, int(*criterion)(RECORD&), bool rise = true);
-		void QuickGetSortIndexes(int* indexes, int len, int(*criterion)(RECORD&), bool rise);
+		void GetSortIndexes(int* indexes, MyTypes::Criterion criterion, bool rise = true);
+		void QuickGetSortIndexes(int* indexes, size_t len, MyTypes::Criterion criterion, bool rise);
 
-		void QuickSort(RECORD* array, int len, int(*criterion)(RECORD&), bool rise = true);
+		void QuickSort(RECORD* array, size_t len, MyTypes::Criterion criterion, bool rise = true);
 		void ReSize(size_t newLen);
 
 		void InBorder(int index) {

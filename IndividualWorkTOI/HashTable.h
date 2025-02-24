@@ -40,6 +40,8 @@ namespace HashTables {
 				count++;
 				hash = hash % length;
 			}
+			if (count == length)
+				return;
 			if (keys[hash] == key) {
 				return;
 			}

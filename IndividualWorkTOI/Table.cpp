@@ -19,7 +19,7 @@ void  Table::TablePTRRecord::SetWidth(unsigned short width) {
 	record.width = width;
 	table->SortAll();
 }
-void  Table::TablePTRRecord::SetHeifht(unsigned short height) {
+void  Table::TablePTRRecord::SetHeight(unsigned short height) {
 	record.height = height;
 	table->SortAll();
 }
@@ -59,9 +59,9 @@ void Table::WriteSortArray(int criterion, bool rise ) {
 	std::cout << "\n";
 	array.WriteArray(indexesCrit);
 }
-int  Table::FindInArray(int value, int criterion) {
+int  Table::FindInArray(unsigned int value, int criterion) {
 	array.SortIndexes(&indexesCrit, criterions[criterion]);
-	int result = array.FindBinary<int>(indexesCrit,value, criterions[criterion]);
+	int result = array.FindBinary<unsigned int>(indexesCrit,value, criterions[criterion]);
 	if (result == -1)
 		std::cout << ("Такого записи с таким ключем нет - " + std::to_string(value)) << "\n";
 	return result;
@@ -70,7 +70,7 @@ Table::TablePTRRecord  Table::operator [](int index) {
 	return TablePTRRecord(this,array[index]);
 }
 
-void  Table::DeleteRecordWhithArray(int value, int criterion) {
+void  Table::DeleteRecordWhithArray(unsigned value, int criterion) {
 	int index = FindInArray(value,criterion);
 	if (index == -1) {
 		std::cout << "Элемент удалить невозможно\n";
@@ -83,10 +83,10 @@ void  Table::DeleteRecordWhithArray(int value, int criterion) {
 	SortAll();
 }
 
-void  Table::WriteSortArrayWithTree() {
-	tree.WriteTreeKeys();
+void  Table::WriteSortArrayWithTree(bool rise) {
+	tree.WriteTree(rise);
 }
-RECORD Table::FindWithTree(int value) {
+RECORD Table::FindWithTree(unsigned int value) {
 	RECORD elem = tree.Find(value);
 	if (elem == RECORD()) {
 		std::cout << "Такого ключа в дереве нет\n";
@@ -94,7 +94,7 @@ RECORD Table::FindWithTree(int value) {
 	return elem;
 }
 
-void  Table::DeleteRecordFromTree(int value) {
+void  Table::DeleteRecordFromTree(unsigned int value) {
 	tree.Delete(value);
 	array.RecoverIndexes();
 }
@@ -108,7 +108,7 @@ void  Table::WriteSortArrayWithList(int criterion, bool rise) {
 }
 
 
-RECORD Table::FindRecordWithList(int value, int criterion) {
+RECORD Table::FindRecordWithList(unsigned int value, int criterion) {
 	RECORD elem = *list.Find(value, criterion);
 	if (elem == RECORD()) {
 		std::cout << "Такого ключа в списке нет\n";
@@ -117,7 +117,7 @@ RECORD Table::FindRecordWithList(int value, int criterion) {
 }
 
 
-void Table::DeleteRecordFromList(int value, int criterion) {
+void Table::DeleteRecordFromList(unsigned int value, int criterion) {
 	list.Remove(value,criterions[criterion]);
 	array.RecoverIndexes();
 }

@@ -4,11 +4,12 @@
 #define RECORD MyTypes::Image
 
 namespace MyTypes {
+	struct Image;
+	static unsigned int criterionName(RECORD& value);
 	struct Image {
 		
 	public:
 		
-
 		size_t number;
 		std::string name;
 		unsigned int size;
@@ -19,7 +20,7 @@ namespace MyTypes {
 
 		void Write() {
 			std::cout << number << "\t";
-			std::cout << name.substr(0,6) << "\t";
+			std::cout << name.substr(0, 6) << "\t";//"(" << std::to_string(criterionName(*this)) << ")" << "\t";
 			std::cout << size << "\t";
 			std::cout << width << "\t";
 			std::cout << height << "\t";
@@ -56,24 +57,33 @@ namespace MyTypes {
 		}				
 		
 	};
-	typedef int (*Criterion)(RECORD&);
-	int static criterionName(RECORD& value) {
-		return (int)value.name[0];
+	static unsigned int GetIntFromString(std::string line) {
+		size_t result = 0;
+		int j = 0;
+		for (int i = 0; i < (3 < line.size() ? 3 : line.size()); i++) {
+			result += (line[i] + 255) * pow(10, 6 - (i + j++));
+		}
+		return (result);
 	}
-	int static criterionHeight(RECORD& value) {
-		return (int)value.height;
+	typedef unsigned int (*Criterion)(RECORD&);
+	unsigned int static criterionName(RECORD& value) {
+		return GetIntFromString(value.name);
 	}
-	int static criterionWidth(RECORD& value) {
-		return (int)value.width;
+
+	unsigned int static criterionHeight(RECORD& value) {
+		return (unsigned int)value.height;
 	}
-	int static criterionColorDepth(RECORD& value) {
-		return (int)value.colorDepth;
+	unsigned int static criterionWidth(RECORD& value) {
+		return (unsigned int)value.width;
 	}
-	int static criterionSize(RECORD& value) {
-		return (int)value.size;
+	unsigned int static criterionColorDepth(RECORD& value) {
+		return (unsigned int)value.colorDepth;
 	}
-	int static criterionFormat(RECORD& value) {
-		return (int)value.format[0];
+	unsigned int static criterionSize(RECORD& value) {
+		return (unsigned int)value.size;
+	}
+	unsigned int static criterionFormat(RECORD& value) {
+		return (unsigned int)value.format[0];
 	}
 	static Criterion criterions[6] = { criterionName, criterionSize, criterionWidth, criterionHeight, criterionColorDepth, criterionFormat };
 };
