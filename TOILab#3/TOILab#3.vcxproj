@@ -130,7 +130,8 @@
     <ClCompile Include="TOILab#3.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Program.txt" />
+    <Text Include="ProgramLogic.txt" />
+    <Text Include="ProgramNum.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
